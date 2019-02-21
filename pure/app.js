@@ -4,8 +4,9 @@ import mapboxgl from 'mapbox-gl';
 
 // // Outlines of US States. Source: Natural Earth http://www.naturalearthdata.com/ via geojson.xyz
 const GEOJSON =
-    // 'Campus_buildings_updated3.geojson';
-  'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_1_states_provinces_shp.geojson'; //eslint-disable-line
+    'Campus_buildings_updated3.geojson';
+  // 'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_1_states_provinces_shp.geojson'; //eslint-disable-line
+  // 'https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/pure/Campus_buildings_updated3.geojson?token=AYEA5dnWyCm6wxmTNLpHA8L8nFk7gtPAks5cbzabwA%3D%3D';
 
 console.log(GEOJSON);
 const INITIAL_VIEW_STATE =
