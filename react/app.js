@@ -3,8 +3,8 @@ import {render} from 'react-dom';
 import MapGL, {Navigation} from 'react-map-gl';
 import DeckGL, {LineLayer, ScatterplotLayer, GeoJsonLayer} from 'deck.gl';
 
-const GEOJSON =
-  'https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/react/Campus_buildings_updated3.json?token=AYEA5YEg3gmfQ2-N8-aKSdBbn-T0T_Vuks5cbvgAwA%3D%3D'; //eslint-disable-line
+const GEOJSON = "./Campus_buildings_updated3.geojson";
+  // 'https://api.myjson.com/bins/rztu6'; //eslint-disable-line
   // 'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_1_states_provinces_shp.geojson'; //eslint-disable-line
 
 const INITIAL_VIEW_STATE = {
@@ -32,7 +32,8 @@ class Root extends Component {
             getLineColor: () => [255, 255, 255],
             getFillColor: () => [200, 200, 200]
           })
-        ]}>
+        ]}
+        >
         <MapGL mapStyle="http://localhost:8081/styles/positron/style.json"/>
       </DeckGL>
     );
