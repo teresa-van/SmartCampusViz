@@ -6,7 +6,9 @@ import mapboxgl from 'mapbox-gl';
 const GEOJSON =
     'Campus_buildings_updated3.geojson';
   // 'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_1_states_provinces_shp.geojson'; //eslint-disable-line
-  // 'https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/pure/Campus_buildings_updated3.geojson?token=AYEA5dZfbIrrp7SPa-GDki43M-4fWmyRks5cbzgCwA%3D%3D';
+  // 'https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/pure/Campus_buildings_updated3.geojson';
+
+console.log(GEOJSON);
 
 const INITIAL_VIEW_STATE =
 {
