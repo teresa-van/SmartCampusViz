@@ -1,37 +1,59 @@
 import {Vector2} from 'math.gl';
-import {default as pathjson} from './paths.json';
+import {default as pathjson} from '../data/paths.json';
+import {default as staypointsjson} from '../data/staypoints.json';
 
 export const GEOJSON = 'Campus_buildings_updated3.geojson';
 
 const S = 0.75;
-const B = 0.95;
+const B = 1;
 
+// Parse paths data
 var color = HSVtoRGB(0, S, B);
 export const PATHS = [{path: [], color: [color.r, color.g, color.b]}];
 var id = 0;
 for (let i = 0; i < pathjson.length; i++)
 {
-  if (id != pathjson[i].Path_ID)
-  {
-    id++;
-    color = HSVtoRGB((id  % 255) / 255, S, B);
-    PATHS[id] = {path: [], color: [color.r, color.g, color.b]};
-  }
+    if (id != pathjson[i].Path_ID)
+    {
+        id++;
+        color = HSVtoRGB((id % 255) / 255, S, B);
+        PATHS[id] = {path: [], color: [color.r, color.g, color.b]};
+    }
 
-  PATHS[id].path.push(new Vector2(pathjson[i].Lon, pathjson[i].Lat));
+    var lat = parseFloat(pathjson[i].Lat);
+    var lon = parseFloat(pathjson[i].Lon);
+    PATHS[id].path.push(new Vector2(lon, lat));
 }
 
-function HSVtoRGB(h, s, v) {
+// Parse staypoints data
+export const STAYPOINTS = [];
+for (let i = 0; i < staypointsjson.length; i++)
+{
+    color = HSVtoRGB((i % 255) / 255, S, B);
+    STAYPOINTS[i] = {point: [], color: [color.r, color.g, color.b]};
+    
+    var lat = parseFloat(staypointsjson[i].Centroid_Lat);
+    var lon = parseFloat(staypointsjson[i].Centroid_Lon);
+    STAYPOINTS[i].point.push(lon);
+    STAYPOINTS[i].point.push(lat);
+}
+
+// Converts HSV/HSB colour value to RGB
+// Taken from: https://stackoverflow.com/questions/17242144/javascript-convert-hsb-hsv-color-to-rgb-accurately
+// h: hue, s: saturation, v: vibrance/brightness
+function HSVtoRGB(h, s, v) 
+{
     var r, g, b, i, f, p, q, t;
-    if (arguments.length === 1) {
+    if (arguments.length === 1)
         s = h.s, v = h.v, h = h.h;
-    }
+
     i = Math.floor(h * 6);
     f = h * 6 - i;
     p = v * (1 - s);
     q = v * (1 - f * s);
     t = v * (1 - (1 - f) * s);
-    switch (i % 6) {
+    switch (i % 6) 
+    {
         case 0: r = v, g = t, b = p; break;
         case 1: r = q, g = v, b = p; break;
         case 2: r = p, g = v, b = t; break;
