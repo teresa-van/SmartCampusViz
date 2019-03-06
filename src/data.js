@@ -3,26 +3,55 @@ import {default as pathjson} from '../data/paths.json';
 import {default as staypointsjson} from '../data/staypoints.json';
 
 export const GEOJSON = 'Campus_buildings_updated3.geojson';
+// export const maxPaths = pathjson[pathjson.length-1].Path_ID;
+export const maxPaths = pathjson.length;
 
 const S = 0.75;
 const B = 1;
 
 // Parse paths data
-var color = HSVtoRGB(0, S, B);
-export const PATHS = [{path: [], color: [color.r, color.g, color.b]}];
+// var color = HSVtoRGB(0, S, B);
+// var color = HSVtoRGB(((pathjson[0].Azimuth_Path * hueFactor) % 255) / 255, S, B);
+var color = HSVtoRGB(((pathjson[0].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+export const PATHS = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
 var id = 0;
-for (let i = 0; i < pathjson.length; i++)
+var index = 0;
+var hueFactor = 255 / 360;
+var numPoints = 1000;//pathjson.length;
+for (let i = 0; i < numPoints; i++)
 {
-    if (id != pathjson[i].Path_ID)
+    // if (id != pathjson[i].Path_ID)
+    // {
+    //     id++;
+    //     // color = HSVtoRGB(((id * hueFactor) % 255) / 255, S, B);
+    //     var color = HSVtoRGB(((pathjson[i].Azimuth_Path * hueFactor)) / 255, S, B);
+    //     PATHS[id] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+    // }
+
+    if (PATHS[index].path.length == 2)
     {
-        id++;
-        color = HSVtoRGB((id % 255) / 255, S, B);
-        PATHS[id] = {path: [], color: [color.r, color.g, color.b]};
+        index++;
+        if (id != pathjson[i].Path_ID)
+        {
+            id++;
+            color = HSVtoRGB(((pathjson[i].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+            PATHS[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+        }
+        else
+        {
+            color = HSVtoRGB(((pathjson[i-1].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+            PATHS[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+
+            var lat = parseFloat(pathjson[i-1].Lat);
+            var lon = parseFloat(pathjson[i-1].Lon);
+            PATHS[index].path.push(new Vector2(lon, lat));
+        }
     }
 
     var lat = parseFloat(pathjson[i].Lat);
     var lon = parseFloat(pathjson[i].Lon);
-    PATHS[id].path.push(new Vector2(lon, lat));
+    // PATHS[id].path.push(new Vector2(lon, lat));
+    PATHS[index].path.push(new Vector2(lon, lat));
 }
 
 // Parse staypoints data
