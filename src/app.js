@@ -92,14 +92,14 @@ const paths = new PathLayer
     id: 'pathLayer',
     data: data.PATHS,
     getPath: p => p.path,
-    getColor: p => p.color,
-    opacity: 0.01,
+    getColor: p => p.azimuthColor,
+    opacity: 0.01 * Math.sqrt(data.maxPaths / data.PATHS.length, 2),
 	getWidth: 2,
 	widthScale: 2 ** (15 - view.zoom),
 	widthMinPixels: 0.1,
 	widthMaxPixels: 2,
-    getDashArray: [20, 0],
-    pickable: true,
+	rounded: true,
+    pickable: false,
     lightSettings: LIGHT_SETTINGS
 });
 
@@ -126,6 +126,6 @@ export const deck = new Deck
 	[
 		buildings,
 		paths,
-		staypoints
+		// staypoints
 	]
 });
