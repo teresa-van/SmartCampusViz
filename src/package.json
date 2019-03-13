@@ -10,6 +10,8 @@
   "dependencies": {
     "@deck.gl/core": "^6.2.0",
     "@deck.gl/layers": "^6.2.0",
+    "crossfilter2": "^1.4.6",
+    "gl-matrix": "^3.0.0",
     "mapbox-gl": "~0.44.2"
   },
   "devDependencies": {

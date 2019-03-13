@@ -33,7 +33,7 @@ var view = INITIAL_VIEW_STATE;
 const map = new mapboxgl.Map
 ({
 	container: 'map',
-	style: 'http://localhost:8081/styles/dark-matter/style.json', // Using our own map server as opposed to Mapbox's server
+	style: 'http://162.246.156.156:8080/styles/dark-matter/style.json', // Using our own map server as opposed to Mapbox's server
 	// Note: deck.gl will be in charge of interaction and event handling
 	interactive: false,
 	center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
@@ -73,7 +73,7 @@ const buildings = new GeoJsonLayer
 const staypoints = new ScatterplotLayer
 ({
 	id: 'scatterplotLayer',
-	data: data.STAYPOINTS,
+	data: data.STAYPOINTSVISUAL,
     getPosition: p => p.point,
     getFillColor: [255, 250, 0],
     opacity: 0.01,
@@ -90,17 +90,17 @@ const staypoints = new ScatterplotLayer
 const paths = new PathLayer
 ({
     id: 'pathLayer',
-    data: data.PATHS,
+    data: data.PATHSVISUAL,
     getPath: p => p.path,
     getColor: p => p.azimuthColor,
-    opacity: 0.01 * Math.sqrt(data.maxPaths / data.PATHS.length, 2),
+    opacity: 0.01 * Math.sqrt(data.maxPaths / data.PATHSVISUAL.length, 2),
 	getWidth: 2,
 	widthScale: 2 ** (15 - view.zoom),
 	widthMinPixels: 0.1,
 	widthMaxPixels: 2,
 	rounded: true,
     pickable: false,
-    lightSettings: LIGHT_SETTINGS
+	lightSettings: LIGHT_SETTINGS
 });
 
 // Create and render deck
