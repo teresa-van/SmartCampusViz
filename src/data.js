@@ -1,70 +1,74 @@
 import {Vector2} from 'math.gl';
-import {default as pathjson} from '../data/paths.json';
-import {default as staypointsjson} from '../data/staypoints.json';
+// import {default as paths} from '../data/paths.json';
+import {default as staypoints} from '../data/staypoints.json';
+import * as data from './filter'
+// import staypoints from './filter'
+
+var paths = data.paths.all();
 
 export const GEOJSON = 'Campus_buildings_updated3.geojson';
-// export const maxPaths = pathjson[pathjson.length-1].Path_ID;
-export const maxPaths = pathjson.length;
+// export const maxPaths = paths[paths.length-1].Path_ID;
+export const maxPaths = data.paths.groupAll().reduceCount().value();
 
 const S = 0.75;
 const B = 1;
 
 // Parse paths data
 // var color = HSVtoRGB(0, S, B);
-// var color = HSVtoRGB(((pathjson[0].Azimuth_Path * hueFactor) % 255) / 255, S, B);
-var color = HSVtoRGB(((pathjson[0].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
-export const PATHS = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
+// var color = HSVtoRGB(((paths[0].Azimuth_Path * hueFactor) % 255) / 255, S, B);
+var color = HSVtoRGB(((paths[0].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+export const PATHSVISUAL = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
 var id = 0;
 var index = 0;
 var hueFactor = 255 / 360;
-var numPoints = 1000;//pathjson.length;
+var numPoints = maxPaths;
 for (let i = 0; i < numPoints; i++)
 {
-    // if (id != pathjson[i].Path_ID)
+    // if (id != paths[i].Path_ID)
     // {
     //     id++;
     //     // color = HSVtoRGB(((id * hueFactor) % 255) / 255, S, B);
-    //     var color = HSVtoRGB(((pathjson[i].Azimuth_Path * hueFactor)) / 255, S, B);
+    //     var color = HSVtoRGB(((paths[i].Azimuth_Path * hueFactor)) / 255, S, B);
     //     PATHS[id] = {path: [], azimuthColor: [color.r, color.g, color.b]};
     // }
 
-    if (PATHS[index].path.length == 2)
+    if (PATHSVISUAL[index].path.length == 2)
     {
         index++;
-        if (id != pathjson[i].Path_ID)
+        if (id != paths[i].Path_ID)
         {
             id++;
-            color = HSVtoRGB(((pathjson[i].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
-            PATHS[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+            color = HSVtoRGB(((paths[i].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+            PATHSVISUAL[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
         }
         else
         {
-            color = HSVtoRGB(((pathjson[i-1].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
-            PATHS[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+            color = HSVtoRGB(((paths[i-1].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+            PATHSVISUAL[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
 
-            var lat = parseFloat(pathjson[i-1].Lat);
-            var lon = parseFloat(pathjson[i-1].Lon);
-            PATHS[index].path.push(new Vector2(lon, lat));
+            var lat = parseFloat(paths[i-1].Lat);
+            var lon = parseFloat(paths[i-1].Lon);
+            PATHSVISUAL[index].path.push(new Vector2(lon, lat));
         }
     }
 
-    var lat = parseFloat(pathjson[i].Lat);
-    var lon = parseFloat(pathjson[i].Lon);
+    var lat = parseFloat(paths[i].Lat);
+    var lon = parseFloat(paths[i].Lon);
     // PATHS[id].path.push(new Vector2(lon, lat));
-    PATHS[index].path.push(new Vector2(lon, lat));
+    PATHSVISUAL[index].path.push(new Vector2(lon, lat));
 }
 
 // Parse staypoints data
-export const STAYPOINTS = [];
-for (let i = 0; i < staypointsjson.length; i++)
+export const STAYPOINTSVISUAL = [];
+for (let i = 0; i < staypoints.length; i++)
 {
     color = HSVtoRGB((i % 255) / 255, S, B);
-    STAYPOINTS[i] = {point: [], color: [color.r, color.g, color.b]};
+    STAYPOINTSVISUAL[i] = {point: [], color: [color.r, color.g, color.b]};
     
-    var lat = parseFloat(staypointsjson[i].Centroid_Lat);
-    var lon = parseFloat(staypointsjson[i].Centroid_Lon);
-    STAYPOINTS[i].point.push(lon);
-    STAYPOINTS[i].point.push(lat);
+    var lat = parseFloat(staypoints[i].Centroid_Lat);
+    var lon = parseFloat(staypoints[i].Centroid_Lon);
+    STAYPOINTSVISUAL[i].point.push(lon);
+    STAYPOINTSVISUAL[i].point.push(lat);
 }
 
 // Converts HSV/HSB colour value to RGB
