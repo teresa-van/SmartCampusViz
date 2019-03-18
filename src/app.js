@@ -1,4 +1,4 @@
-import {Deck} from '@deck.gl/core';
+import {Deck, Layer} from '@deck.gl/core';
 import
 {
 	GeoJsonLayer,
@@ -6,6 +6,9 @@ import
 	ScatterplotLayer
 } from '@deck.gl/layers';
 import mapboxgl from 'mapbox-gl';
+// import 'mapbox-gl/dist/mapbox-gl.css';
+// import DrawRectangle from 'mapbox-gl-draw-rectangle-mode';
+import MapboxDraw from 'mapbox-gl-draw'; 
 import * as data from './data';
 
 const INITIAL_VIEW_STATE =
@@ -41,6 +44,57 @@ const map = new mapboxgl.Map
 	bearing: INITIAL_VIEW_STATE.bearing,
 	pitch: INITIAL_VIEW_STATE.pitch,
 });
+
+const selectMap = new mapboxgl.Map
+({
+	container: 'select-map',
+	style: 'http://162.246.156.156:8080/styles/dark-matter/style.json', // Using our own map server as opposed to Mapbox's server
+	interactive: false,
+	center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
+	zoom: INITIAL_VIEW_STATE.zoom,
+	bearing: INITIAL_VIEW_STATE.bearing,
+	pitch: INITIAL_VIEW_STATE.pitch,
+});
+
+selectMap.on('load', e =>
+{
+	selectMap.getStyle().layers.forEach(l => 
+	{
+		if (!l.id.startsWith('gl-draw')) 
+			selectMap.setLayoutProperty(l.id, 'visibility', 'none')
+	});
+});
+
+var draw = new MapboxDraw
+({
+	displayControlsDefault: false,
+	controls: 
+	{
+		polygon: true,
+		trash: true
+	}
+});
+
+selectMap.addControl(draw);
+selectMap.on('draw.create', updateArea);
+selectMap.on('draw.delete', updateArea);
+selectMap.on('draw.update', updateArea);
+ 
+function updateArea(e) 
+{
+	var data = draw.getAll();
+	console.log(data);
+	// var answer = document.getElementById('calculated-area');
+	// if (data.features.length > 0) {
+	// var area = turf.area(data);
+	// // restrict to area to 2 decimal points
+	// var rounded_area = Math.round(area*100)/100;
+	// answer.innerHTML = '<p><strong>' + rounded_area + '</strong></p><p>square meters</p>';
+	// } else {
+	// answer.innerHTML = '';
+	// if (e.type !== 'draw.delete') alert("Use the draw tools to draw a polygon!");
+	// }
+}
 
 // Create buildings from campus shape files
 const buildings = new GeoJsonLayer
@@ -120,12 +174,19 @@ export const deck = new Deck
 			bearing: viewState.bearing,
 			pitch: viewState.pitch
 		});
+		selectMap.jumpTo
+		({
+			center: [viewState.longitude, viewState.latitude],
+			zoom: viewState.zoom,
+			bearing: viewState.bearing,
+			pitch: viewState.pitch
+		});
 		view = viewState;
 	},
 	layers:
 	[
 		buildings,
 		paths,
-		// staypoints
+		// staypoints,
 	]
 });
