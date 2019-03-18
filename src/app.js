@@ -39,7 +39,7 @@ const map = new mapboxgl.Map
 	center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
 	zoom: INITIAL_VIEW_STATE.zoom,
 	bearing: INITIAL_VIEW_STATE.bearing,
-	pitch: INITIAL_VIEW_STATE.pitch
+	pitch: INITIAL_VIEW_STATE.pitch,
 });
 
 // Create buildings from campus shape files
