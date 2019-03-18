@@ -11,9 +11,12 @@ import {default as pathjson} from '../data/paths.json';
 import {default as staypointsjson} from '../data/staypoints.json';
 
 export const paths = crossfilter(pathjson);
+export const maxPaths = paths.groupAll().reduceCount().value();
 export const staypoints = crossfilter(staypointsjson);
 configurePathsFilter();
-filterPathAcademicDay('BETWEEN_TERMS');
+// filterPathAcademicDay('BETWEEN_TERMS');
+// filterLatitude([51.077820, 51.078580]);
+// filterLongitude([-114.13050, -114.12840]);
 
 // #region Paths
 
@@ -47,13 +50,23 @@ function filterPathMeanTemp(meanTemp)
     paths.meanTemp.filter(meanTemp);
 }
 
+function filterLatitude(latitude)
+{
+    paths.latitude.filter(latitude);
+}
+
+function filterLongitude(longitude)
+{
+    paths.longitude.filter(longitude);
+}
+
 function configurePathsFilter()
 {
     try 
     {
         paths.id = paths.dimension(function(d) { return d.Path_ID}),
         paths.pointId = paths.dimension(function(d) { return d.Path_Point_ID}),
-        paths.date = paths.dimension(function(d) { return d.Loct}),
+        paths.date = paths.dimension(function(d) { return d.Loct}), // Needs to parse properly
         paths.academicDay = paths.dimension(function(d) { return d.Academic_Day}),
         paths.buildingId = paths.dimension(function(d) { return d.Building_ID}),
         paths.buildingName = paths.dimension(function(d) { return d.Building_Name}),
