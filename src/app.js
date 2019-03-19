@@ -1,4 +1,4 @@
-const {MapboxLayer, PathLayer} = deck;
+const { MapboxLayer, PathLayer } = deck;
 
 const INITIAL_VIEW_STATE =
 {
@@ -41,7 +41,9 @@ var draw = new MapboxDraw
 	{
 		polygon: true,
 		trash: true
-	}
+	},
+	userProperties: true,
+	styles: polyStyle
 });
 
 map.addControl(draw);
@@ -52,7 +54,26 @@ map.on('draw.update', updateArea);
 function updateArea(e) 
 {
 	var data = draw.getAll();
-	console.log(data);
+	if (data.features.length > 0)
+	{
+		var points = turf.points(pathCoordinates);
+		var polygon = turf.polygon([data.features[0].geometry.coordinates[0]]);
+
+		var ptsWithin = turf.pointsWithinPolygon(points, polygon);
+		filteredPointsWithin(ptsWithin);
+		UpdatePaths();
+		pathsLayer.setProps({ data: PATHSVISUAL });
+	}
+	else
+	{
+		if (e.type == 'draw.delete') 
+		{
+			paths.latitude.filter(null);
+			paths.longitude.filter(null);
+			UpdatePaths();
+			pathsLayer.setProps({ data: PATHSVISUAL });
+		}
+	}
 }
 
 // Create paths
@@ -60,16 +81,16 @@ const pathsLayer = new MapboxLayer
 ({
 	id: 'pathLayer',
 	type: PathLayer,
-    data: PATHSVISUAL,
-    getPath: p => p.path,
-    getColor: p => p.azimuthColor,
-    opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5),
+	data: PATHSVISUAL,
+	getPath: p => p.path,
+	getColor: p => p.azimuthColor,
+	opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5),
 	getWidth: 2,
 	widthScale: 2 ** (15 - view.zoom),
 	widthMinPixels: 0.1,
 	widthMaxPixels: 2,
 	rounded: true,
-    pickable: false,
+	pickable: false,
 	lightSettings: LIGHT_SETTINGS
 });
 
@@ -88,14 +109,14 @@ const geoJsonLayer = new MapboxLayer
 	pickable: true,
 	fp64: true,
 	lightSettings: LIGHT_SETTINGS,
-	onClick: ({object, x, y}) =>
+	onClick: ({ object, x, y }) =>
 	{
 		try
 		{
 			const tooltip = object.properties.Building_n;
 			console.log(tooltip);
 		}
-		catch(error) { };
+		catch (error) { };
 		/* Update tooltip
 			http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
 		*/
@@ -104,6 +125,7 @@ const geoJsonLayer = new MapboxLayer
 
 map.on('load', () => 
 {
+	// map.addSource('pathLayer', { type: "FeatureCollection", data: PATHSVISUAL });
 	map.addLayer(geoJsonLayer);
 	map.addLayer(pathsLayer);
 
