@@ -24,15 +24,18 @@ var view = INITIAL_VIEW_STATE;
 // Create base map
 const map = new mapboxgl.Map
 ({
-	container: document.body,
+	container: 'map',
 	style: 'http://162.246.156.156:8080/styles/dark-matter/style.json', // Using our own map server as opposed to Mapbox's server
 	// Note: deck.gl will be in charge of interaction and event handling
-	interactive: true,
+	// interactive: true,
 	center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
 	zoom: INITIAL_VIEW_STATE.zoom,
 	bearing: INITIAL_VIEW_STATE.bearing,
 	pitch: INITIAL_VIEW_STATE.pitch,
 });
+
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
 
 var draw = new MapboxDraw
 ({
@@ -51,16 +54,19 @@ map.on('draw.create', updateArea);
 map.on('draw.delete', updateArea);
 map.on('draw.update', updateArea);
 
+var points, polygon, ptsWithin;
+
 function updateArea(e) 
 {
 	var data = draw.getAll();
 	if (data.features.length > 0)
 	{
-		var points = turf.points(pathCoordinates);
-		var polygon = turf.polygon([data.features[0].geometry.coordinates[0]]);
-
-		var ptsWithin = turf.pointsWithinPolygon(points, polygon);
-		filteredPointsWithin(ptsWithin);
+		// console.log([data.features[0].geometry.coordinates[0]]);
+		points = turf.points(pathCoordinates);
+		polygon = turf.polygon([data.features[0].geometry.coordinates[0]]);
+		ptsWithin = turf.pointsWithinPolygon(points, polygon);
+		// filterPointsWithin(ptsWithin);
+		filterPathsPassingThrough(ptsWithin, true);
 		UpdatePaths();
 		pathsLayer.setProps({ data: PATHSVISUAL });
 	}
@@ -68,8 +74,10 @@ function updateArea(e)
 	{
 		if (e.type == 'draw.delete') 
 		{
-			paths.latitude.filter(null);
-			paths.longitude.filter(null);
+			// paths.latitude.filter(null);
+			// paths.longitude.filter(null);
+			// paths.id.filter(null);
+			filterPathsPassingThrough(ptsWithin, false);
 			UpdatePaths();
 			pathsLayer.setProps({ data: PATHSVISUAL });
 		}

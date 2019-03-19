@@ -17,12 +17,14 @@ function UpdatePaths()
 {
     var filteredNumPaths = paths.groupAll().reduceCount().value();
     var filteredPaths = paths.allFiltered();
-    var id = filteredPaths[0].Path_ID;
     var index = 0;
     var hueFactor = 255 / 360;
     var numPoints = filteredNumPaths;
 
+    if (filteredNumPaths == 0) return;
+    
     // Holy shit this shit needs refactoring...
+    var id = filteredPaths[0].Path_ID;
     var color = HSVtoRGB(((filteredPaths[0].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
     PATHSVISUAL = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
     for (let i = 0; i < numPoints; i++)
@@ -46,22 +48,22 @@ function UpdatePaths()
         if (PATHSVISUAL[index].path.length == 2)
         {
             index++;
-            if (id != filteredPaths[i].Path_ID)
-            {
-                id = filteredPaths[i].Path_ID;
-                color = HSVtoRGB(((filteredPaths[i].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
-                PATHSVISUAL[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
-            } 
-            else
-            {
+            // if (id != filteredPaths[i].Path_ID)
+            // {
+            //     id = filteredPaths[i].Path_ID;
+            //     color = HSVtoRGB(((filteredPaths[i].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+            //     PATHSVISUAL[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+            // } 
+            // else
+            // {
                 color = HSVtoRGB(((filteredPaths[i-1].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
                 PATHSVISUAL[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
 
                 var lat = parseFloat(filteredPaths[i-1].Lat);
                 var lon = parseFloat(filteredPaths[i-1].Lon);
-                pathCoordinates.push([lon, lat]);
+                // pathCoordinates.push([lon, lat]);
                 PATHSVISUAL[index].path.push([lon, lat]);
-            }
+            // }
         }
 
         var lat = parseFloat(filteredPaths[i].Lat);
