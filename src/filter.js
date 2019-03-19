@@ -6,7 +6,7 @@
         null <- Select all (remove filter)
 */
 
-var pathsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/UNSTABLE/data/paths.json";
+var pathsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/paths.json";
 var pathsjson;
 
 // #region Load stuff
@@ -39,7 +39,7 @@ const paths = crossfilter(pathsjson);
 const maxPaths = paths.groupAll().reduceCount().value();
 // const staypoints = crossfilter(staypointsjson);
 configurePathsFilter();
-filterPathAcademicDay('BETWEEN_TERMS');
+// filterPathAcademicDay('BETWEEN_TERMS');
 // filterLatitude([51.077820, 51.078580]);
 // filterLongitude([-114.13050, -114.12840]);
 
@@ -83,6 +83,29 @@ function filterLatitude(latitude)
 function filterLongitude(longitude)
 {
     paths.longitude.filter(longitude);
+}
+
+function filteredPointsWithin(points)
+{
+    var lats = []
+    var lons = [];
+    for (var i = 0; i < points.features.length; i++)
+    {
+        lons.push(points.features[i].geometry.coordinates[0]);
+        lats.push(points.features[i].geometry.coordinates[1]);
+    }
+    
+    // console.log(lats);
+    // console.log(lons);
+
+    paths.latitude.filter(function(d)
+    {
+        return lats.indexOf(d) > -1;
+    });
+    paths.longitude.filter(function(d)
+    {
+        return lons.indexOf(d) > -1;
+    });
 }
 
 function configurePathsFilter()
