@@ -114,7 +114,7 @@ const geoJsonLayer = new MapboxLayer
 	getFillColor: [150, 150, 150, 100],
 	opacity: 0.25,
 	lineWidthMinPixels: 2,
-	pickable: true,
+	pickable: false,
 	fp64: true,
 	lightSettings: LIGHT_SETTINGS,
 	onClick: ({ object, x, y }) =>
@@ -136,8 +136,34 @@ map.on('load', () =>
 	// map.addSource('pathLayer', { type: "FeatureCollection", data: PATHSVISUAL });
 	map.addLayer(geoJsonLayer);
 	map.addLayer(pathsLayer);
-
 });
+// map.getCanvas().style.cursor = 'crosshair';
+
+
+// var flag = false;
+// $(function()
+// {
+//     $(".mapbox-gl-draw_polygon").click(function()
+//     {
+// 		flag = true;
+// 		// $("#map canvas").css("cursor", "crosshair");
+// 	});
+// 	$("mapboxgl-canvas").hover(
+//         function()
+//         {
+// 			$(this).fadeIn(100, function()
+// 			{
+// 				// map.getCanvas().style.cursor = 'crosshair';
+// 				$(this).css("cursor", "crosshair");
+// 			});
+// 		},
+//         function()
+//         {
+// 			map.getCanvas().style.cursor = 'crosshair';
+//             // $("*").css("cursor", "auto");
+// 		}
+// 	);
+// });
 
 // #region Unused (for now)
 

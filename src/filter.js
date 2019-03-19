@@ -45,7 +45,7 @@ const maxPaths = paths.groupAll().reduceCount().value();
 configurePathsFilter();
 // filterPathID(0);
 // filterCoordinates((-114.1288, 51.07751));
-filterPathAcademicDay('BETWEEN_TERMS');
+// filterPathAcademicDay('BETWEEN_TERMS');
 // filterPathMaxTemp([0,8]);
 // filterLatitude([51.077820, 51.078580]);
 // filterLongitude([-114.13050, -114.12840]);
