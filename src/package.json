@@ -8,8 +8,9 @@
     "build": "NODE_ENV=production webpack --env.prod=true"
   },
   "dependencies": {
-    "@deck.gl/core": "^6.2.0",
-    "@deck.gl/layers": "^6.2.0",
+    "@deck.gl/core": "^6.4.7",
+    "@deck.gl/layers": "^6.4.7",
+    "@deck.gl/mapbox": "^6.4.7",
     "crossfilter2": "^1.4.6",
     "gl-matrix": "^3.0.0",
     "mapbox-gl": "^0.44.2",
@@ -17,10 +18,10 @@
     "mapbox-gl-draw-rectangle-mode": "^1.0.4"
   },
   "devDependencies": {
-    "buble": "^0.19.3",
+    "buble": "^0.19.7",
     "buble-loader": "^0.5.0",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.1"
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1"
   }
 }
