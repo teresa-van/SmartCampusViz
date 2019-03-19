@@ -34,14 +34,36 @@ const map = new mapboxgl.Map
 	pitch: INITIAL_VIEW_STATE.pitch,
 });
 
-// Create paths
-const pathsLayer = new PathLayer
+var draw = new MapboxDraw
 ({
-    id: 'pathLayer',
-    data: data.PATHSVISUAL,
+	displayControlsDefault: false,
+	controls:
+	{
+		polygon: true,
+		trash: true
+	}
+});
+
+map.addControl(draw);
+map.on('draw.create', updateArea);
+map.on('draw.delete', updateArea);
+map.on('draw.update', updateArea);
+
+function updateArea(e) 
+{
+	var data = draw.getAll();
+	console.log(data);
+}
+
+// Create paths
+const pathsLayer = new MapboxLayer
+({
+	id: 'pathLayer',
+	type: PathLayer,
+    data: PATHSVISUAL,
     getPath: p => p.path,
     getColor: p => p.azimuthColor,
-    opacity: 0.01 * Math.sqrt(data.maxPaths / data.PATHSVISUAL.length, 2),
+    opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5),
 	getWidth: 2,
 	widthScale: 2 ** (15 - view.zoom),
 	widthMinPixels: 0.1,
@@ -51,113 +73,43 @@ const pathsLayer = new PathLayer
 	lightSettings: LIGHT_SETTINGS
 });
 
+// Create buildings from campus shape files
+const geoJsonLayer = new MapboxLayer
+({
+	id: 'geojsonLayer',
+	type: GeoJsonLayer,
+	data: GEOJSON,
+	stroked: true,
+	filled: true,
+	getLineColor: [100, 100, 100],
+	getFillColor: [150, 150, 150, 100],
+	opacity: 0.25,
+	lineWidthMinPixels: 2,
+	pickable: true,
+	fp64: true,
+	lightSettings: LIGHT_SETTINGS,
+	onClick: ({object, x, y}) =>
+	{
+		try
+		{
+			const tooltip = object.properties.Building_n;
+			console.log(tooltip);
+		}
+		catch(error) { };
+		/* Update tooltip
+			http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
+		*/
+	}
+});
+
 map.on('load', () => 
 {
+	map.addLayer(geoJsonLayer);
 	map.addLayer(pathsLayer);
+
 });
-// var draw = new MapboxDraw
-// ({
-// 	displayControlsDefault: false,
-// 	controls:
-// 	{
-// 		polygon: true,
-// 		trash: true
-// 	}
-// });
 
-// map.addControl(draw);
-// map.on('draw.create', updateArea);
-// map.on('draw.delete', updateArea);
-// map.on('draw.update', updateArea);
-
-// // selectMap.disable();
-
-// function updateArea(e) 
-// {
-// 	var data = draw.getAll();
-// 	console.log(data);
-// }
-
-// // Create paths
-// const paths = new MapboxLayer
-// ({
-// 	id: 'pathLayer',
-// 	type: PathLayer,
-//     data: [],
-//     // getPath: p => p.path,
-//     // getColor: p => p.azimuthColor,
-//     // opacity: 0.01 * (data.maxPaths / data.PATHSVISUAL.length / 5),
-// 	// getWidth: 2,
-// 	// widthScale: 2 ** (15 - view.zoom),
-// 	// widthMinPixels: 0.1,
-// 	// widthMaxPixels: 2,
-// 	// rounded: true,
-//     // pickable: false,
-// 	// lightSettings: LIGHT_SETTINGS
-// });
-
-// // Insert the layer before mapbox labels 
-// map.on('load', () => 
-// {
-// 	map.addLayer(paths, 'waterway-label');
-// });
-
-// const myScatterplotLayer = new MapboxLayer
-// ({
-//     id: 'my-scatterplot',
-// 	type: ScatterplotLayer,
-//     data: [
-//         {position: [-74.5, 40], size: 100}
-//     ],
-//     getPosition: d => d.position,
-//     getRadius: d => d.size,
-//     getColor: [255, 0, 0]
-// });
-
-// myScatterplotLayer.map = map;
-
-// console.log(myScatterplotLayer);
-
-// map.on('load', () => 
-// {
-// 	map.addLayer(myScatterplotLayer);
-// });
-
-// add to mapbox
-// map.addLayer(myScat	terplotLayer);
-
-// // update the layer
-// myScatterplotLayer.setProps({
-//     getColor: [0, 0, 255]
-// });
-
-// Create buildings from campus shape files
-// const buildings = new GeoJsonLayer
-// ({
-// 	id: 'geojsonLayer',
-// 	data: data.GEOJSON,
-// 	stroked: true,
-// 	filled: true,
-// 	getLineColor: [100, 100, 100],
-// 	getFillColor: [150, 150, 150, 100],
-// 	opacity: 0.25,
-// 	lineWidthMinPixels: 2,
-// 	pickable: true,
-// 	fp64: true,
-// 	lightSettings: LIGHT_SETTINGS,
-// 	onClick: ({object, x, y}) =>
-// 	{
-// 		try
-// 		{
-// 			const tooltip = object.properties.Building_n;
-// 			console.log(tooltip);
-// 		}
-// 		catch(error) { };
-// 		/* Update tooltip
-// 			http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
-// 		*/
-// 	}
-// });
+// #region Unused (for now)
 
 // const staypoints = new ScatterplotLayer
 // ({
@@ -173,23 +125,6 @@ map.on('load', () =>
 // 	pickable: false,
 //     lightSettings: LIGHT_SETTINGS
 
-// });
-
-// // Create paths
-// const paths = new PathLayer
-// ({
-//     id: 'pathLayer',
-//     data: data.PATHSVISUAL,
-//     getPath: p => p.path,
-//     getColor: p => p.azimuthColor,
-//     opacity: 0.01 * Math.sqrt(data.maxPaths / data.PATHSVISUAL.length, 2),
-// 	getWidth: 2,
-// 	widthScale: 2 ** (15 - view.zoom),
-// 	widthMinPixels: 0.1,
-// 	widthMaxPixels: 2,
-// 	rounded: true,
-//     pickable: false,
-// 	lightSettings: LIGHT_SETTINGS
 // });
 
 // // Create and render deck
@@ -225,3 +160,5 @@ map.on('load', () =>
 // 	// 	// staypoints,
 // 	// ]
 // });
+
+// #endregion
