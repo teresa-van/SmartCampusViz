@@ -1,17 +1,10 @@
-// import {Vector2} from 'math.gl';
-// import {default as staypoints} from '../data/staypoints.json';
-// import * as data from './filter'
-
 const GEOJSON = 'https://raw.githubusercontent.com/teresa-van/SmartCampusViz/UNSTABLE/src/Campus_buildings_updated3.geojson';
 const filteredNumPaths = paths.groupAll().reduceCount().value();
-// const maxPaths = maxPaths;
 var PATHSVISUAL = [];
 var STAYPOINTSVISUAL = [];
 
 const S = 0.75;
 const B = 1;
-
-// console.log(paths.allFiltered());
 
 UpdatePaths();
 // UpdateStaypoints();
@@ -64,14 +57,14 @@ function UpdatePaths()
 
                 var lat = parseFloat(filteredPaths[i-1].Lat);
                 var lon = parseFloat(filteredPaths[i-1].Lon);
-                PATHSVISUAL[index].path.push(new Vector2(lon, lat));
+                PATHSVISUAL[index].path.push([lon, lat]);
             }
         }
 
         var lat = parseFloat(filteredPaths[i].Lat);
         var lon = parseFloat(filteredPaths[i].Lon);
         // PATHS[id].path.push(new Vector2(lon, lat));
-        PATHSVISUAL[index].path.push(new Vector2(lon, lat));
+        PATHSVISUAL[index].path.push([lon, lat]);
     }
 }
 
