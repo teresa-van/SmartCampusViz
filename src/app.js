@@ -35,7 +35,7 @@ const map = new mapboxgl.Map
 });
 
 // Create paths
-const paths = new PathLayer
+const pathsLayer = new PathLayer
 ({
     id: 'pathLayer',
     data: data.PATHSVISUAL,
@@ -53,7 +53,7 @@ const paths = new PathLayer
 
 map.on('load', () => 
 {
-	map.addLayer(paths);
+	map.addLayer(pathsLayer);
 });
 // var draw = new MapboxDraw
 // ({
