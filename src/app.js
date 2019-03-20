@@ -68,7 +68,7 @@ function updateArea(e)
 		// filterPointsWithin(ptsWithin);
 		filterPathsPassingThrough(ptsWithin, true);
 		UpdatePaths();
-		pathsLayer.setProps({ data: PATHSVISUAL });
+		pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
 	}
 	else
 	{
@@ -79,7 +79,7 @@ function updateArea(e)
 			// paths.id.filter(null);
 			filterPathsPassingThrough(ptsWithin, false);
 			UpdatePaths();
-			pathsLayer.setProps({ data: PATHSVISUAL });
+			pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
 		}
 	}
 }
