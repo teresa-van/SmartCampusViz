@@ -43,9 +43,9 @@ const paths = crossfilter(pathsjson);
 const maxPaths = paths.groupAll().reduceCount().value();
 // const staypoints = crossfilter(staypointsjson);
 configurePathsFilter();
-// filterPathID(0);
+// filterPathID([0,4]);
 // filterCoordinates((-114.1288, 51.07751));
-// filterPathAcademicDay('BETWEEN_TERMS');
+filterPathAcademicDay('BETWEEN_TERMS');
 // filterPathMaxTemp([0,8]);
 // filterLatitude([51.077820, 51.078580]);
 // filterLongitude([-114.13050, -114.12840]);
@@ -125,32 +125,66 @@ function filterPointsWithin(points)
     });
 }
 
-function filterPathsPassingThrough(points, include)
+function filterPathsPassingThrough()
 {
-    var lats = [];
-    var lons = [];
+    var pointsWithinAllPoly = [];
+    filteredPathIDs = [];
+    filterPathID(null);
 
-    for (var i = 0; i < points.features.length; i++)
-    {
-        if (include)
-        {
-            lats.push(points.features[i].geometry.coordinates[1]);
-            lons.push(points.features[i].geometry.coordinates[0]);
-        }
-    }
-
-    var checked = [];
+    var pathCoordinates = [];
     paths.allFiltered().forEach(function (d)
     {
-        if (checked.includes(d.Path_ID)) return;
-        if (lats.includes(d.Lat) && lons.includes(d.Lon))
-        {
-            filteredPathIDs.push(d.Path_ID);
-            checked.push(d.Path_ID);
-        }
-        else
-            remove(filteredPathIDs, d.Path_ID);
+        pathCoordinates.push([d.Lon, d.Lat]);
     });
+
+    var n = 0;
+    for (var id in allPolyPoints)
+    {
+        pointsWithinAllPoly[n] = {lats : [], lons : []};
+
+        var points = turf.points(pathCoordinates);
+        var polygon = turf.polygon(allPolyPoints[id]);
+        var ptsWithin = turf.pointsWithinPolygon(points, polygon);
+        
+        for (var i = 0; i < ptsWithin.features.length; i++)
+        {
+            var lon = (ptsWithin.features[i].geometry.coordinates[0]);
+            var lat = (ptsWithin.features[i].geometry.coordinates[1]);
+            pointsWithinAllPoly[n].lons.push(lon);
+            pointsWithinAllPoly[n].lats.push(lat);
+        }
+        n++;
+    }
+
+    var pathID = paths.allFiltered()[0].Path_ID;
+    var pointsForPath = {};
+    pointsForPath[paths.allFiltered()[0].Path_ID] = {lats:[], lons:[]};
+    paths.allFiltered().forEach(function (d)
+    {
+        if (d.Path_ID != pathID)
+        {
+            pathID = d.Path_ID;
+            pointsForPath[pathID] = {lats:[], lons:[]};
+        }
+        pointsForPath[pathID].lons.push(d.Lon);
+        pointsForPath[pathID].lats.push(d.Lat);
+    });
+    
+    for (var id in pointsForPath)
+    {
+        var add = true;
+        for (var n in pointsWithinAllPoly)
+        {
+            if (pointsWithinAllPoly[n].lats.filter(x => pointsForPath[id].lats.includes(x)).length == 0 || 
+                pointsWithinAllPoly[n].lons.filter(x => pointsForPath[id].lons.includes(x)).length == 0)
+            {
+                add = false;
+            }
+        }
+        if (add)
+            filteredPathIDs.push(parseInt(id));
+    }
+
 
     if (filteredPathIDs.length > 0)
     {
@@ -160,7 +194,7 @@ function filterPathsPassingThrough(points, include)
         });
     }
     else
-        filterPathID(null);
+        alert("There are no paths going through these polygons.");
 }
 
 function configurePathsFilter()

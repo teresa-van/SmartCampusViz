@@ -1,6 +1,6 @@
 const GEOJSON = 'https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/Campus_buildings_updated3.geojson';
 
-var pathCoordinates = [];
+// var pathCoordinates = [];
 var PATHSVISUAL = [];
 var STAYPOINTSVISUAL = [];
 
@@ -15,6 +15,7 @@ UpdatePaths();
 // var color = HSVtoRGB(((paths[0].Azimuth_Path * hueFactor) % 255) / 255, S, B);
 function UpdatePaths()
 {
+    // pathCoordinates = [];
     var filteredNumPaths = paths.groupAll().reduceCount().value();
     var filteredPaths = paths.allFiltered();
     var index = 0;
@@ -69,7 +70,7 @@ function UpdatePaths()
         var lat = parseFloat(filteredPaths[i].Lat);
         var lon = parseFloat(filteredPaths[i].Lon);
         // PATHS[id].path.push(new Vector2(lon, lat));
-        pathCoordinates.push([lon, lat]);
+        // pathCoordinates.push([lon, lat]);
         PATHSVISUAL[index].path.push([lon, lat]);
     }
 }
