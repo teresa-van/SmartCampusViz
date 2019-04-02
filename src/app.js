@@ -1,4 +1,4 @@
-const { MapboxLayer, PathLayer } = deck;
+const { MapboxLayer, PathLayer, ScatterplotLayer } = deck;
 
 const INITIAL_VIEW_STATE =
 {
@@ -64,16 +64,24 @@ function updateArea(e)
 	{
 		console.log(id);
 		delete allPolyPoints[id];
-		filterPathsPassingThrough();
+		filterPathsPassingThroughPolygon();
+		filterStaypointsWithinPolygon();
+
 		UpdatePaths();
 		pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
+		UpdateStaypoints();
+		staypointsLayer.setProps({ data: STAYPOINTSVISUAL, opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)) });
 	}
 	else
 	{
 		allPolyPoints[id] = [e.features[0].geometry.coordinates[0]];
-		filterPathsPassingThrough();
+		filterPathsPassingThroughPolygon();
+		filterStaypointsWithinPolygon();
+
 		UpdatePaths();
 		pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
+		UpdateStaypoints();
+		staypointsLayer.setProps({ data: STAYPOINTSVISUAL, opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)) });
 	}
 }
 
@@ -85,7 +93,7 @@ const pathsLayer = new MapboxLayer
 	data: PATHSVISUAL,
 	getPath: p => p.path,
 	getColor: p => p.azimuthColor,
-	opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5),
+	opacity: Math.min(1, 0.01 * (maxPaths / PATHSVISUAL.length / 5)),
 	getWidth: 2,
 	widthScale: 2 ** (15 - view.zoom),
 	widthMinPixels: 0.1,
@@ -93,6 +101,22 @@ const pathsLayer = new MapboxLayer
 	rounded: true,
 	pickable: false,
 	lightSettings: LIGHT_SETTINGS
+});
+
+const staypointsLayer = new MapboxLayer
+({
+	id: 'scatterplotLayer',
+	type: ScatterplotLayer,
+	data: STAYPOINTSVISUAL,
+    getPosition: p => p.point,
+    getFillColor: [255, 250, 0],
+    opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)),
+    getRadius: 0.5,
+    radiusScale: 2 ** (30 - view.zoom),
+    radiusMinPixels: 0.1,
+    radiusMaxPixels: 2,
+	pickable: false,
+    lightSettings: LIGHT_SETTINGS
 });
 
 // Create buildings from campus shape files
@@ -129,6 +153,7 @@ map.on('load', () =>
 	// map.addSource('pathLayer', { type: "FeatureCollection", data: PATHSVISUAL });
 	map.addLayer(geoJsonLayer);
 	map.addLayer(pathsLayer);
+	map.addLayer(staypointsLayer);
 });
 // map.getCanvas().style.cursor = 'crosshair';
 
