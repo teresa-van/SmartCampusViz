@@ -8,7 +8,7 @@ const S = 0.75;
 const B = 1;
 
 UpdatePaths();
-// UpdateStaypoints();
+UpdateStaypoints();
 
 // Parse paths data
 // var color = HSVtoRGB(0, S, B);
@@ -20,7 +20,6 @@ function UpdatePaths()
     var filteredPaths = paths.allFiltered();
     var index = 0;
     var hueFactor = 255 / 360;
-    var numPoints = filteredNumPaths;
 
     if (filteredNumPaths == 0) return;
     
@@ -28,7 +27,7 @@ function UpdatePaths()
     var id = filteredPaths[0].Path_ID;
     var color = HSVtoRGB(((filteredPaths[0].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
     PATHSVISUAL = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
-    for (let i = 0; i < numPoints; i++)
+    for (let i = 0; i < filteredNumPaths; i++)
     {
         // if (id != paths[i].Path_ID)
         // {
@@ -75,21 +74,27 @@ function UpdatePaths()
     }
 }
 
-// function UpdateStaypoints()
-// {
-//     var color;
-//     // Parse staypoints data
-//     for (let i = 0; i < staypoints.length; i++)
-//     {
-//         color = HSVtoRGB((i % 255) / 255, S, B);
-//         STAYPOINTSVISUAL[i] = {point: [], color: [color.r, color.g, color.b]};
+function UpdateStaypoints()
+{
+    var filteredNumStaypoints = staypoints.groupAll().reduceCount().value();
+    var filteredStaypoints = staypoints.allFiltered();
+
+    if (filteredNumStaypoints == 0) return;
+
+    var color;
+    STAYPOINTSVISUAL = [];
+    // Parse staypoints data
+    for (let i = 0; i < filteredNumStaypoints; i++)
+    {
+        color = HSVtoRGB(100 / 255, S, B);
+        STAYPOINTSVISUAL[i] = {point: [], color: [color.r, color.g, color.b]};
         
-//         var lat = parseFloat(staypoints[i].Centroid_Lat);
-//         var lon = parseFloat(staypoints[i].Centroid_Lon);
-//         STAYPOINTSVISUAL[i].point.push(lon);
-//         STAYPOINTSVISUAL[i].point.push(lat);
-//     }
-// }
+        var lat = parseFloat(filteredStaypoints[i].Centroid_Lat);
+        var lon = parseFloat(filteredStaypoints[i].Centroid_Lon);
+        STAYPOINTSVISUAL[i].point.push(lon);
+        STAYPOINTSVISUAL[i].point.push(lat);
+    }
+}
 
 // Converts HSV/HSB colour value to RGB
 // Taken from: https://stackoverflow.com/questions/17242144/javascript-convert-hsb-hsv-color-to-rgb-accurately
