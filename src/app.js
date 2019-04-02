@@ -54,33 +54,26 @@ map.on('draw.create', updateArea);
 map.on('draw.delete', updateArea);
 map.on('draw.update', updateArea);
 
-var points, polygon, ptsWithin;
-
+var allPolyPoints = {};
 function updateArea(e) 
 {
-	var data = draw.getAll();
-	if (data.features.length > 0)
+	// var data = draw.getAll();
+	var id = e.features[0].id;
+	console.log(e);
+	if (e.type == 'draw.delete') 
 	{
-		// console.log([data.features[0].geometry.coordinates[0]]);
-		points = turf.points(pathCoordinates);
-		polygon = turf.polygon([data.features[0].geometry.coordinates[0]]);
-		ptsWithin = turf.pointsWithinPolygon(points, polygon);
-		// filterPointsWithin(ptsWithin);
-		filterPathsPassingThrough(ptsWithin, true);
+		console.log(id);
+		delete allPolyPoints[id];
+		filterPathsPassingThrough();
 		UpdatePaths();
 		pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
 	}
 	else
 	{
-		if (e.type == 'draw.delete') 
-		{
-			// paths.latitude.filter(null);
-			// paths.longitude.filter(null);
-			// paths.id.filter(null);
-			filterPathsPassingThrough(ptsWithin, false);
-			UpdatePaths();
-			pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
-		}
+		allPolyPoints[id] = [e.features[0].geometry.coordinates[0]];
+		filterPathsPassingThrough();
+		UpdatePaths();
+		pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
 	}
 }
 
