@@ -54,34 +54,31 @@ map.on('draw.create', updateArea);
 map.on('draw.delete', updateArea);
 map.on('draw.update', updateArea);
 
+function filterWithPolygons()
+{
+	filterPathsPassingThroughPolygon();
+	filterStaypointsWithinPolygon();
+
+	UpdatePaths();
+	pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
+	UpdateStaypoints();
+	staypointsLayer.setProps({ data: STAYPOINTSVISUAL, opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)) });
+}
+
 var allPolyPoints = {};
 function updateArea(e) 
 {
 	// var data = draw.getAll();
 	var id = e.features[0].id;
-	console.log(e);
 	if (e.type == 'draw.delete') 
 	{
-		console.log(id);
 		delete allPolyPoints[id];
-		filterPathsPassingThroughPolygon();
-		filterStaypointsWithinPolygon();
-
-		UpdatePaths();
-		pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
-		UpdateStaypoints();
-		staypointsLayer.setProps({ data: STAYPOINTSVISUAL, opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)) });
+		filterWithPolygons();
 	}
 	else
 	{
 		allPolyPoints[id] = [e.features[0].geometry.coordinates[0]];
-		filterPathsPassingThroughPolygon();
-		filterStaypointsWithinPolygon();
-
-		UpdatePaths();
-		pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
-		UpdateStaypoints();
-		staypointsLayer.setProps({ data: STAYPOINTSVISUAL, opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)) });
+		filterWithPolygons();
 	}
 }
 

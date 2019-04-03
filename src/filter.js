@@ -54,13 +54,9 @@ const maxStaypoints = staypoints.groupAll().reduceCount().value();
 configurePathsFilter();
 configureStaypointsFilter();
 
-// filterPathID([0,4]);
-// filterCoordinates((-114.1288, 51.07751));
-paths.academicDay.filter('BETWEEN_TERMS');
-staypoints.academicDayStart.filter('BETWEEN_TERMS');
-// filterPathMaxTemp([0,8]);
-// filterLatitude([51.077820, 51.078580]);
-// filterLongitude([-114.13050, -114.12840]);
+// paths.id.filter([0,4]);
+// paths.academicDay.filter('BETWEEN_TERMS');
+// staypoints.academicDayStart.filter('BETWEEN_TERMS');
 
 // #region Paths
 
@@ -75,38 +71,64 @@ function filterPathsPassingThroughPolygon()
         pathCoordinates.push([d.Lon, d.Lat]);
     });
 
-    var pointsWithinAllPoly = findPointsWithinAllPolygons(pathCoordinates);
+    var pointsWithinAllPoly = findPointsWithinAllPolygons(pathCoordinates, true);
 
     // Set up dictionary where key: path ID, value: all points on path
     var pathID = paths.allFiltered()[0].Path_ID;
     var pointsForPath = {};
-    pointsForPath[paths.allFiltered()[0].Path_ID] = {lats:[], lons:[]};
+    pointsForPath[paths.allFiltered()[0].Path_ID] = [];
     paths.allFiltered().forEach(function (d)
     {
         if (d.Path_ID != pathID)
         {
             pathID = d.Path_ID;
-            pointsForPath[pathID] = {lats:[], lons:[]};
+            pointsForPath[pathID] = [];
         }
-        pointsForPath[pathID].lons.push(d.Lon);
-        pointsForPath[pathID].lats.push(d.Lat);
+        pointsForPath[pathID].push("" + d.Lon + d.Lat);
     });
-    
+
+    // console.log(pointsForPath);
+    // console.log(pointsWithinAllPoly);
+
     // Intersect all points on path with all points within each polygon, add to filter list if there exists a point in each polygon
-    for (var id in pointsForPath)
+    // NEEDS REFACTORING. SLOW ASF
+    for (var id in pointsForPath) // per path
     {
         var add = true;
-        for (var n in pointsWithinAllPoly)
+        for (var n in pointsWithinAllPoly) // per polygon
         {
-            if (pointsWithinAllPoly[n].lats.filter(x => pointsForPath[id].lats.includes(x)).length == 0 || 
-                pointsWithinAllPoly[n].lons.filter(x => pointsForPath[id].lons.includes(x)).length == 0)
+            if (pointsWithinAllPoly[n].filter(x => pointsForPath[id].includes(x)).length == 0)
             {
                 add = false;
+                break;
             }
         }
         if (add)
             filteredPathIDs.push(parseInt(id));
     }
+    // for (var id in pointsForPath) // per path
+    // {
+    //     var add = true;
+    //     for (var n in pointsWithinAllPoly) // per polygon
+    //     {
+    //         var found = false;
+    //         for (var p in pointsForPath[id]) // per point on path
+    //         {
+    //             if (pointsWithinAllPoly[n].some(a => pointsForPath[id][p].includes(a)))
+    //             {
+    //                 found = true;
+    //                 break;
+    //             }
+    //         }
+    //         if (!found)
+    //         {
+    //             add = false;
+    //             break;
+    //         }
+    //     }
+    //     if (add)
+    //         filteredPathIDs.push(parseInt(id));
+    // }
 
     // Filter
     if (filteredPathIDs.length > 0)
@@ -151,7 +173,6 @@ function configurePathsFilter()
 
 function filterStaypointsWithinPolygon()
 {
-    console.log(staypoints.allFiltered());
     filteredCentroidLon = [];
     filteredCentroidLat = [];
     staypoints.centroidLon.filter(null);
@@ -229,14 +250,15 @@ function configureStaypointsFilter()
 // #endregion
 
 
-function findPointsWithinAllPolygons(allPoints)
+function findPointsWithinAllPolygons(allPoints, path)
 {
     var pointsWithinAllPoly = [];
 
     var n = 0;
     for (var id in allPolyPoints)
     {
-        pointsWithinAllPoly[n] = {lats : [], lons : []};
+        if (path) pointsWithinAllPoly[n] = [];
+        else pointsWithinAllPoly[n] = {lats : [], lons : []};
 
         var points = turf.points(allPoints);
         var polygon = turf.polygon(allPolyPoints[id]);
@@ -246,8 +268,12 @@ function findPointsWithinAllPolygons(allPoints)
         {
             var lon = (ptsWithin.features[i].geometry.coordinates[0]);
             var lat = (ptsWithin.features[i].geometry.coordinates[1]);
-            pointsWithinAllPoly[n].lons.push(lon);
-            pointsWithinAllPoly[n].lats.push(lat);
+            if (path) pointsWithinAllPoly[n].push("" + lon + lat);
+            else
+            {
+                pointsWithinAllPoly[n].lons.push(lon);
+                pointsWithinAllPoly[n].lats.push(lat);
+            }
         }
         n++;
     }
