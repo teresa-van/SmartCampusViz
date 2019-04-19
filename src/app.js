@@ -54,15 +54,23 @@ map.on('draw.create', updateArea);
 map.on('draw.delete', updateArea);
 map.on('draw.update', updateArea);
 
-function filterWithPolygons()
+function filterWithPolygons(remove)
 {
-	filterPathsPassingThroughPolygon();
-	filterStaypointsWithinPolygon();
+	if (remove)
+	{
+		findPathsPassingThroughAllPolygons();
+		// findStaypointsWithinAllPolygons();
+	}
+	else
+	{
+		findPathsPassingThroughPolygon();
+		// findStaypointsWithinPolygon();
+	}
 
 	UpdatePaths();
 	pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
-	UpdateStaypoints();
-	staypointsLayer.setProps({ data: STAYPOINTSVISUAL, opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)) });
+	// UpdateStaypoints();
+	// staypointsLayer.setProps({ data: STAYPOINTSVISUAL, opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)) });
 }
 
 var allPolyPoints = {};
@@ -73,12 +81,12 @@ function updateArea(e)
 	if (e.type == 'draw.delete') 
 	{
 		delete allPolyPoints[id];
-		filterWithPolygons();
+		filterWithPolygons(true);
 	}
 	else
 	{
 		allPolyPoints[id] = [e.features[0].geometry.coordinates[0]];
-		filterWithPolygons();
+		filterWithPolygons((e.type == 'draw.update'));
 	}
 }
 
