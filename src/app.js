@@ -4,7 +4,7 @@ const INITIAL_VIEW_STATE =
 {
 	latitude: 51.078,
 	longitude: -114.132,
-	zoom: 15.25,
+	zoom: 15.85,
 	bearing: 0,
 	pitch: 0
 };
@@ -54,23 +54,31 @@ map.on('draw.create', updateArea);
 map.on('draw.delete', updateArea);
 map.on('draw.update', updateArea);
 
+function UpdateVisualization()
+{
+	UpdatePaths();
+	pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
+	UpdateStaypoints();
+	staypointsLayer.setProps({ data: STAYPOINTSVISUAL, opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)) });
+
+	renderAll();
+}
+
+paths.onChange(e => UpdateVisualization());
+staypoints.onChange(e => UpdateVisualization());
+
 function filterWithPolygons(remove)
 {
 	if (remove)
 	{
 		findPathsPassingThroughAllPolygons();
-		// findStaypointsWithinAllPolygons();
+		findStaypointsWithinAllPolygons();
 	}
 	else
 	{
 		findPathsPassingThroughPolygon();
-		// findStaypointsWithinPolygon();
+		findStaypointsWithinPolygon();
 	}
-
-	UpdatePaths();
-	pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
-	// UpdateStaypoints();
-	// staypointsLayer.setProps({ data: STAYPOINTSVISUAL, opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)) });
 }
 
 var allPolyPoints = {};
@@ -98,7 +106,7 @@ const pathsLayer = new MapboxLayer
 	data: PATHSVISUAL,
 	getPath: p => p.path,
 	getColor: p => p.azimuthColor,
-	opacity: Math.min(1, 0.01 * (maxPaths / PATHSVISUAL.length / 5)),
+	opacity: Math.min(1, 0.02 * (maxPaths / PATHSVISUAL.length / 3)),
 	getWidth: 2,
 	widthScale: 2 ** (15 - view.zoom),
 	widthMinPixels: 0.1,

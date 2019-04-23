@@ -1,0 +1,179 @@
+body 
+{
+    font-family: "Raleway", sans-serif;
+    margin: 0; 
+    padding: 0;
+}
+
+.sidebar 
+{
+    height: 96%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 2%;
+    left: 1%;
+    background-color: #202024;
+    opacity: 0.9;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidebar > div
+{
+    transition: 0.3s;
+}
+
+.sidebar a 
+{
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar h1 
+{
+    padding: 8px 8px 0px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #d6d6d6;
+    display: block;
+    min-width: 250px;
+}
+
+.sidebar h2 
+{
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #a5a5a5;
+    display: block;
+    min-width: 250px;
+}
+
+hr.linestyle
+{
+    /* padding: 8px 8px 8px 32px; */
+    border-top: 1px solid #3d3d3d;
+}
+
+.sidebar a:hover 
+{
+    color: #f1f1f1;
+}
+
+.sidebar .closebtn 
+{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.openbtn 
+{
+    font-size: 18px;
+    cursor: pointer;
+    background-color: #53545c;
+    color: rgb(3, 3, 3);
+    padding: 12px 12px;
+    border: none;
+}
+
+.openbtn:hover 
+{
+    background-color: #696974;
+}
+
+/* CHART */
+
+#charts 
+{
+    padding: 10px 0;
+}
+
+.chart 
+{
+    display: inline-block;
+    height: 151px;
+    margin-bottom: 20px;
+}
+
+.reset 
+{
+    padding-left: 1em;
+    font-size: smaller;
+    color: #ccc;
+}
+
+.background.bar 
+{
+    fill: #ccc;
+}
+
+.foreground.bar 
+{
+    fill: rgb(118, 120, 255);
+}
+
+.axis path, .axis line 
+{
+    fill: none;
+    stroke: rgb(216, 216, 216);
+    shape-rendering: crispEdges;
+}
+
+.axis text 
+{
+    font-size: 15px;
+    fill: #ccc;
+}
+
+.brush rect.extent 
+{
+    fill: rgb(255, 100, 100);
+    fill-opacity: .125;
+}
+
+.brush .resize path 
+{
+    fill: #eee;
+    stroke: #666;
+}
+
+/* CHART */
+  
+#main 
+{
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.3s linear;
+    transition-delay: 0.4s;
+    /* transition: margin-left .5s; */
+    position: absolute; 
+    top: 2%;
+    left: 1%;
+    /* padding: 16px; */
+    z-index: 1;
+}
+
+#map 
+{ 
+    position:absolute; 
+    top:0; 
+    bottom:0; 
+    width:100%; 
+    z-index: 0;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) 
+{
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
+}
