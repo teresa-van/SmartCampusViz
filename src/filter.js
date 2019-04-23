@@ -54,10 +54,12 @@ filteredCentroidLat = [];
 const staypoints = crossfilter(staypointsjson);
 const maxStaypoints = staypoints.groupAll().reduceCount().value();
 
-// const staypoints = crossfilter(staypointsjson);
 configurePathsFilter();
 configureStaypointsFilter();
 
+
+// paths.month.filter(6);
+// paths.weekday.filter(0);
 // paths.id.filter([0,4]);
 // paths.academicDay.filter('BETWEEN_TERMS');
 // staypoints.academicDayStart.filter('BETWEEN_TERMS');
@@ -129,6 +131,19 @@ function configurePathsFilter()
         paths.id = paths.dimension(function (d) { return d.Path_ID }),
         paths.pointId = paths.dimension(function (d) { return d.Path_Point_ID }),
         paths.date = paths.dimension(function (d) { return d.Loct }), // Needs to parse properly
+
+        paths.day = paths.dimension(function (d) { return parseInt(d.Loct.split(" ")[0].split("-")[0]) }),
+        paths.month = paths.dimension(function (d) { return parseInt(d.Loct.split(" ")[0].split("-")[1]) }),
+        paths.year = paths.dimension(function (d) { return parseInt(d.Loct.split(" ")[0].split("-")[2]) }),
+        paths.weekday = paths.dimension(function (d) { 
+            var date = d.Loct.split(" ")[0].split("-");
+            var day = new Date(date[1]+"-"+date[0]+"-"+date[2]);
+            return parseInt(day.getDay());
+        }),
+
+        paths.hour = paths.dimension(function (d) { return parseInt(d.Loct.split(" ")[1].split(":")[0]) }),
+        paths.minute = paths.dimension(function (d) { return parseInt(d.Loct.split(" ")[1].split(":")[1]) }),
+
         paths.academicDay = paths.dimension(function (d) { return d.Academic_Day }),
         paths.buildingId = paths.dimension(function (d) { return d.Building_ID }),
         paths.buildingName = paths.dimension(function (d) { return d.Building_Name }),
@@ -221,6 +236,19 @@ function configureStaypointsFilter()
     {
         staypoints.loctStart = staypoints.dimension(function (d) { return d.Loct_Start }),
         staypoints.loctEnd = staypoints.dimension(function (d) { return d.Loct_End }),
+
+        staypoints.day = staypoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[0].split("-")[0]) }),
+        staypoints.month = staypoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[0].split("-")[1]) }),
+        staypoints.year = staypoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[0].split("-")[2]) }),
+        staypoints.weekday = staypoints.dimension(function (d) { 
+            var date = d.Loct_Start.split(" ")[0].split("-");
+            var day = new Date(date[1]+"-"+date[0]+"-"+date[2]);
+            return parseInt(day.getDay());
+        }),
+
+        staypoints.hour = staypoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[1].split(":")[0]) }),
+        staypoints.minute = staypoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[1].split(":")[1]) }),
+
         staypoints.academicDayStart = staypoints.dimension(function (d) { return d.Academic_Day_Start }),
         staypoints.academicDayEnd = staypoints.dimension(function (d) { return d.Academic_Day_End }),
         staypoints.duration = staypoints.dimension(function (d) { return d.Duration_minutes }),
@@ -245,6 +273,8 @@ function configureStaypointsFilter()
 }
 
 // #endregion
+
+// #region Utilities
 
 function findPointsWithinAPolygon(allPoints, polyPoints, path)
 {
@@ -286,3 +316,5 @@ function findPointsWithinAllPolygons(allPoints, path)
 
     return pointsWithinAllPoly;
 }
+
+// #endregion
