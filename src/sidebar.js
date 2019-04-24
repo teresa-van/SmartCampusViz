@@ -1,6 +1,6 @@
 function openSidebar() 
 {
-    document.getElementById("sidebar").style.width = "18%";
+    document.getElementById("sidebar").style.width = "20%";
     document.getElementById("main").style.zIndex = "-1";
     document.getElementById("main").style.opacity = "0";
 }
