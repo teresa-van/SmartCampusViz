@@ -1,7 +1,7 @@
 function barChart() 
 {
     if (!barChart.id) barChart.id = 0;
-    var margin = { top: 10, right: 10, bottom: 20, left: 10 },
+    var margin = { top: 10, right: 10, bottom: 50, left: 10 },
         x,
         y = d3.scale.linear().range([100, 0]),
         id = barChart.id++,
@@ -11,6 +11,8 @@ function barChart()
         dimension,
         group,
         dimension2,
+        tickLabels,
+        numTicks,
         round;
 
     function chart(div) 
@@ -19,6 +21,8 @@ function barChart()
             height = y.range()[0];
 
         y.domain([0, group.top(1)[0].value]);
+        axis.scale(x).tickFormat(function(d) { return tickLabels[d]; } );
+        axis.scale(x).ticks(numTicks);
         div.each(function () 
         {
             var div = d3.select(this),
@@ -50,7 +54,13 @@ function barChart()
                 g.append("g")
                     .attr("class", "axis")
                     .attr("transform", "translate(0," + height + ")")
-                    .call(axis);
+                    .call(axis)
+                    .selectAll("text")
+                    .attr("y", 0)
+                    .attr("x", -9)
+                    .attr("dy", ".35em")
+                    .attr("transform", "rotate(-90)")
+                    .style("text-anchor", "end");
 
                 // Initialize the brush component with pretty resize handles.
                 var gBrush = g.append("g").attr("class", "brush").call(brush);
@@ -136,6 +146,7 @@ function barChart()
             .attr("x", x(extent[0]))
             .attr("width", x(extent[1]) - x(extent[0]));
 
+        console.log(extent);
         dimension.filterRange(extent);
         dimension2.filterRange(extent);
     });
@@ -191,6 +202,22 @@ function barChart()
     {
         if (!arguments.length) return dimension2;
         dimension2 = _;
+
+        return chart;
+    };
+
+    chart.tickLabels = function (_) 
+    {
+        if (!arguments.length) return tickLabels;
+        tickLabels = _;
+
+        return chart;
+    };
+
+    chart.numTicks = function (_) 
+    {
+        if (!arguments.length) return numTicks;
+        numTicks = _;
 
         return chart;
     };

@@ -77,7 +77,7 @@ function filterPathsPassingThroughPolygons()
         });
     }
     else
-        alert("No paths pass through these polygons.");
+        alert("No points pass through these polygons.");
 }
 
 function findPathsPassingThroughPolygon()

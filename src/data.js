@@ -86,8 +86,12 @@ function UpdateStaypoints()
     // Parse staypoints data
     for (let i = 0; i < filteredNumStaypoints; i++)
     {
-        color = HSVtoRGB(100 / 255, S, B);
-        STAYPOINTSVISUAL[i] = {point: [], color: [color.r, color.g, color.b]};
+        var hour = parseInt(filteredStaypoints[i].Loct_Start.split(" ")[1].split(":")[0]);
+        var hue = (hour >= 0 && hour < 8) ? 0 : (hour >= 8 && hour < 16) ? 60 : 240
+        color = HSVtoRGB(hue / 360, S, B);
+
+        var s = (filteredStaypoints[i].Duration_minutes / 762.8) * 2000 + 2;
+        STAYPOINTSVISUAL[i] = {point: [], color: [color.r, color.g, color.b], pointSize: s};
         
         var lat = parseFloat(filteredStaypoints[i].Centroid_Lat);
         var lon = parseFloat(filteredStaypoints[i].Centroid_Lon);
