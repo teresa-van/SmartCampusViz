@@ -4,7 +4,7 @@ const INITIAL_VIEW_STATE =
 {
 	latitude: 51.078,
 	longitude: -114.132,
-	zoom: 15.85,
+	zoom: 15.50,
 	bearing: 0,
 	pitch: 0
 };
@@ -101,7 +101,7 @@ function updateArea(e)
 // Create paths
 const pathsLayer = new MapboxLayer
 ({
-	id: 'pathLayer',
+	id: 'pathsLayer',
 	type: PathLayer,
 	data: PATHSVISUAL,
 	getPath: p => p.path,
@@ -118,16 +118,16 @@ const pathsLayer = new MapboxLayer
 
 const staypointsLayer = new MapboxLayer
 ({
-	id: 'scatterplotLayer',
+	id: 'staypointsLayer',
 	type: ScatterplotLayer,
 	data: STAYPOINTSVISUAL,
     getPosition: p => p.point,
-    getFillColor: [255, 250, 0],
+    getFillColor: p => p.color,
     opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)),
-    getRadius: 0.5,
-    radiusScale: 2 ** (30 - view.zoom),
-    radiusMinPixels: 0.1,
-    radiusMaxPixels: 2,
+    getRadius: p => p.pointSize,
+    radiusScale: 1 / (view.zoom ** 2),
+    radiusMinPixels: 2,
+    radiusMaxPixels: 30,//p => console.log(p.pointSize),
 	pickable: false,
     lightSettings: LIGHT_SETTINGS
 });
@@ -166,7 +166,7 @@ map.on('load', () =>
 	// map.addSource('pathLayer', { type: "FeatureCollection", data: PATHSVISUAL });
 	map.addLayer(geoJsonLayer);
 	map.addLayer(pathsLayer);
-	map.addLayer(staypointsLayer);
+	// map.addLayer(staypointsLayer);
 });
 // map.getCanvas().style.cursor = 'crosshair';
 

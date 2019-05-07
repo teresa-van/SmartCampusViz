@@ -21,24 +21,32 @@
     <script src="https://d3js.org/d3.v3.min.js"></script>
 
     <script src='extensions.js'></script>
-</head>
 
-<body>
-    <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
     <script
         src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
     <script src="semantic/semantic.min.js"></script>
 
+    <link href="https://fonts.googleapis.com/css?family=Jura" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles.css"/>
-    
+</head>
+
+<body>
     <div id='map'></div>
     <div id="sidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeSidebar()">×</a>
+        <h1>View</h1>
+        <hr class="linestyle"/>
+        <div style="padding-left: 25px">
+            <button id="path-button" class="ui teal button" style="font-family: 'Jura', sans-serif">Paths</button>
+            <button id="staypoints-button" class="ui teal button basic" style="font-family: 'Jura', sans-serif">Staypoints</button>
+        </div>    
         <h1>Filter</h1>
         <hr class="linestyle"/>
-        <h2>Month</h2>
+        <!-- <h2>Month</h2>
         <div style="min-width: 250px; width: 94%; padding-left: 25px">
             <select name="month" class="ui fluid selection dropdown" multiple="" id="month-select">
                 <option value="">Month</option>
@@ -69,18 +77,23 @@
                 <option value="5">Friday</option>
                 <option value="6">Saturday</option>
             </select>
-        </div>
-
-        <h2>Time of Day</h2>
+        </div> -->
+        <center>
         <div id="charts">
-            <div id="hour-chart" class="chart" style="min-width: 250px; width: 450px; padding-left: 25px"></div>
+            <h2>Month</h2>
+            <div id="month-chart" class="chart"></div>
+            <h2>Weekday</h2>
+            <div id="weekday-chart" class="chart"></div>
+            <h2>Time of Day</h2>
+            <div id="hour-chart" class="chart"></div>
         </div>
+        </center>
 
         <h1>Legend</h1>
         <hr class="linestyle"/>
         <h2>Azimuth Path</h2>
         <div style="padding-left: 60px;">
-            <img src="https://i.stack.imgur.com/01XJ7.png" width="300px" height="300px"/>
+            <img src="./azimuthpath.png" width="80%"/>
         </div>
         
     </div>

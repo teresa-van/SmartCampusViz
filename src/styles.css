@@ -1,8 +1,6 @@
-body 
+html body *
 {
-    font-family: "Raleway", sans-serif;
-    margin: 0; 
-    padding: 0;
+    font-family: "Jura", sans-serif;
 }
 
 .sidebar 
@@ -17,7 +15,7 @@ body
     opacity: 0.9;
     overflow-x: hidden;
     transition: 0.5s;
-    padding-top: 60px;
+    padding-top: 30px;
 }
 
 .sidebar > div
@@ -27,9 +25,9 @@ body
 
 .sidebar a 
 {
-    padding: 8px 8px 8px 32px;
+    padding: 4px 4px 4px 16px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 18px;
     color: #818181;
     display: block;
     transition: 0.3s;
@@ -37,9 +35,9 @@ body
 
 .sidebar h1 
 {
-    padding: 8px 8px 0px 32px;
+    padding: 4px 4px 0px 16px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 18px;
     color: #d6d6d6;
     display: block;
     min-width: 250px;
@@ -47,9 +45,9 @@ body
 
 .sidebar h2 
 {
-    padding: 8px 8px 8px 32px;
+    padding: 4px 4px 4px 16px;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 14px;
     color: #a5a5a5;
     display: block;
     min-width: 250px;
@@ -77,11 +75,11 @@ hr.linestyle
 
 .openbtn 
 {
-    font-size: 18px;
+    font-size: 14px;
     cursor: pointer;
     background-color: #53545c;
     color: rgb(3, 3, 3);
-    padding: 12px 12px;
+    padding: 10px 10px;
     border: none;
 }
 
@@ -94,14 +92,14 @@ hr.linestyle
 
 #charts 
 {
-    padding: 10px 0;
+    padding: 4px 0px;
 }
 
 .chart 
 {
     display: inline-block;
-    height: 151px;
-    margin-bottom: 20px;
+    height: 140px;
+    margin-bottom: 4px;
 }
 
 .reset 
@@ -130,7 +128,7 @@ hr.linestyle
 
 .axis text 
 {
-    font-size: 15px;
+    font-size: 14px;
     fill: #ccc;
 }
 
