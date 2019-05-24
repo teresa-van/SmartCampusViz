@@ -1,34 +1,10 @@
-function openSidebar() 
-{
-    document.getElementById("sidebar").style.width = "20%";
-    document.getElementById("main").style.zIndex = "-1";
-    document.getElementById("main").style.opacity = "0";
-}
-  
-function closeSidebar() 
-{
-    document.getElementById("sidebar").style.width = "0";
-    document.getElementById("main").style.zIndex = "1";
-    document.getElementById("main").style.opacity = "1";
-}
-
 var width = 0.16 * window.innerWidth;
-
-var charts = 
+var leftCharts = 
 [
-    // barChart()
-    //     .dimension(paths.month)
-    //     .group(paths.month.group())
-    //     .dimension2(staypoints.month)
-    //     .x(d3.scale.linear()
-    //         .domain([1,13])
-    //         .rangeRound([0, width], .1))
-    //     .tickLabels(["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
-    //     .numTicks(13),
     barChart()
-        .dimension(paths.month)
-        .group(paths.month.group())
-        .dimension2(staypoints.month)
+        .dimension(paths[0].month)
+        .group(paths[0].month.group())
+        .dimension2(staypoints[0].month)
         .x(d3.scale.linear()
             .domain([1,13])
             .rangeRound([0, width]))
@@ -36,9 +12,9 @@ var charts =
         .numTicks(13),
 
     barChart()
-        .dimension(paths.weekday)
-        .group(paths.weekday.group())
-        .dimension2(staypoints.weekday)
+        .dimension(paths[0].weekday)
+        .group(paths[0].weekday.group())
+        .dimension2(staypoints[0].weekday)
         .x(d3.scale.linear()
         .domain([0, 7])
         .rangeRound([0, width]))
@@ -46,9 +22,9 @@ var charts =
         .numTicks(8),
 
     barChart()
-        .dimension(paths.hour)
-        .group(paths.hour.group())
-        .dimension2(staypoints.hour)
+        .dimension(paths[0].hour)
+        .group(paths[0].hour.group())
+        .dimension2(staypoints[0].hour)
         .x(d3.scale.linear()
         .domain([0, 24])
         .rangeRound([0, width]))
@@ -56,8 +32,45 @@ var charts =
         .numTicks(13),
 ];
 
-var chart = d3.selectAll(".chart")
-      .data(charts)
+var rightCharts = 
+[
+    barChart()
+        .dimension(paths[1].month)
+        .group(paths[1].month.group())
+        .dimension2(staypoints[1].month)
+        .x(d3.scale.linear()
+            .domain([1,13])
+            .rangeRound([0, width]))
+        .tickLabels(["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+        .numTicks(13),
+
+    barChart()
+        .dimension(paths[1].weekday)
+        .group(paths[1].weekday.group())
+        .dimension2(staypoints[1].weekday)
+        .x(d3.scale.linear()
+        .domain([0, 7])
+        .rangeRound([0, width]))
+        .tickLabels(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"])
+        .numTicks(8),
+
+    barChart()
+        .dimension(paths[1].hour)
+        .group(paths[1].hour.group())
+        .dimension2(staypoints[1].hour)
+        .x(d3.scale.linear()
+        .domain([0, 24])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(25).keys()])
+        .numTicks(13),
+];
+
+var leftChart = d3.selectAll(".left-chart")
+      .data(leftCharts)
+      .each(function(chart) { chart.on("brush", renderAll).on("brushend", renderAll); });
+
+var rightChart = d3.selectAll(".right-chart")
+      .data(rightCharts)
       .each(function(chart) { chart.on("brush", renderAll).on("brushend", renderAll); });
 
 renderAll();
@@ -71,28 +84,92 @@ function render(method)
 // Whenever the brush moves, re-rendering everything.
 function renderAll() 
 {
-    chart.each(render);
+    leftChart.each(render);
+    rightChart.each(render);
 }
 
-$('#path-button')
+function openLeftSidebar() 
+{
+    document.getElementById("left-sidebar").style.width = "20%";
+    document.getElementById("left-sidebar-button").style.zIndex = "-1";
+    document.getElementById("left-sidebar-button").style.opacity = "0";
+}
+
+function closeLeftSidebar() 
+{
+    document.getElementById("left-sidebar").style.width = "0";
+    document.getElementById("left-sidebar-button").style.zIndex = "10";
+    document.getElementById("left-sidebar-button").style.opacity = "1";
+}
+
+function openRightSidebar() 
+{
+    document.getElementById("right-sidebar").style.width = "20%";
+    document.getElementById("right-sidebar-button").style.zIndex = "-1";
+    document.getElementById("right-sidebar-button").style.opacity = "0";
+}
+  
+
+function closeRightSidebar() 
+{
+    document.getElementById("right-sidebar").style.width = "0";
+    document.getElementById("right-sidebar-button").style.zIndex = "10";
+    document.getElementById("right-sidebar-button").style.opacity = "1";
+}
+
+function togglePaths(paths, index)
+{
+    var pathsLayer = (index == 0) ? leftPathsLayer : rightPathsLayer;
+    var staypointsLayer = (index == 0) ? leftStaypointsLayer : rightStaypointsLayer;
+
+    pathsLayer.setProps({ visible: paths });
+    staypointsLayer.setProps({ visible: !paths });
+
+    dataView = paths ? 'paths' : 'staypoints';
+    filterWithPolygons(true, index);
+}
+
+$('#left-path-button')
     .click(
         function()
         {
-            document.getElementById("path-button").className = "ui teal button";
-            document.getElementById("staypoints-button").className = "ui teal button basic";
-            map.removeLayer('staypointsLayer');
-            map.addLayer(pathsLayer);
+            document.getElementById("left-path-button").className = "ui button";
+            document.getElementById("left-staypoints-button").className = "ui button basic";
+        
+            togglePaths(true, 0);
         }
     );
 
-$('#staypoints-button')
+$('#right-path-button')
     .click(
         function()
         {
-            document.getElementById("path-button").className = "ui teal button basic";
-            document.getElementById("staypoints-button").className = "ui teal button";
-            map.removeLayer('pathsLayer');
-            map.addLayer(staypointsLayer);
+            document.getElementById("right-path-button").className = "ui button";
+            document.getElementById("right-staypoints-button").className = "ui button basic";
+        
+            togglePaths(true, 1);
+        }
+    );
+
+$('#left-staypoints-button')
+    .click(
+        function()
+        {
+            document.getElementById("left-path-button").className = "ui button basic";
+            document.getElementById("left-staypoints-button").className = "ui button";
+
+            togglePaths(false, 0);
+        }
+    );
+
+$('#right-staypoints-button')
+    .click(
+        function()
+        {
+            document.getElementById("right-path-button").className = "ui button basic";
+            document.getElementById("right-staypoints-button").className = "ui button";
+
+            togglePaths(false, 1);
         }
     );
 

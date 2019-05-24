@@ -1,251 +1,238 @@
-const { MapboxLayer, PathLayer, ScatterplotLayer } = deck;
+// #region Constants, Variables, Initialization
+var darkStyle = 'mapbox://styles/mapbox/dark-v10'; //'http://162.246.156.156:8080/styles/dark-matter/style.json';
+var lightStyle = 'mapbox://styles/mapbox/light-v10'; //'http://162.246.156.156:8080/styles/positron/style.json';
 
-const INITIAL_VIEW_STATE =
+var deckgl;
+
+var dataView = 'paths';
+var allPolyPoints = [{}, {}];
+var drawing = false;
+var syncPolygons = false;
+var loaded = 0;
+
+var map;
+var rightMap;
+var leftMap;
+
+var loopLength = 1800;
+var animationSpeed = 30;
+var loopTime = loopLength / animationSpeed;
+var currentTime = 0;
+var animation;
+
+paths[0].onChange(e => updateVisualization(0));
+paths[1].onChange(e => updateVisualization(1));
+
+staypoints[0].onChange(e => updateVisualization(0));
+staypoints[1].onChange(e => updateVisualization(1));
+
+// #endregion
+
+$(function () 
 {
-	latitude: 51.078,
-	longitude: -114.132,
-	zoom: 15.50,
-	bearing: 0,
-	pitch: 0
-};
+	mapboxgl.accessToken = 'pk.eyJ1IjoidGVyZXNhLXZhbiIsImEiOiJjanF3cGV6MHgwYWw3NDhzYnU0MzhveWRpIn0.2L-9hptK5Va1-PjdKC_fVA';
+	updatePaths(0);
+	updatePaths(1);
 
-const LIGHT_SETTINGS =
-{
-	lightsPosition: [-122.45, 37.66, 8000, -122.0, 38.0, 8000],
-	ambientRatio: 0.3,
-	diffuseRatio: 0.6,
-	specularRatio: 0.4,
-	lightsStrength: [1, 0.0, 0.8, 0.0],
-	numberOfLights: 2
-};
+	updateStaypoints(0);
+	updateStaypoints(1);
 
-var view = INITIAL_VIEW_STATE;
+	createLayers();
+	initMaps();
 
-// Create base map
-const map = new mapboxgl.Map
-({
-	container: 'map',
-	style: 'http://162.246.156.156:8080/styles/dark-matter/style.json', // Using our own map server as opposed to Mapbox's server
-	// Note: deck.gl will be in charge of interaction and event handling
-	// interactive: true,
-	center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
-	zoom: INITIAL_VIEW_STATE.zoom,
-	bearing: INITIAL_VIEW_STATE.bearing,
-	pitch: INITIAL_VIEW_STATE.pitch,
+    leftMap.on('load', function () 
+    {
+		addMapLayers(leftMap, [leftGeoJsonLayer, leftPathsLayer, leftStaypointsLayer, leftBuildingLabelLayer]);
+        mapLoaded();
+    });
+
+    rightMap.on('load', function ()
+    {
+		addMapLayers(rightMap, [rightGeoJsonLayer, rightPathsLayer, rightStaypointsLayer, rightBuildingLabelLayer]);
+        mapLoaded();
+	});
 });
 
-// Add zoom and rotation controls to the map.
-map.addControl(new mapboxgl.NavigationControl());
-
-var draw = new MapboxDraw
-({
-	displayControlsDefault: false,
-	controls:
-	{
-		polygon: true,
-		trash: true
-	},
-	userProperties: true,
-	styles: polyStyle
-});
-
-map.addControl(draw);
-map.on('draw.create', updateArea);
-map.on('draw.delete', updateArea);
-map.on('draw.update', updateArea);
-
-function UpdateVisualization()
+function initMaps()
 {
-	UpdatePaths();
-	pathsLayer.setProps({ data: PATHSVISUAL, opacity: 0.01 * (maxPaths / PATHSVISUAL.length / 5) });
-	UpdateStaypoints();
-	staypointsLayer.setProps({ data: STAYPOINTSVISUAL, opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)) });
+	leftMap = createMap('leftMap', darkStyle);
+	rightMap = createMap('rightMap', darkStyle);
 
-	renderAll();
+	map = new mapboxgl.Compare(leftMap, rightMap, {});
+	map._setPosition(0);
 }
 
-paths.onChange(e => UpdateVisualization());
-staypoints.onChange(e => UpdateVisualization());
+function mapLoaded()
+{
+    loaded++;
 
-function filterWithPolygons(remove)
+    if (loaded < 2)
+        return;
+
+    addNavigationControls();
+    addDrawControls();
+	addScaleControls();
+}
+
+function updateVisualization(index)
+{
+	if (dataView === 'paths')
+	{
+		var layer = (index == 0) ? leftPathsLayer : rightPathsLayer;
+		updatePaths(index);
+		layer.setProps({ data: PATHSVISUAL[index], opacity: 0.02 * (maxPaths / PATHSVISUAL[index].length / 3) });
+	}
+	else
+	{
+		var layer = (index == 0) ? leftStaypointsLayer : rightStaypointsLayer;
+		updateStaypoints(index);
+		layer.setProps({ data: STAYPOINTSVISUAL[index], opacity: Math.min(1, 0.02 * (maxStaypoints / STAYPOINTSVISUAL[index].length / 3)) });
+	}
+
+	// renderAll();
+}
+
+function updateCursor(e)
+{
+	drawing = !drawing;
+}
+
+function createMap(container, style)
+{
+	return new mapboxgl.Map
+	({
+		container: container,
+		style: style, // Using our own map server as opposed to Mapbox's server
+		// interactive: true,
+		center: [initialViewState.longitude, initialViewState.latitude],
+		zoom: initialViewState.zoom,
+		bearing: initialViewState.bearing,
+		pitch: initialViewState.pitch,
+		antialias: true,
+	});
+}
+
+function addMapLayers(_map, layers)
+{
+	for (var i in layers)
+	{
+		_map.addLayer(layers[i]);
+		layers[i].deck.props.getCursor = () => drawing ? "crosshair" : "grab";
+	}
+}
+
+function addNavigationControls()
+{
+	rightMap.addControl(new mapboxgl.NavigationControl());
+}
+
+function addScaleControls()
+{
+	var scale = new mapboxgl.ScaleControl({
+		maxWidth: 200,
+		unit: 'metric'
+	});
+
+	rightMap.addControl(scale, 'bottom-right');
+}
+
+function addDrawControls()
+{
+	leftDraw = new MapboxDraw({
+        displayControlsDefault: false,
+        controls: {
+            polygon: true,
+            trash: true
+		},
+		userProperties: true,
+		styles: polyStyle
+    });
+
+    rightDraw = new MapboxDraw({
+        displayControlsDefault: false,
+        controls: {
+            polygon: true,
+            trash: true
+		},
+		userProperties: true,
+		styles: polyStyle
+    });
+
+    rightMap.addControl(rightDraw);
+    leftMap.addControl(leftDraw, "top-left");
+
+    rightMap.on('draw.create', updateAreaR);
+    rightMap.on('draw.delete', updateAreaR);
+    rightMap.on('draw.update', updateAreaR);
+	rightMap.on('draw.modechange', updateCursor);
+
+    leftMap.on('draw.create', updateAreaL);
+    leftMap.on('draw.delete', updateAreaL);
+    leftMap.on('draw.update', updateAreaL);
+	leftMap.on('draw.modechange', updateCursor);
+
+    function updateAreaL(e)
+    {
+        updateArea(e, 0);
+    }
+
+    function updateAreaR(e)
+    {
+        updateArea(e, 1);
+	}
+
+	function updateArea(e, index) 
+	{
+		var id = e.features[0].id;
+		if (e.type == 'draw.delete') 
+		{
+			delete allPolyPoints[index][id];
+			filterWithPolygons(true, index);
+		}
+		else
+		{
+			allPolyPoints[index][id] = [e.features[0].geometry.coordinates[0]];
+			filterWithPolygons((e.type == 'draw.update'), index);
+		}
+	}
+
+	// $("#toggleSyncButton").click(TogglePolygonSync);
+
+    // function TogglePolygonSync()
+    // {
+    //     rightDraw.deleteAll();
+    //     leftDraw.deleteAll();
+    //     syncPolygons = !syncPolygons;
+    // }
+
+    $("#toggleCompareButton").click(toggleCompare);
+
+    var compareVisible = false;
+
+    function toggleCompare()
+    {
+        setCompare(!compareVisible);
+    }
+
+    function setCompare(visible)
+    {
+        $("#leftContainer").css({ "visibility": (visible ? "visible" : "hidden"), "opacity": (visible ? "1" : "0") });
+        map._setPosition(visible ? $(document).width() / 2 : 0);
+        compareVisible = visible;
+    }
+}
+
+function filterWithPolygons(remove, index)
 {
 	if (remove)
 	{
-		findPathsPassingThroughAllPolygons();
-		findStaypointsWithinAllPolygons();
+		if (dataView === 'paths') findPathsPassingThroughAllPolygons(index);
+		else findStaypointsWithinAllPolygons(index);
 	}
 	else
 	{
-		findPathsPassingThroughPolygon();
-		findStaypointsWithinPolygon();
+		if (dataView === 'paths') findPathsPassingThroughPolygon(index);
+		else findStaypointsWithinPolygon(index);
 	}
 }
 
-var allPolyPoints = {};
-function updateArea(e) 
-{
-	// var data = draw.getAll();
-	var id = e.features[0].id;
-	if (e.type == 'draw.delete') 
-	{
-		delete allPolyPoints[id];
-		filterWithPolygons(true);
-	}
-	else
-	{
-		allPolyPoints[id] = [e.features[0].geometry.coordinates[0]];
-		filterWithPolygons((e.type == 'draw.update'));
-	}
-}
-
-// Create paths
-const pathsLayer = new MapboxLayer
-({
-	id: 'pathsLayer',
-	type: PathLayer,
-	data: PATHSVISUAL,
-	getPath: p => p.path,
-	getColor: p => p.azimuthColor,
-	opacity: Math.min(1, 0.02 * (maxPaths / PATHSVISUAL.length / 3)),
-	getWidth: 2,
-	widthScale: 2 ** (15 - view.zoom),
-	widthMinPixels: 0.1,
-	widthMaxPixels: 2,
-	rounded: true,
-	pickable: false,
-	lightSettings: LIGHT_SETTINGS
-});
-
-const staypointsLayer = new MapboxLayer
-({
-	id: 'staypointsLayer',
-	type: ScatterplotLayer,
-	data: STAYPOINTSVISUAL,
-    getPosition: p => p.point,
-    getFillColor: p => p.color,
-    opacity: Math.min(1, 0.01 * (maxStaypoints / STAYPOINTSVISUAL.length / 5)),
-    getRadius: p => p.pointSize,
-    radiusScale: 1 / (view.zoom ** 2),
-    radiusMinPixels: 2,
-    radiusMaxPixels: 30,//p => console.log(p.pointSize),
-	pickable: false,
-    lightSettings: LIGHT_SETTINGS
-});
-
-// Create buildings from campus shape files
-const geoJsonLayer = new MapboxLayer
-({
-	id: 'geojsonLayer',
-	type: GeoJsonLayer,
-	data: GEOJSON,
-	stroked: true,
-	filled: true,
-	getLineColor: [100, 100, 100],
-	getFillColor: [150, 150, 150, 100],
-	opacity: 0.25,
-	lineWidthMinPixels: 2,
-	pickable: false,
-	fp64: true,
-	lightSettings: LIGHT_SETTINGS,
-	onClick: ({ object, x, y }) =>
-	{
-		try
-		{
-			const tooltip = object.properties.Building_n;
-			console.log(tooltip);
-		}
-		catch (error) { };
-		/* Update tooltip
-			http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
-		*/
-	}
-});
-
-map.on('load', () => 
-{
-	// map.addSource('pathLayer', { type: "FeatureCollection", data: PATHSVISUAL });
-	map.addLayer(geoJsonLayer);
-	map.addLayer(pathsLayer);
-	// map.addLayer(staypointsLayer);
-});
-// map.getCanvas().style.cursor = 'crosshair';
-
-
-// var flag = false;
-// $(function()
-// {
-//     $(".mapbox-gl-draw_polygon").click(function()
-//     {
-// 		flag = true;
-// 		// $("#map canvas").css("cursor", "crosshair");
-// 	});
-// 	$("mapboxgl-canvas").hover(
-//         function()
-//         {
-// 			$(this).fadeIn(100, function()
-// 			{
-// 				// map.getCanvas().style.cursor = 'crosshair';
-// 				$(this).css("cursor", "crosshair");
-// 			});
-// 		},
-//         function()
-//         {
-// 			map.getCanvas().style.cursor = 'crosshair';
-//             // $("*").css("cursor", "auto");
-// 		}
-// 	);
-// });
-
-// #region Unused (for now)
-
-// const staypoints = new ScatterplotLayer
-// ({
-// 	id: 'scatterplotLayer',
-// 	data: data.STAYPOINTSVISUAL,
-//     getPosition: p => p.point,
-//     getFillColor: [255, 250, 0],
-//     opacity: 0.01,
-//     getRadius: 0.5,
-//     radiusScale: 2 ** (30 - view.zoom),
-//     radiusMinPixels: 0.1,
-//     radiusMaxPixels: 2,
-// 	pickable: false,
-//     lightSettings: LIGHT_SETTINGS
-
-// });
-
-// // Create and render deck
-// export const deck = new Deck
-// ({
-// 	canvas: 'deck-canvas',
-// 	width: '100%',
-// 	height: '100%',
-// 	initialViewState: INITIAL_VIEW_STATE,
-// 	controller: true,
-// 	onViewStateChange: ({viewState}) => 
-// 	{
-// 		map.jumpTo
-// 		({
-// 			center: [viewState.longitude, viewState.latitude],
-// 			zoom: viewState.zoom,
-// 			bearing: viewState.bearing,
-// 			pitch: viewState.pitch
-// 		});
-// 		// selectMap.jumpTo
-// 		// ({
-// 		// 	center: [viewState.longitude, viewState.latitude],
-// 		// 	zoom: viewState.zoom,
-// 		// 	bearing: viewState.bearing,
-// 		// 	pitch: viewState.pitch
-// 		// });
-// 		view = viewState;
-// 	},
-// 	// layers:
-// 	// [
-// 	// 	buildings,
-// 	// 	paths,
-// 	// 	// staypoints,
-// 	// ]
-// });
-
-// #endregion

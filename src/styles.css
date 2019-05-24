@@ -1,17 +1,64 @@
+:root
+{
+    --primary: #92e0db;
+    --primary-light: #c5ffff;
+    --primary-dark: #60aea9;
+    --slider-bg: #444;
+    --sidebar-bg: #202024;
+}
+
+body 
+{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
 html body *
 {
     font-family: "Jura", sans-serif;
+    color: #d6d6d6;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
+hr
+{
+    height: 1px;
+    color: #3d3d3d; 
+    background-color: #3d3d3d;
+    border: none;
+}
+
+#leftContainer
+{
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0s linear;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) 
+{
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
+}
+
+/* #region Sidebar */
 .sidebar 
 {
-    height: 96%;
-    width: 0;
     position: fixed;
+    height: 93%;
+    width: 0;
     z-index: 1;
-    top: 2%;
-    left: 1%;
-    background-color: #202024;
+    top: 1%;
+    /* left: 1%; */
+    /* right: 1%; */
+    background-color: var(--sidebar-bg);
     opacity: 0.9;
     overflow-x: hidden;
     transition: 0.5s;
@@ -31,6 +78,11 @@ html body *
     color: #818181;
     display: block;
     transition: 0.3s;
+}
+
+.sidebar a:hover 
+{
+    color: #f1f1f1;
 }
 
 .sidebar h1 
@@ -53,17 +105,6 @@ html body *
     min-width: 250px;
 }
 
-hr.linestyle
-{
-    /* padding: 8px 8px 8px 32px; */
-    border-top: 1px solid #3d3d3d;
-}
-
-.sidebar a:hover 
-{
-    color: #f1f1f1;
-}
-
 .sidebar .closebtn 
 {
     position: absolute;
@@ -73,23 +114,119 @@ hr.linestyle
     margin-left: 50px;
 }
 
-.openbtn 
+.sidebarbtn
 {
-    font-size: 14px;
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.3s linear;
+    transition-delay: 0.4s;
+    transition: margin-left .5s;
+    z-index: 10;
+}
+
+/* #endregion */
+
+/* #region UI */
+.ui.button
+{
+    font-family: 'Jura', sans-serif;
+    background-color:var(--primary);
+}
+
+.ui.basic.button
+{
+    background-color: var(--primary);
+    color: var(--primary) !important;
+    box-shadow: var(--primary) 0px 0px 0px 1px inset !important;
+}
+
+.ui.button.openbtn
+{
+    position: fixed;
+    top: 45%;
+    /* left: 1%; */
+    /* width: 30px; */
+    height: 60px; 
+    font-size: 20px;
+    padding: 8px;
     cursor: pointer;
     background-color: #53545c;
     color: rgb(3, 3, 3);
-    padding: 10px 10px;
     border: none;
 }
 
-.openbtn:hover 
+.ui.button.openbtn:hover 
 {
     background-color: #696974;
 }
 
-/* CHART */
+/* Rounded sliders */
+.switch 
+{
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 25px;
+}
+  
+.switch input 
+{ 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
 
+.slider 
+{
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--slider-bg);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before 
+{
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider 
+{
+    background-color: var(--primary-dark);
+}
+
+input:checked + .slider:before 
+{
+    -webkit-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    transform: translateX(20px);
+}
+
+.slider.round 
+{
+    border-radius: 34px;
+}
+  
+.slider.round:before 
+{
+    border-radius: 50%;
+}
+
+/* #endregion */
+
+/* #region Charts */
 #charts 
 {
     padding: 4px 0px;
@@ -116,7 +253,7 @@ hr.linestyle
 
 .foreground.bar 
 {
-    fill: rgb(118, 120, 255);
+    fill: var(--primary);
 }
 
 .axis path, .axis line 
@@ -143,35 +280,30 @@ hr.linestyle
     fill: #eee;
     stroke: #666;
 }
+/* #endregion */
 
-/* CHART */
-  
-#main 
+/* #region Map */
+.mapboxgl-ctrl-scale
 {
-    visibility: visible;
-    opacity: 1;
-    transition: visibility 0s, opacity 0.3s linear;
-    transition-delay: 0.4s;
-    /* transition: margin-left .5s; */
-    position: absolute; 
-    top: 2%;
-    left: 1%;
-    /* padding: 16px; */
-    z-index: 1;
+    background-color: transparent;
+    border-style: solid;
+    border-width: 0px 2px 2px 2px;
+    border-color: white;
+    color: white;
+    font-size: 12px;
+    opacity: 0.75;
+    height: 12px;
+    text-indent: -45px;
+    vertical-align: middle;
+    line-height: 12px;
 }
 
-#map 
+.map 
 { 
     position:absolute; 
     top:0; 
     bottom:0; 
     width:100%; 
-    z-index: 0;
+    /* z-index: 0; */
 }
-
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) 
-{
-    .sidebar {padding-top: 15px;}
-    .sidebar a {font-size: 18px;}
-}
+/* #endregion */
