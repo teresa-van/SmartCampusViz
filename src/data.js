@@ -1,24 +1,19 @@
 const GEOJSON = 'https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/Campus_buildings_updated3.geojson';
 
 // var pathCoordinates = [];
-var PATHSVISUAL = [];
-var STAYPOINTSVISUAL = [];
+var PATHSVISUAL = [[], []];
+var STAYPOINTSVISUAL = [[], []];
 
 const S = 0.75;
 const B = 1;
 
-UpdatePaths();
-UpdateStaypoints();
-
 // Parse paths data
-// var color = HSVtoRGB(0, S, B);
-// var color = HSVtoRGB(((paths[0].Azimuth_Path * hueFactor) % 255) / 255, S, B);
-function UpdatePaths()
+function updatePaths(index)
 {
     // pathCoordinates = [];
-    var filteredNumPaths = paths.groupAll().reduceCount().value();
-    var filteredPaths = paths.allFiltered();
-    var index = 0;
+    var filteredNumPaths = paths[index].groupAll().reduceCount().value();
+    var filteredPaths = paths[index].allFiltered();
+    var count = 0;
     var hueFactor = 255 / 360;
 
     if (filteredNumPaths == 0) return;
@@ -26,63 +21,44 @@ function UpdatePaths()
     // Holy shit this shit needs refactoring...
     var id = filteredPaths[0].Path_ID;
     var color = HSVtoRGB(((filteredPaths[0].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
-    PATHSVISUAL = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
+    PATHSVISUAL[index] = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
     for (let i = 0; i < filteredNumPaths; i++)
     {
-        // if (id != paths[i].Path_ID)
-        // {
-        //     id++;
-        //     // color = HSVtoRGB(((id * hueFactor) % 255) / 255, S, B);
-        //     var color = HSVtoRGB(((paths[i].Azimuth_Path * hueFactor)) / 255, S, B);
-        //     PATHS[id] = {path: [], azimuthColor: [color.r, color.g, color.b]};
-        // }
-
         if (id != filteredPaths[i].Path_ID)
         {
-            index++;
+            count++;
             id = filteredPaths[i].Path_ID;
             color = HSVtoRGB(((filteredPaths[i].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
-            PATHSVISUAL[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+            PATHSVISUAL[index][count] = {path: [], azimuthColor: [color.r, color.g, color.b]};
         } 
 
-        if (PATHSVISUAL[index].path.length == 2)
+        if (PATHSVISUAL[index][count].path.length == 2)
         {
-            index++;
-            // if (id != filteredPaths[i].Path_ID)
-            // {
-            //     id = filteredPaths[i].Path_ID;
-            //     color = HSVtoRGB(((filteredPaths[i].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
-            //     PATHSVISUAL[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
-            // } 
-            // else
-            // {
-                color = HSVtoRGB(((filteredPaths[i-1].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
-                PATHSVISUAL[index] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+            count++;
+            
+            color = HSVtoRGB(((filteredPaths[i-1].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+            PATHSVISUAL[index][count] = {path: [], azimuthColor: [color.r, color.g, color.b]};
 
-                var lat = parseFloat(filteredPaths[i-1].Lat);
-                var lon = parseFloat(filteredPaths[i-1].Lon);
-                // pathCoordinates.push([lon, lat]);
-                PATHSVISUAL[index].path.push([lon, lat]);
-            // }
+            var lat = parseFloat(filteredPaths[i-1].Lat);
+            var lon = parseFloat(filteredPaths[i-1].Lon);
+            PATHSVISUAL[index][count].path.push([lon, lat]);
         }
 
         var lat = parseFloat(filteredPaths[i].Lat);
         var lon = parseFloat(filteredPaths[i].Lon);
-        // PATHS[id].path.push(new Vector2(lon, lat));
-        // pathCoordinates.push([lon, lat]);
-        PATHSVISUAL[index].path.push([lon, lat]);
+        PATHSVISUAL[index][count].path.push([lon, lat]);
     }
 }
 
-function UpdateStaypoints()
+function updateStaypoints(index)
 {
-    var filteredNumStaypoints = staypoints.groupAll().reduceCount().value();
-    var filteredStaypoints = staypoints.allFiltered();
+    var filteredNumStaypoints = staypoints[index].groupAll().reduceCount().value();
+    var filteredStaypoints = staypoints[index].allFiltered();
 
     if (filteredNumStaypoints == 0) return;
 
     var color;
-    STAYPOINTSVISUAL = [];
+    STAYPOINTSVISUAL[index] = [];
     // Parse staypoints data
     for (let i = 0; i < filteredNumStaypoints; i++)
     {
@@ -91,12 +67,12 @@ function UpdateStaypoints()
         color = HSVtoRGB(hue / 360, S, B);
 
         var s = (filteredStaypoints[i].Duration_minutes / 762.8) * 2000 + 2;
-        STAYPOINTSVISUAL[i] = {point: [], color: [color.r, color.g, color.b], pointSize: s};
+        STAYPOINTSVISUAL[index][i] = {point: [], color: [color.r, color.g, color.b], pointSize: s};
         
         var lat = parseFloat(filteredStaypoints[i].Centroid_Lat);
         var lon = parseFloat(filteredStaypoints[i].Centroid_Lon);
-        STAYPOINTSVISUAL[i].point.push(lon);
-        STAYPOINTSVISUAL[i].point.push(lat);
+        STAYPOINTSVISUAL[index][i].point.push(lon);
+        STAYPOINTSVISUAL[index][i].point.push(lat);
     }
 }
 
@@ -129,40 +105,3 @@ function HSVtoRGB(h, s, v)
         b: Math.round(b * 255)
     };
 }
-
-// const PATHS =
-// [
-//     {
-//         path:
-//         [
-//             new Vector2(-114.1288, 51.07751),
-//             new Vector2(-114.129, 51.07729),
-//             new Vector2(-114.1286, 51.07768),
-//             new Vector2(-114.1271, 51.07653),
-//             new Vector2(-114.1267, 51.07558),
-//             new Vector2(-114.1243, 51.07624)
-//         ]
-//     },
-//     {
-//         path:
-//         [
-//             new Vector2(-114.132, 51.07831),
-//             new Vector2(-114.1324, 51.07826),
-//             new Vector2(-114.132, 51.07829),
-//             new Vector2(-114.131, 51.07852),
-//             new Vector2(-114.1295, 51.07989),
-//             new Vector2(-114.1282, 51.07971)
-//         ]
-//     },
-//     {
-//         path:
-//         [
-//             new Vector2(-114.1257, 51.07992),
-//             new Vector2(-114.1261, 51.07955),
-//             new Vector2(-114.1264, 51.07947),
-//             new Vector2(-114.1284, 51.07885),
-//             new Vector2(-114.1286, 51.07902),
-//             new Vector2(-114.1283, 51.0802)
-//         ]
-//     }
-// ];

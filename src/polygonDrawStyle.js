@@ -14,7 +14,7 @@ const polyStyle =
         white
       ],
       'fill-outline-color': white,
-      'fill-opacity': 0.1
+      'fill-opacity': 0.25
     }
   },
   {
@@ -26,7 +26,7 @@ const polyStyle =
     'paint': {
       'fill-color': '#fbb03b',
       'fill-outline-color': '#fbb03b',
-      'fill-opacity': 0.1
+      'fill-opacity': 0.25
     }
   },
   {
@@ -54,7 +54,7 @@ const polyStyle =
     'paint': {
       'line-color': white,
       'line-width': 2,
-      'line-opacity': 0.15
+      'line-opacity': 0.45
     }
   },
   {

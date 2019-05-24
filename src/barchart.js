@@ -146,7 +146,6 @@ function barChart()
             .attr("x", x(extent[0]))
             .attr("width", x(extent[1]) - x(extent[0]));
 
-        console.log(extent);
         dimension.filterRange(extent);
         dimension2.filterRange(extent);
     });
