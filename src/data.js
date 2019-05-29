@@ -54,8 +54,6 @@ function updatePaths(index)
         var minutes = filteredPaths[i].Loct.split(" ")[1].split(":")[1];
         var seconds = filteredPaths[i].Loct.split(" ")[1].split(":")[2];
 
-        console.log(filteredPaths[i].Loct);
-
         timestamp = timestamp + (filteredPaths[i].Minutes_To_Next * filteredPaths[i].Speed);
         PATHSVISUAL[index][count].path.push([lon, lat, timestamp]);
     }
