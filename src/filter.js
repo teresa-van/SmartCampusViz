@@ -118,14 +118,14 @@ function configurePathsFilter(_paths)
         _paths.pointId = _paths.dimension(function (d) { return d.Path_Point_ID }),
         _paths.date = _paths.dimension(function (d) { return d.Loct }), // Needs to parse properly
 
-        _paths.day = _paths.dimension(function (d) { return d.Day }),
-        _paths.month = _paths.dimension(function (d) { return d.Month }),
-        _paths.year = _paths.dimension(function (d) { return d.Year }),
+        _paths.day = _paths.dimension(function (d) { return d.Loct_Day }),
+        _paths.month = _paths.dimension(function (d) { return d.Loct_Month }),
+        _paths.year = _paths.dimension(function (d) { return d.Loct_Year }),
         _paths.weekday = _paths.dimension(function (d) { return d.Weekday }),
 
-        _paths.hour = _paths.dimension(function (d) { return d.Time_Hour }),
-        _paths.minute = _paths.dimension(function (d) { return d.Time_Min }),
-        _paths.seconds = _paths.dimension(function (d) { return d.Time_Sec }),
+        _paths.hour = _paths.dimension(function (d) { return d.Loct_Hour }),
+        _paths.minute = _paths.dimension(function (d) { return d.Loct_Minute }),
+        _paths.second = _paths.dimension(function (d) { return d.Loct_Second }),
 
         _paths.academicDay = _paths.dimension(function (d) { return d.Academic_Day }),
         _paths.buildingId = _paths.dimension(function (d) { return d.Building_ID }),

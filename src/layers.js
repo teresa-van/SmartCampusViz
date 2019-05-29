@@ -33,6 +33,20 @@ var leftBuildingLabelLayer, rightBuildingLabelLayer;
 
 function createLayers()
 {
+	// leftPathsLayer = new TripsLayer
+	// ({
+	// 	id: 'leftPathsLayer',
+	// 	// type: TripsLayer,
+	// 	data: PATHSVISUAL[0],
+	// 	getPath: p => p.path,
+	// 	getColor: p => p.azimuthColor,
+	// 	opacity: Math.min(1, 0.02 * (maxPaths / PATHSVISUAL[0].length / 6)),
+	// 	widthMinPixels: 2,
+	// 	rounded: true,
+	// 	trailLength: 100,
+	// 	currentTime: currentTime
+	// })
+
 	rightPathsLayer = new TripsLayer
 	({
 		id: 'rightPathsLayer',
@@ -40,7 +54,7 @@ function createLayers()
 		data: PATHSVISUAL[1],
 		getPath: p => p.path,
 		getColor: p => p.azimuthColor,
-		opacity: 0.3,
+		opacity: Math.min(1, 0.02 * (maxPaths / PATHSVISUAL[1].length)),
 		widthMinPixels: 2,
 		rounded: true,
 		trailLength: 100,

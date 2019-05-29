@@ -15,8 +15,8 @@ var rightMap;
 var leftMap;
 
 var startTime = 0;
-var loopLength = 1500;
-var animationSpeed = 10;
+var loopLength = 2000;
+var animationSpeed = 20;
 var loopTime = loopLength / animationSpeed;
 var currentTime = 0;
 var animation;
@@ -61,7 +61,7 @@ $(function ()
 		initialViewState: initialViewState,
 		controller: false,
 		layers: [ 
-			rightPathsLayer
+			rightPathsLayer,
 		]
 	});
 
@@ -111,21 +111,35 @@ function mapLoaded()
 		currentTime = ((timeStamp % loopTime) / loopTime) * loopLength;
 		// console.log(currentTime);
 
-		var layer = new TripsLayer
+		// var leftLayer = new TripsLayer
+		// ({
+		// 	id: 'leftPathsLayer',
+		// 	// type: TripsLayer,
+		// 	data: PATHSVISUAL[0],
+		// 	getPath: p => p.path,
+		// 	getColor: p => p.azimuthColor,
+		// 	opacity: 0.02 * (maxPaths / PATHSVISUAL[0].length / 6),
+		// 	widthMinPixels: 2,
+		// 	rounded: true,
+		// 	trailLength: 100,
+		// 	currentTime: currentTime
+		// })
+
+		var rightLayer = new TripsLayer
 		({
 			id: 'rightPathsLayer',
 			// type: TripsLayer,
 			data: PATHSVISUAL[1],
 			getPath: p => p.path,
 			getColor: p => p.azimuthColor,
-			opacity: 0.3,
+			opacity: 0.02 * (maxPaths / PATHSVISUAL[1].length),
 			widthMinPixels: 2,
 			rounded: true,
 			trailLength: 100,
 			currentTime: currentTime
 		})
 
-		deckgl.setProps({ layers: [layer] });
+		deckgl.setProps({ layers: [rightLayer] });
 
 		// rightPathsLayer.setProps({ currentTime: currentTime });
 
@@ -139,7 +153,7 @@ function updateVisualization(index)
 	{
 		var layer = (index == 0) ? leftPathsLayer : rightPathsLayer;
 		updatePaths(index);
-		layer.setProps({ data: PATHSVISUAL[index], opacity: 0.02 * (maxPaths / PATHSVISUAL[index].length / 3) });
+		// layer.setProps({ data: PATHSVISUAL[index], opacity: 0.02 * (maxPaths / PATHSVISUAL[index].length / 6) });
 	}
 	else
 	{
