@@ -108,6 +108,8 @@ function findPathsPassingThroughAllPolygons(index)
     filterPathsPassingThroughPolygons(index);
 }
 
+var month
+
 function configurePathsFilter(_paths)
 {
     try 
@@ -116,17 +118,14 @@ function configurePathsFilter(_paths)
         _paths.pointId = _paths.dimension(function (d) { return d.Path_Point_ID }),
         _paths.date = _paths.dimension(function (d) { return d.Loct }), // Needs to parse properly
 
-        _paths.day = _paths.dimension(function (d) { return parseInt(d.Loct.split(" ")[0].split("-")[0]) }),
-        _paths.month = _paths.dimension(function (d) { return parseInt(d.Loct.split(" ")[0].split("-")[1]) }),
-        _paths.year = _paths.dimension(function (d) { return parseInt(d.Loct.split(" ")[0].split("-")[2]) }),
-        _paths.weekday = _paths.dimension(function (d) { 
-            var date = d.Loct.split(" ")[0].split("-");
-            var day = new Date(date[1]+"-"+date[0]+"-"+date[2]);
-            return parseInt(day.getDay());
-        }),
+        _paths.day = _paths.dimension(function (d) { return d.Day }),
+        _paths.month = _paths.dimension(function (d) { return d.Month }),
+        _paths.year = _paths.dimension(function (d) { return d.Year }),
+        _paths.weekday = _paths.dimension(function (d) { return d.Weekday }),
 
-        _paths.hour = _paths.dimension(function (d) { return parseInt(d.Loct.split(" ")[1].split(":")[0]) }),
-        _paths.minute = _paths.dimension(function (d) { return parseInt(d.Loct.split(" ")[1].split(":")[1]) }),
+        _paths.hour = _paths.dimension(function (d) { return d.Time_Hour }),
+        _paths.minute = _paths.dimension(function (d) { return d.Time_Min }),
+        _paths.seconds = _paths.dimension(function (d) { return d.Time_Sec }),
 
         _paths.academicDay = _paths.dimension(function (d) { return d.Academic_Day }),
         _paths.buildingId = _paths.dimension(function (d) { return d.Building_ID }),

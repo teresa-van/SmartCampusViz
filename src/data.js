@@ -49,10 +49,10 @@ function updatePaths(index)
 
         var lat = parseFloat(filteredPaths[i].Lat);
         var lon = parseFloat(filteredPaths[i].Lon);
-        // timestamp = timestamp + filteredPaths[i].Speed;
-        var hours = filteredPaths[i].Loct.split(" ")[1].split(":")[0];
-        var minutes = filteredPaths[i].Loct.split(" ")[1].split(":")[1];
-        var seconds = filteredPaths[i].Loct.split(" ")[1].split(":")[2];
+
+        var hours = filteredPaths[i].Time_Hour;
+        var minutes = filteredPaths[i].Time_Min;
+        var seconds = filteredPaths[i].Time_Sec;
 
         timestamp = timestamp + (filteredPaths[i].Minutes_To_Next * filteredPaths[i].Speed);
         PATHSVISUAL[index][count].path.push([lon, lat, timestamp]);
