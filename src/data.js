@@ -21,32 +21,43 @@ function updatePaths(index)
     // Holy shit this shit needs refactoring...
     var id = filteredPaths[0].Path_ID;
     var color = HSVtoRGB(((filteredPaths[0].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+    var timestamp = 0;
     PATHSVISUAL[index] = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
     for (let i = 0; i < filteredNumPaths; i++)
     {
+        
         if (id != filteredPaths[i].Path_ID)
         {
             count++;
             id = filteredPaths[i].Path_ID;
-            color = HSVtoRGB(((filteredPaths[i].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+            color = HSVtoRGB(((filteredPaths[i].Azimuth_Path * hueFactor) % 255) / 255, S, B);
+            timestamp = 0;
             PATHSVISUAL[index][count] = {path: [], azimuthColor: [color.r, color.g, color.b]};
         } 
 
-        if (PATHSVISUAL[index][count].path.length == 2)
-        {
-            count++;
+        // if (PATHSVISUAL[index][count].path.length == 2)
+        // {
+        //     count++;
             
-            color = HSVtoRGB(((filteredPaths[i-1].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
-            PATHSVISUAL[index][count] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+        //     color = HSVtoRGB(((filteredPaths[i-1].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+        //     PATHSVISUAL[index][count] = {path: [], azimuthColor: [color.r, color.g, color.b]};
 
-            var lat = parseFloat(filteredPaths[i-1].Lat);
-            var lon = parseFloat(filteredPaths[i-1].Lon);
-            PATHSVISUAL[index][count].path.push([lon, lat]);
-        }
+        //     var lat = parseFloat(filteredPaths[i-1].Lat);
+        //     var lon = parseFloat(filteredPaths[i-1].Lon);
+        //     PATHSVISUAL[index][count].path.push([lon, lat]);
+        // }
 
         var lat = parseFloat(filteredPaths[i].Lat);
         var lon = parseFloat(filteredPaths[i].Lon);
-        PATHSVISUAL[index][count].path.push([lon, lat]);
+        // timestamp = timestamp + filteredPaths[i].Speed;
+        var hours = filteredPaths[i].Loct.split(" ")[1].split(":")[0];
+        var minutes = filteredPaths[i].Loct.split(" ")[1].split(":")[1];
+        var seconds = filteredPaths[i].Loct.split(" ")[1].split(":")[2];
+
+        console.log(filteredPaths[i].Loct);
+
+        timestamp = timestamp + (filteredPaths[i].Minutes_To_Next * filteredPaths[i].Speed);
+        PATHSVISUAL[index][count].path.push([lon, lat, timestamp]);
     }
 }
 

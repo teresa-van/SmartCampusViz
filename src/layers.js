@@ -2,6 +2,11 @@ const { MapboxLayer, PathLayer, ScatterplotLayer, TextLayer, TripsLayer } = deck
 
 const initialViewState =
 {
+	// longitude: -74,
+	// latitude: 40.72,
+	// zoom: 13,
+	// pitch: 45,
+	// bearing: 0
 	longitude: -114.1300,
 	latitude: 51.0782,
 	zoom: 15.75,
@@ -14,6 +19,13 @@ var view = initialViewState;
 var buildingLabelData = [];
 createBuildingLabelData();
 
+var TEST;
+var testURL = 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips.json';
+loadJSON(function (response)
+{
+    TEST = JSON.parse(response);
+}, testURL);
+
 var leftPathsLayer, rightPathsLayer;
 var leftStaypointsLayer, rightStaypointsLayer;
 var leftGeoJsonLayer, rightGeoJsonLayer;
@@ -21,6 +33,20 @@ var leftBuildingLabelLayer, rightBuildingLabelLayer;
 
 function createLayers()
 {
+	rightPathsLayer = new TripsLayer
+	({
+		id: 'rightPathsLayer',
+		// type: TripsLayer,
+		data: PATHSVISUAL[1],
+		getPath: p => p.path,
+		getColor: p => p.azimuthColor,
+		opacity: 0.3,
+		widthMinPixels: 2,
+		rounded: true,
+		trailLength: 100,
+		currentTime: currentTime
+	})
+
 	leftPathsLayer = new MapboxLayer
 	({
 		id: 'leftPathsLayer',
@@ -39,23 +65,23 @@ function createLayers()
 		highlightColor: [255, 255, 255]
 	});
 
-	rightPathsLayer = new MapboxLayer
-	({
-		id: 'rightPathsLayer',
-		type: PathLayer,
-		data: PATHSVISUAL[1],
-		getPath: p => p.path,
-		getColor: p => p.azimuthColor,
-		opacity: Math.min(1, 0.02 * (maxPaths / PATHSVISUAL[1].length / 3)),
-		getWidth: 2,
-		widthUnits: 'meters',
-		widthMinPixels: 0.1,
-		widthMaxPixels: 2,
-		rounded: true,
-		pickable: true,
-		autoHighlight: true,
-		highlightColor: [255, 255, 255]
-	});
+	// rightPathsLayer = new MapboxLayer
+	// ({
+	// 	id: 'rightPathsLayer',
+	// 	type: PathLayer,
+	// 	data: PATHSVISUAL[1],
+	// 	getPath: p => p.path,
+	// 	getColor: p => p.azimuthColor,
+	// 	opacity: Math.min(1, 0.02 * (maxPaths / PATHSVISUAL[1].length / 3)),
+	// 	getWidth: 2,
+	// 	widthUnits: 'meters',
+	// 	widthMinPixels: 0.1,
+	// 	widthMaxPixels: 2,
+	// 	rounded: true,
+	// 	pickable: true,
+	// 	autoHighlight: true,
+	// 	highlightColor: [255, 255, 255]
+	// });
 
 	leftStaypointsLayer = new MapboxLayer
 	({

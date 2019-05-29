@@ -14,8 +14,9 @@ var map;
 var rightMap;
 var leftMap;
 
-var loopLength = 1800;
-var animationSpeed = 30;
+var startTime = 0;
+var loopLength = 1500;
+var animationSpeed = 10;
 var loopTime = loopLength / animationSpeed;
 var currentTime = 0;
 var animation;
@@ -48,9 +49,36 @@ $(function ()
 
     rightMap.on('load', function ()
     {
-		addMapLayers(rightMap, [rightGeoJsonLayer, rightPathsLayer, rightStaypointsLayer, rightBuildingLabelLayer]);
+		addMapLayers(rightMap, [rightGeoJsonLayer, rightStaypointsLayer, rightBuildingLabelLayer]);
         mapLoaded();
 	});
+
+	deckgl = new Deck
+	({
+		canvas: 'rightDeck',
+		width: '100%',
+		height: '100%',
+		initialViewState: initialViewState,
+		controller: false,
+		layers: [ 
+			rightPathsLayer
+		]
+	});
+
+	rightMap.on('render', function()
+	{
+		var view = 
+		{
+			bearing: rightMap.getBearing(),
+			longitude: rightMap.getCenter().lng,
+			latitude: rightMap.getCenter().lat,
+			pitch: rightMap.getPitch(),
+			zoom: rightMap.getZoom()
+		};
+		
+		deckgl.setProps({ viewState: view });
+	});
+
 });
 
 function initMaps()
@@ -72,6 +100,37 @@ function mapLoaded()
     addNavigationControls();
     addDrawControls();
 	addScaleControls();
+	
+	animate();
+
+	startTime = Date.now();
+
+	function animate()
+	{
+		var timeStamp = (Date.now() - startTime) / 1000;
+		currentTime = ((timeStamp % loopTime) / loopTime) * loopLength;
+		// console.log(currentTime);
+
+		var layer = new TripsLayer
+		({
+			id: 'rightPathsLayer',
+			// type: TripsLayer,
+			data: PATHSVISUAL[1],
+			getPath: p => p.path,
+			getColor: p => p.azimuthColor,
+			opacity: 0.3,
+			widthMinPixels: 2,
+			rounded: true,
+			trailLength: 100,
+			currentTime: currentTime
+		})
+
+		deckgl.setProps({ layers: [layer] });
+
+		// rightPathsLayer.setProps({ currentTime: currentTime });
+
+		animation = requestAnimationFrame(animate);
+	}
 }
 
 function updateVisualization(index)
