@@ -23,6 +23,10 @@ function updatePaths(index)
     var color = HSVtoRGB(((filteredPaths[0].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
     var timestamp = 0;
     PATHSVISUAL[index] = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
+    
+    var prevDate = new Date(filteredPaths[0].Year, filteredPaths[0].Month, filteredPaths[0].Day, 
+        filteredPaths[0].Time_Hour, filteredPaths[0].Time_Min, filteredPaths[0].Time_Sec);
+
     for (let i = 0; i < filteredNumPaths; i++)
     {
         
@@ -32,6 +36,8 @@ function updatePaths(index)
             id = filteredPaths[i].Path_ID;
             color = HSVtoRGB(((filteredPaths[i].Azimuth_Path * hueFactor) % 255) / 255, S, B);
             timestamp = 0;
+            var prevDate = new Date(filteredPaths[i].Year, filteredPaths[i].Month, filteredPaths[i].Day, 
+                filteredPaths[i].Time_Hour, filteredPaths[i].Time_Min, filteredPaths[i].Time_Sec);
             PATHSVISUAL[index][count] = {path: [], azimuthColor: [color.r, color.g, color.b]};
         } 
 
@@ -50,12 +56,13 @@ function updatePaths(index)
         var lat = parseFloat(filteredPaths[i].Lat);
         var lon = parseFloat(filteredPaths[i].Lon);
 
-        var hours = filteredPaths[i].Time_Hour;
-        var minutes = filteredPaths[i].Time_Min;
-        var seconds = filteredPaths[i].Time_Sec;
+        var date = new Date(filteredPaths[i].Year, filteredPaths[i].Month, filteredPaths[i].Day, filteredPaths[i].Time_Hour, filteredPaths[i].Time_Min, filteredPaths[i].Time_Sec);
+        var minFromPrev = Math.round((((date - prevDate) % 86400000) % 3600000) / 60000);
 
-        timestamp = timestamp + (filteredPaths[i].Minutes_To_Next * filteredPaths[i].Speed);
+        timestamp = timestamp + minFromPrev;
         PATHSVISUAL[index][count].path.push([lon, lat, timestamp]);
+
+        prevDate = date;
     }
 }
 
