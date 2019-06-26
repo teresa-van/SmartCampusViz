@@ -14,13 +14,6 @@ var map;
 var rightMap;
 var leftMap;
 
-var startTime = 0;
-var loopLength = 2000;
-var animationSpeed = 20;
-var loopTime = loopLength / animationSpeed;
-var currentTime = 0;
-var animation;
-
 paths[0].onChange(e => updateVisualization(0));
 paths[1].onChange(e => updateVisualization(1));
 
@@ -43,7 +36,7 @@ $(function ()
 
     leftMap.on('load', function () 
     {
-		addMapLayers(leftMap, [leftGeoJsonLayer, leftPathsLayer, leftStaypointsLayer, leftBuildingLabelLayer]);
+		addMapLayers(leftMap, [leftGeoJsonLayer, leftStaypointsLayer, leftBuildingLabelLayer]);
         mapLoaded();
     });
 
@@ -61,7 +54,7 @@ $(function ()
 		initialViewState: initialViewState,
 		controller: false,
 		layers: [ 
-			rightPathsLayer,
+			animatedPathsLayer
 		]
 	});
 
@@ -101,45 +94,38 @@ function mapLoaded()
     addDrawControls();
 	addScaleControls();
 	
-	animate();
 
-	startTime = Date.now();
+	var loopLength = 2000;
+	var animationSpeed = 30;
+	var loopTime = loopLength / animationSpeed;
+	var animation;
+
+	var start = Date.now();
+
+	animate();
 
 	function animate()
 	{
-		var timeStamp = (Date.now() - startTime) / 1000;
-		currentTime = ((timeStamp % loopTime) / loopTime) * loopLength;
+		var timeStamp = (Date.now() - start) / 1000;
+		currentTime = ((timeStamp % loopTime) / loopTime) * loopLength
+		// currentDate = ((timeStamp % loopTime) / loopTime) * loopLength;
 		// console.log(currentTime);
 
-		// var leftLayer = new TripsLayer
-		// ({
-		// 	id: 'leftPathsLayer',
-		// 	// type: TripsLayer,
-		// 	data: PATHSVISUAL[0],
-		// 	getPath: p => p.path,
-		// 	getColor: p => p.azimuthColor,
-		// 	opacity: 0.02 * (maxPaths / PATHSVISUAL[0].length / 6),
-		// 	widthMinPixels: 2,
-		// 	rounded: true,
-		// 	trailLength: 100,
-		// 	currentTime: currentTime
-		// })
-
-		var rightLayer = new TripsLayer
+		var animatedPathsLayer = new TripsLayer
 		({
 			id: 'rightPathsLayer',
 			// type: TripsLayer,
-			data: PATHSVISUAL[1],
+			data: ANIMATEPATHS,
 			getPath: p => p.path,
 			getColor: p => p.azimuthColor,
-			opacity: 0.02 * (maxPaths / PATHSVISUAL[1].length),
+			opacity: 0.02 * (maxPaths / ANIMATEPATHS.length),
 			widthMinPixels: 2,
 			rounded: true,
-			trailLength: 100,
+			trailLength: 480,
 			currentTime: currentTime
 		})
 
-		deckgl.setProps({ layers: [rightLayer] });
+		deckgl.setProps({ layers: [animatedPathsLayer] });
 
 		// rightPathsLayer.setProps({ currentTime: currentTime });
 

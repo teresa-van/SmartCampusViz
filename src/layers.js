@@ -19,13 +19,6 @@ var view = initialViewState;
 var buildingLabelData = [];
 createBuildingLabelData();
 
-var TEST;
-var testURL = 'https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/trips/trips.json';
-loadJSON(function (response)
-{
-    TEST = JSON.parse(response);
-}, testURL);
-
 var leftPathsLayer, rightPathsLayer;
 var leftStaypointsLayer, rightStaypointsLayer;
 var leftGeoJsonLayer, rightGeoJsonLayer;
@@ -33,32 +26,18 @@ var leftBuildingLabelLayer, rightBuildingLabelLayer;
 
 function createLayers()
 {
-	// leftPathsLayer = new TripsLayer
-	// ({
-	// 	id: 'leftPathsLayer',
-	// 	// type: TripsLayer,
-	// 	data: PATHSVISUAL[0],
-	// 	getPath: p => p.path,
-	// 	getColor: p => p.azimuthColor,
-	// 	opacity: Math.min(1, 0.02 * (maxPaths / PATHSVISUAL[0].length / 6)),
-	// 	widthMinPixels: 2,
-	// 	rounded: true,
-	// 	trailLength: 100,
-	// 	currentTime: currentTime
-	// })
-
-	rightPathsLayer = new TripsLayer
+	animatedPathsLayer = new TripsLayer
 	({
 		id: 'rightPathsLayer',
 		// type: TripsLayer,
-		data: PATHSVISUAL[1],
+		data: ANIMATEPATHS,
 		getPath: p => p.path,
 		getColor: p => p.azimuthColor,
-		opacity: Math.min(1, 0.02 * (maxPaths / PATHSVISUAL[1].length)),
+		opacity: Math.min(1, 0.02 * (maxPaths / ANIMATEPATHS.length)),
 		widthMinPixels: 2,
 		rounded: true,
-		trailLength: 100,
-		currentTime: currentTime
+		trailLength: 480,
+		currentTime: 0
 	})
 
 	leftPathsLayer = new MapboxLayer
@@ -79,23 +58,23 @@ function createLayers()
 		highlightColor: [255, 255, 255]
 	});
 
-	// rightPathsLayer = new MapboxLayer
-	// ({
-	// 	id: 'rightPathsLayer',
-	// 	type: PathLayer,
-	// 	data: PATHSVISUAL[1],
-	// 	getPath: p => p.path,
-	// 	getColor: p => p.azimuthColor,
-	// 	opacity: Math.min(1, 0.02 * (maxPaths / PATHSVISUAL[1].length / 3)),
-	// 	getWidth: 2,
-	// 	widthUnits: 'meters',
-	// 	widthMinPixels: 0.1,
-	// 	widthMaxPixels: 2,
-	// 	rounded: true,
-	// 	pickable: true,
-	// 	autoHighlight: true,
-	// 	highlightColor: [255, 255, 255]
-	// });
+	rightPathsLayer = new MapboxLayer
+	({
+		id: 'rightPathsLayer',
+		type: PathLayer,
+		data: PATHSVISUAL[1],
+		getPath: p => p.path,
+		getColor: p => p.azimuthColor,
+		opacity: Math.min(1, 0.02 * (maxPaths / PATHSVISUAL[1].length / 3)),
+		getWidth: 2,
+		widthUnits: 'meters',
+		widthMinPixels: 0.1,
+		widthMaxPixels: 2,
+		rounded: true,
+		pickable: true,
+		autoHighlight: true,
+		highlightColor: [255, 255, 255]
+	});
 
 	leftStaypointsLayer = new MapboxLayer
 	({
