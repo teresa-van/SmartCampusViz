@@ -9,7 +9,9 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.js'></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js'></script>
-    <script src="https://unpkg.com/deck.gl@^6.2.0/deckgl.min.js"></script>
+    <!-- <script src="https://unpkg.com/deck.gl@^6.4.7/deckgl.min.js"></script> -->
+    <!-- <script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script> -->
+    <script src="https://unpkg.com/deck.gl@~7.0.0/dist.min.js"></script>
     <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="semantic/semantic.min.js"></script>
@@ -55,6 +57,14 @@
                 <div id="weekday-chart" class="left-chart chart"></div>
                 <h2>Time of Day</h2>
                 <div id="hour-chart" class="left-chart chart"></div>
+                <h2>Mean Temperature</h2>
+                <div id="mean-temp-chart" class="left-chart chart"></div>
+                <h2>Azimuth Path</h2>
+                <div id="azimuth-path-chart" class="left-chart chart"></div>
+                <h2>Total Precipitation</h2>
+                <div id="precip-chart" class="left-chart chart"></div>
+                <h2>Snow</h2>
+                <div id="snow-chart" class="left-chart chart"></div>
             </div>
             </center>
         </div>
@@ -62,6 +72,7 @@
 
     <div id='rightContainer'>
         <div id='rightMap' class='map'></div>
+        <canvas id='rightDeck' style='pointer-events: none'></canvas>
         <div id='right-sidebar-button' class="sidebarbtn">
             <button class="openbtn ui icon button" style="right:1%" onclick="openRightSidebar()"><</button>
         </div>
@@ -73,12 +84,42 @@
                 <button id="right-path-button" class="ui button">Paths</button>
                 <button id="right-staypoints-button" class="ui button basic">Staypoints</button>
             </div>
+
             <!-- <button id="toggleSyncButton" style="position:absolute;">Toggle sync</button> -->
-            <p style="float:left; padding-top: 20px; padding-left: 25px">Toggle Compare</p>
-            <label class="switch" style="top: 20px; left: 10px;">
-                <input type="checkbox">
-                <span id="toggleCompareButton" class="slider round"></span>
-            </label>
+            <div class="row" style="padding-top: 20px; padding-left: 25px">
+                <div class="column">
+                    <p>Toggle Compare</p>
+                </div>
+                <div class="column">
+                    <label class="switch">
+                        <input id="toggleCompareButton" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 10px; padding-left: 25px">
+                <div class="column">
+                    <p>Toggle Animation</p>
+                </div>
+                <div class="column" style="width: 15%">
+                    <label class="switch">
+                        <input id="toggleAnimateButton" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="column" style="width: 15%">
+                    <button id="restartAnimateButton" class="link" style="color: var(--primary)">Restart</button>
+                </div>
+            </div>
+
+            <h1>Legend</h1>
+            <hr>
+            <h2>Azimuth Path</h2>
+            <div style="padding-left: 60px;">
+                <img src="./azimuthpath.png" width="80%"/>
+            </div>
+
             <h1>Filter</h1>
             <hr>
             <center>
@@ -89,15 +130,16 @@
                 <div id="weekday-chart" class="right-chart chart"></div>
                 <h2>Time of Day</h2>
                 <div id="hour-chart" class="right-chart chart"></div>
+                <h2>Mean Temperature</h2>
+                <div id="mean-temp-chart" class="right-chart chart"></div>
+                <h2>Azimuth Path</h2>
+                <div id="azimuth-path-chart" class="right-chart chart"></div>
+                <h2>Total Precipitation</h2>
+                <div id="precip-chart" class="right-chart chart"></div>
+                <h2>Snow</h2>
+                <div id="snow-chart" class="right-chart chart"></div>
             </div>
             </center>
-    
-            <h1>Legend</h1>
-            <hr>
-            <h2>Azimuth Path</h2>
-            <div style="padding-left: 60px;">
-                <img src="./azimuthpath.png" width="80%"/>
-            </div>
         </div>
     </div>
           

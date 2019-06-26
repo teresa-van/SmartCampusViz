@@ -34,6 +34,20 @@ hr
     border: none;
 }
 
+.column
+{
+    float: left;
+    width: 35%;
+}
+  
+/* Clear floats after the columns */
+.row:after 
+{
+    content: "";
+    display: table;
+    clear: both;
+}
+
 #leftContainer
 {
     visibility: hidden;
@@ -127,6 +141,13 @@ hr
 /* #endregion */
 
 /* #region UI */
+
+button.link 
+{ 
+    background:none;
+    border:none; 
+}
+
 .ui.button
 {
     font-family: 'Jura', sans-serif;
@@ -150,14 +171,14 @@ hr
     font-size: 20px;
     padding: 8px;
     cursor: pointer;
-    background-color: #53545c;
-    color: rgb(3, 3, 3);
+    background-color: #aaacbb;
+    color: rgb(74, 74, 77);
     border: none;
 }
 
 .ui.button.openbtn:hover 
 {
-    background-color: #696974;
+    background-color: #80808a;
 }
 
 /* Rounded sliders */

@@ -146,8 +146,9 @@ function barChart()
             .attr("x", x(extent[0]))
             .attr("width", x(extent[1]) - x(extent[0]));
 
+        console.log(extent);
         dimension.filterRange(extent);
-        dimension2.filterRange(extent);
+        try { dimension2.filterRange(extent) } catch {};
     });
 
     brush.on("brushend.chart", function () 
@@ -159,7 +160,7 @@ function barChart()
             div.select("#clip-" + id + " rect").attr("x", null).attr("width", "100%");
 
             dimension.filterAll();
-            dimension2.filterAll();
+            try { dimension2.filterAll() } catch {};
         }
     });
 

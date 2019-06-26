@@ -1,11 +1,14 @@
 const GEOJSON = 'https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/Campus_buildings_updated3.geojson';
 
 // var pathCoordinates = [];
+var ANIMATEPATHS = [];
 var PATHSVISUAL = [[], []];
 var STAYPOINTSVISUAL = [[], []];
 
 const S = 0.75;
 const B = 1;
+var startDate = 1380322371000;
+var endDate = 1494523051000;
 
 // Parse paths data
 function updatePaths(index)
@@ -20,33 +23,45 @@ function updatePaths(index)
     
     // Holy shit this shit needs refactoring...
     var id = filteredPaths[0].Path_ID;
-    var color = HSVtoRGB(((filteredPaths[0].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+    var color = HSVtoRGB(((filteredPaths[0].Azimuth_Path * hueFactor) % 255) / 255, S, B);
+    // var color = (filteredPaths[0].Mean_Temp_C > 0) ? HSVtoRGB(0, S, B) : HSVtoRGB(0.55, S, B);
+    var timestamp = 0;
     PATHSVISUAL[index] = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
+    ANIMATEPATHS = [{path: [], azimuthColor: [color.r, color.g, color.b]}];
     for (let i = 0; i < filteredNumPaths; i++)
     {
+        
         if (id != filteredPaths[i].Path_ID)
         {
             count++;
             id = filteredPaths[i].Path_ID;
-            color = HSVtoRGB(((filteredPaths[i].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+            color = HSVtoRGB(((filteredPaths[i].Azimuth_Path * hueFactor) % 255) / 255, S, B);
+            // color = (filteredPaths[i].Mean_Temp_C > 0) ? HSVtoRGB(0, S, B) : HSVtoRGB(0.55, S, B);
+            timestamp = 0;
             PATHSVISUAL[index][count] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+            ANIMATEPATHS[count] = {path: [], azimuthColor: [color.r, color.g, color.b]};
         } 
 
-        if (PATHSVISUAL[index][count].path.length == 2)
-        {
-            count++;
+        // if (PATHSVISUAL[index][count].path.length == 2)
+        // {
+        //     count++;
             
-            color = HSVtoRGB(((filteredPaths[i-1].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
-            PATHSVISUAL[index][count] = {path: [], azimuthColor: [color.r, color.g, color.b]};
+        //     color = HSVtoRGB(((filteredPaths[i-1].Azimuth_Segment * hueFactor) % 255) / 255, S, B);
+        //     PATHSVISUAL[index][count] = {path: [], azimuthColor: [color.r, color.g, color.b]};
 
-            var lat = parseFloat(filteredPaths[i-1].Lat);
-            var lon = parseFloat(filteredPaths[i-1].Lon);
-            PATHSVISUAL[index][count].path.push([lon, lat]);
-        }
+        //     var lat = parseFloat(filteredPaths[i-1].Lat);
+        //     var lon = parseFloat(filteredPaths[i-1].Lon);
+        //     PATHSVISUAL[index][count].path.push([lon, lat]);
+        // }
 
         var lat = parseFloat(filteredPaths[i].Lat);
         var lon = parseFloat(filteredPaths[i].Lon);
+
+        var minFromLast = filteredPaths[i].Minutes_From_Last;
+        timestamp = timestamp + (minFromLast * 100);
+
         PATHSVISUAL[index][count].path.push([lon, lat]);
+        ANIMATEPATHS[count].path.push([lon, lat, timestamp]);
     }
 }
 

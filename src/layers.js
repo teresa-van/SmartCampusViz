@@ -19,8 +19,25 @@ var leftStaypointsLayer, rightStaypointsLayer;
 var leftGeoJsonLayer, rightGeoJsonLayer;
 var leftBuildingLabelLayer, rightBuildingLabelLayer;
 
+var animatedPathsLayer;
+
 function createLayers()
 {
+	animatedPathsLayer = new TripsLayer
+	({
+		id: 'animatedPathsLayer',
+		// type: TripsLayer,
+		data: ANIMATEPATHS,
+		getPath: p => p.path,
+		getColor: p => p.azimuthColor,
+		opacity: Math.min(1, 0.02 * (maxPaths / ANIMATEPATHS.length)),
+		widthMinPixels: 2,
+		rounded: true,
+		trailLength: 480,
+		currentTime: 0,
+		visible: false
+	});
+
 	leftPathsLayer = new MapboxLayer
 	({
 		id: 'leftPathsLayer',

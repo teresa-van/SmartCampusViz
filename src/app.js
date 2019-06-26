@@ -10,15 +10,19 @@ var drawing = false;
 var syncPolygons = false;
 var loaded = 0;
 
-var map;
-var rightMap;
-var leftMap;
+var compareVisible = false;
+var animating = false;
 
 var loopLength = 1800;
 var animationSpeed = 30;
 var loopTime = loopLength / animationSpeed;
-var currentTime = 0;
 var animation;
+
+var start = Date.now();
+
+var map;
+var rightMap;
+var leftMap;
 
 paths[0].onChange(e => updateVisualization(0));
 paths[1].onChange(e => updateVisualization(1));
@@ -42,14 +46,42 @@ $(function ()
 
     leftMap.on('load', function () 
     {
-		addMapLayers(leftMap, [leftGeoJsonLayer, leftPathsLayer, leftStaypointsLayer, leftBuildingLabelLayer]);
+		addMapLayers(leftMap, [leftBuildingLabelLayer, leftGeoJsonLayer, leftPathsLayer, leftStaypointsLayer],
+			['', 'leftBuildingLabelLayer', 'leftGeoJsonLayer', 'leftGeoJsonLayer']);
         mapLoaded();
     });
 
     rightMap.on('load', function ()
     {
-		addMapLayers(rightMap, [rightGeoJsonLayer, rightPathsLayer, rightStaypointsLayer, rightBuildingLabelLayer]);
+		addMapLayers(rightMap, [rightBuildingLabelLayer, rightGeoJsonLayer, rightPathsLayer, rightStaypointsLayer],
+			['', 'rightBuildingLabelLayer', 'rightGeoJsonLayer', 'rightGeoJsonLayer']);
         mapLoaded();
+	});
+
+	deckgl = new Deck
+	({
+		canvas: 'rightDeck',
+		width: '100%',
+		height: '100%',
+		initialViewState: initialViewState,
+		controller: false,
+		layers: [ 
+			animatedPathsLayer
+		]
+	});
+
+	rightMap.on('render', function()
+	{
+		var view = 
+		{
+			bearing: rightMap.getBearing(),
+			longitude: rightMap.getCenter().lng,
+			latitude: rightMap.getCenter().lat,
+			pitch: rightMap.getPitch(),
+			zoom: rightMap.getZoom()
+		};
+		
+		deckgl.setProps({ viewState: view });
 	});
 });
 
@@ -72,6 +104,37 @@ function mapLoaded()
     addNavigationControls();
     addDrawControls();
 	addScaleControls();
+
+	animate();
+
+	function animate()
+	{
+		var timeStamp = (Date.now() - start) / 1000;
+		var currentTime = ((timeStamp % loopTime) / loopTime) * loopLength
+		// currentDate = ((timeStamp % loopTime) / loopTime) * loopLength;
+		// console.log(currentTime);
+
+		var animatedPathsLayer = new TripsLayer
+		({
+			id: 'animatedPathsLayer',
+			// type: TripsLayer,
+			data: ANIMATEPATHS,
+			getPath: p => p.path,
+			getColor: p => p.azimuthColor,
+			opacity: 0.02 * (maxPaths / ANIMATEPATHS.length),
+			widthMinPixels: 2,
+			rounded: true,
+			trailLength: 480,
+			currentTime: currentTime,
+			visible: animating
+		})
+
+		deckgl.setProps({ layers: [animatedPathsLayer] });
+
+		// rightPathsLayer.setProps({ currentTime: currentTime });
+
+		animation = requestAnimationFrame(animate);
+	}
 }
 
 function updateVisualization(index)
@@ -112,11 +175,11 @@ function createMap(container, style)
 	});
 }
 
-function addMapLayers(_map, layers)
+function addMapLayers(_map, layers, order)
 {
 	for (var i in layers)
 	{
-		_map.addLayer(layers[i]);
+		_map.addLayer(layers[i], order[i]);
 		layers[i].deck.props.getCursor = () => drawing ? "crosshair" : "grab";
 	}
 }
@@ -204,22 +267,6 @@ function addDrawControls()
     //     leftDraw.deleteAll();
     //     syncPolygons = !syncPolygons;
     // }
-
-    $("#toggleCompareButton").click(toggleCompare);
-
-    var compareVisible = false;
-
-    function toggleCompare()
-    {
-        setCompare(!compareVisible);
-    }
-
-    function setCompare(visible)
-    {
-        $("#leftContainer").css({ "visibility": (visible ? "visible" : "hidden"), "opacity": (visible ? "1" : "0") });
-        map._setPosition(visible ? $(document).width() / 2 : 0);
-        compareVisible = visible;
-    }
 }
 
 function filterWithPolygons(remove, index)

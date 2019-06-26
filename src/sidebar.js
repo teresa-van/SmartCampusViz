@@ -30,6 +30,46 @@ var leftCharts =
         .rangeRound([0, width]))
         .tickLabels([...Array(25).keys()])
         .numTicks(13),
+
+        barChart()
+        .dimension(paths[0].meanTemp)
+        .group(paths[0].meanTemp.group())
+        .dimension2(staypoints[0].meanTemp)
+        .x(d3.scale.linear()
+        .domain([-25, 25])
+        .rangeRound([0, width]))
+        .tickLabels(["0", "0", "25"])
+        .numTicks(1),
+
+    barChart()
+        .dimension(paths[0].azimuthPath)
+        .group(paths[0].azimuthPath.group())
+        .dimension2(staypoints[0].azimuthPath)
+        .x(d3.scale.linear()
+        .domain([0, 360])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(361).keys()])
+        .numTicks(9),
+
+    barChart()
+        .dimension(paths[0].totalPrecip)
+        .group(paths[0].totalPrecip.group())
+        .dimension2(staypoints[0].totalPrecip)
+        .x(d3.scale.linear()
+        .domain([0, 10])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(10).keys()])
+        .numTicks(9),
+
+    barChart()
+        .dimension(paths[0].snow)
+        .group(paths[0].snow.group())
+        .dimension2(staypoints[0].snow)
+        .x(d3.scale.linear()
+        .domain([0, 20])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(20).keys()])
+        .numTicks(9),
 ];
 
 var rightCharts = 
@@ -63,6 +103,46 @@ var rightCharts =
         .rangeRound([0, width]))
         .tickLabels([...Array(25).keys()])
         .numTicks(13),
+
+    barChart()
+        .dimension(paths[1].meanTemp)
+        .group(paths[1].meanTemp.group())
+        .dimension2(staypoints[1].meanTemp)
+        .x(d3.scale.linear()
+        .domain([-25, 25])
+        .rangeRound([0, width]))
+        .tickLabels(["0", "0", "25"])
+        .numTicks(1),
+
+    barChart()
+        .dimension(paths[1].azimuthPath)
+        .group(paths[1].azimuthPath.group())
+        .dimension2(staypoints[1].azimuthPath)
+        .x(d3.scale.linear()
+        .domain([0, 360])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(361).keys()])
+        .numTicks(9),
+
+    barChart()
+        .dimension(paths[1].totalPrecip)
+        .group(paths[1].totalPrecip.group())
+        .dimension2(staypoints[1].totalPrecip)
+        .x(d3.scale.linear()
+        .domain([0, 10])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(10).keys()])
+        .numTicks(9),
+
+    barChart()
+        .dimension(paths[1].snow)
+        .group(paths[1].snow.group())
+        .dimension2(staypoints[1].snow)
+        .x(d3.scale.linear()
+        .domain([0, 20])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(20).keys()])
+        .numTicks(9),
 ];
 
 var leftChart = d3.selectAll(".left-chart")
@@ -117,6 +197,75 @@ function closeRightSidebar()
     document.getElementById("right-sidebar-button").style.opacity = "1";
 }
 
+
+///////// COMPARE ////////////
+
+$("#toggleCompareButton").click(toggleCompare);
+
+var compareVisible = false;
+function toggleCompare()
+{
+    setCompare(!compareVisible);
+}
+
+function setCompare(visible)
+{
+    $("#leftContainer").css({ "visibility": (visible ? "visible" : "hidden"), "opacity": (visible ? "1" : "0") });
+    map._setPosition(visible ? $(document).width() / 2 : 0);
+    compareVisible = visible;
+}
+
+
+///////// ANIMATE ////////////
+
+$("#toggleAnimateButton").click(toggleAnimation);
+
+function toggleAnimation()
+{
+    setAnimation(!animating);
+}
+
+function setAnimation(on)
+{
+    if (compareVisible) 
+        $("#toggleCompareButton").click();
+
+    rightPathsLayer.setProps( {visible: on ? false : dataView == 'paths'});
+    rightStaypointsLayer.setProps( {visible: on ? false : dataView == 'staypoints'});
+
+    var animatedPathsLayer = new TripsLayer
+    ({
+        id: 'animatedPathsLayer',
+        // type: TripsLayer,
+        data: ANIMATEPATHS,
+        getPath: p => p.path,
+        getColor: p => p.azimuthColor,
+        opacity: 0.02 * (maxPaths / ANIMATEPATHS.length),
+        widthMinPixels: 2,
+        rounded: true,
+        trailLength: 480,
+        currentTime: 0,
+        visible: on
+    })
+
+    deckgl.setProps({ layers: [animatedPathsLayer] });
+
+    if (on)
+        document.getElementById('toggleCompareButton').setAttribute("disabled", "disabled");
+    else
+        document.getElementById('toggleCompareButton').removeAttribute("disabled");
+
+    animating = on;
+}
+
+$("#restartAnimateButton")
+    .click(
+        function()
+        {
+            start = Date.now();
+        }
+    );
+
 function togglePaths(paths, index)
 {
     var pathsLayer = (index == 0) ? leftPathsLayer : rightPathsLayer;
@@ -128,6 +277,9 @@ function togglePaths(paths, index)
     dataView = paths ? 'paths' : 'staypoints';
     filterWithPolygons(true, index);
 }
+
+
+///////// STAYPOINTS / PATHS ////////////
 
 $('#left-path-button')
     .click(
