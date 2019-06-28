@@ -9,8 +9,6 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.js'></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js'></script>
-    <!-- <script src="https://unpkg.com/deck.gl@^6.4.7/deckgl.min.js"></script> -->
-    <!-- <script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script> -->
     <script src="https://unpkg.com/deck.gl@~7.0.0/dist.min.js"></script>
     <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
@@ -52,19 +50,28 @@
             <center>
             <div id="left-charts">
                 <h2>Month</h2>
-                <div id="month-chart" class="left-chart chart"></div>
+                <div id="left-month-chart" class="left-chart chart"></div>
                 <h2>Weekday</h2>
-                <div id="weekday-chart" class="left-chart chart"></div>
+                <div id="left-weekday-chart" class="left-chart chart"></div>
                 <h2>Time of Day</h2>
-                <div id="hour-chart" class="left-chart chart"></div>
+                <div id="left-hour-chart" class="left-chart chart"></div>
                 <h2>Mean Temperature</h2>
-                <div id="mean-temp-chart" class="left-chart chart"></div>
-                <h2>Azimuth Path</h2>
-                <div id="azimuth-path-chart" class="left-chart chart"></div>
+                <div id="left-mean-temp-chart" class="left-chart chart"></div>
                 <h2>Total Precipitation</h2>
-                <div id="precip-chart" class="left-chart chart"></div>
+                <div id="left-precip-chart" class="left-chart chart"></div>
                 <h2>Snow</h2>
-                <div id="snow-chart" class="left-chart chart"></div>
+                <div id="left-snow-chart" class="left-chart chart"></div>
+
+                <!-- Hidable charts -->
+                <div id="left-azimuth-path-filter">
+                    <h2>Azimuth Path</h2>
+                    <div id="left-azimuth-path-chart" class="left-chart chart"></div>
+                </div>
+                <div id="left-duration-filter" style="display: none">
+                    <h2>Duration</h2>
+                    <div id="left-duration-chart" class="left-chart chart"></div>
+                </div>
+                
             </div>
             </center>
         </div>
@@ -125,19 +132,27 @@
             <center>
             <div id="right-charts">
                 <h2>Month</h2>
-                <div id="month-chart" class="right-chart chart"></div>
+                <div id="right-month-chart" class="right-chart chart"></div>
                 <h2>Weekday</h2>
-                <div id="weekday-chart" class="right-chart chart"></div>
+                <div id="right-weekday-chart" class="right-chart chart"></div>
                 <h2>Time of Day</h2>
-                <div id="hour-chart" class="right-chart chart"></div>
+                <div id="right-hour-chart" class="right-chart chart"></div>
                 <h2>Mean Temperature</h2>
-                <div id="mean-temp-chart" class="right-chart chart"></div>
-                <h2>Azimuth Path</h2>
-                <div id="azimuth-path-chart" class="right-chart chart"></div>
+                <div id="right-mean-temp-chart" class="right-chart chart"></div>
                 <h2>Total Precipitation</h2>
-                <div id="precip-chart" class="right-chart chart"></div>
+                <div id="right-precip-chart" class="right-chart chart"></div>
                 <h2>Snow</h2>
-                <div id="snow-chart" class="right-chart chart"></div>
+                <div id="right-snow-chart" class="right-chart chart"></div>
+
+                <!-- Hidable charts -->
+                <div id="right-azimuth-path-filter">
+                    <h2>Azimuth Path</h2>
+                    <div id="right-azimuth-path-chart" class="right-chart chart"></div>
+                </div>
+                <div id="right-duration-filter" style="display: none">
+                    <h2>Duration</h2>
+                    <div id="right-duration-chart" class="right-chart chart"></div>
+                </div>
             </div>
             </center>
         </div>

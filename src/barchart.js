@@ -145,10 +145,9 @@ function barChart()
         g.select("#clip-" + id + " rect")
             .attr("x", x(extent[0]))
             .attr("width", x(extent[1]) - x(extent[0]));
-
-        console.log(extent);
-        dimension.filterRange(extent);
-        try { dimension2.filterRange(extent) } catch {};
+       
+        try { dimension.filterRange(extent) } catch {}; // error in EDGE
+        try { dimension2.filterRange(extent) } catch {}; // error in EDGE
     });
 
     brush.on("brushend.chart", function () 
@@ -159,7 +158,7 @@ function barChart()
             div.select(".title a").style("display", "none");
             div.select("#clip-" + id + " rect").attr("x", null).attr("width", "100%");
 
-            dimension.filterAll();
+            try { dimension.filterAll() } catch {};
             try { dimension2.filterAll() } catch {};
         }
     });

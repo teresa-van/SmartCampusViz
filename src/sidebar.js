@@ -42,16 +42,6 @@ var leftCharts =
         .numTicks(1),
 
     barChart()
-        .dimension(paths[0].azimuthPath)
-        .group(paths[0].azimuthPath.group())
-        .dimension2(staypoints[0].azimuthPath)
-        .x(d3.scale.linear()
-        .domain([0, 360])
-        .rangeRound([0, width]))
-        .tickLabels([...Array(361).keys()])
-        .numTicks(9),
-
-    barChart()
         .dimension(paths[0].totalPrecip)
         .group(paths[0].totalPrecip.group())
         .dimension2(staypoints[0].totalPrecip)
@@ -69,6 +59,26 @@ var leftCharts =
         .domain([0, 20])
         .rangeRound([0, width]))
         .tickLabels([...Array(20).keys()])
+        .numTicks(9),
+
+    barChart()
+        .dimension(paths[0].azimuthPath)
+        .group(paths[0].azimuthPath.group())
+        .dimension2(undefined)
+        .x(d3.scale.linear()
+        .domain([0, 370])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(370).keys()])
+        .numTicks(9),
+
+    barChart()
+        .dimension(staypoints[0].duration)
+        .group(staypoints[0].duration.group())
+        .dimension2(undefined)
+        .x(d3.scale.linear()
+        .domain([0, 1600])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(1600).keys()])
         .numTicks(9),
 ];
 
@@ -115,16 +125,6 @@ var rightCharts =
         .numTicks(1),
 
     barChart()
-        .dimension(paths[1].azimuthPath)
-        .group(paths[1].azimuthPath.group())
-        .dimension2(staypoints[1].azimuthPath)
-        .x(d3.scale.linear()
-        .domain([0, 360])
-        .rangeRound([0, width]))
-        .tickLabels([...Array(361).keys()])
-        .numTicks(9),
-
-    barChart()
         .dimension(paths[1].totalPrecip)
         .group(paths[1].totalPrecip.group())
         .dimension2(staypoints[1].totalPrecip)
@@ -142,6 +142,26 @@ var rightCharts =
         .domain([0, 20])
         .rangeRound([0, width]))
         .tickLabels([...Array(20).keys()])
+        .numTicks(9),
+
+    barChart()
+        .dimension(paths[1].azimuthPath)
+        .group(paths[1].azimuthPath.group())
+        .dimension2(undefined)
+        .x(d3.scale.linear()
+        .domain([0, 370])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(370).keys()])
+        .numTicks(9),
+
+    barChart()
+        .dimension(staypoints[1].duration)
+        .group(staypoints[1].duration.group())
+        .dimension2(undefined)
+        .x(d3.scale.linear()
+        .domain([0, 1600])
+        .rangeRound([0, width]))
+        .tickLabels([...Array(1600).keys()])
         .numTicks(9),
 ];
 
@@ -251,9 +271,17 @@ function setAnimation(on)
     deckgl.setProps({ layers: [animatedPathsLayer] });
 
     if (on)
+    {
         document.getElementById('toggleCompareButton').setAttribute("disabled", "disabled");
+        document.getElementById('right-path-button').setAttribute("disabled", "disabled");
+        document.getElementById('right-staypoints-button').setAttribute("disabled", "disabled");
+    }
     else
+    {
         document.getElementById('toggleCompareButton').removeAttribute("disabled");
+        document.getElementById('right-path-button').removeAttribute("disabled");
+        document.getElementById('right-staypoints-button').removeAttribute("disabled");
+    }
 
     animating = on;
 }
@@ -273,6 +301,12 @@ function togglePaths(paths, index)
 
     pathsLayer.setProps({ visible: paths });
     staypointsLayer.setProps({ visible: !paths });
+
+    document.getElementById("left-azimuth-path-filter").style.display = paths ? "inline-block" : "none";
+    document.getElementById("right-azimuth-path-filter").style.display = paths ? "inline-block" : "none";
+
+    document.getElementById("left-duration-filter").style.display = !paths ? "inline-block" : "none";
+    document.getElementById("right-duration-filter").style.display = !paths ? "inline-block" : "none";
 
     dataView = paths ? 'paths' : 'staypoints';
     filterWithPolygons(true, index);

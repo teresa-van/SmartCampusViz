@@ -121,7 +121,7 @@ function mapLoaded()
 			data: ANIMATEPATHS,
 			getPath: p => p.path,
 			getColor: p => p.azimuthColor,
-			opacity: 0.02 * (maxPaths / ANIMATEPATHS.length),
+			opacity: Math.min(1, 0.08 * (maxPaths / ANIMATEPATHS.length) / 2),
 			widthMinPixels: 2,
 			rounded: true,
 			trailLength: 480,
