@@ -10,7 +10,6 @@ function barChart()
         brushDirty,
         dimension,
         group,
-        dimension2,
         tickLabels,
         numTicks,
         round;
@@ -147,7 +146,6 @@ function barChart()
             .attr("width", x(extent[1]) - x(extent[0]));
        
         try { dimension.filterRange(extent) } catch {}; // error in EDGE
-        try { dimension2.filterRange(extent) } catch {}; // error in EDGE
     });
 
     brush.on("brushend.chart", function () 
@@ -159,7 +157,6 @@ function barChart()
             div.select("#clip-" + id + " rect").attr("x", null).attr("width", "100%");
 
             try { dimension.filterAll() } catch {};
-            try { dimension2.filterAll() } catch {};
         }
     });
 
@@ -197,14 +194,6 @@ function barChart()
         return chart;
     };
 
-    chart.dimension2 = function (_) 
-    {
-        if (!arguments.length) return dimension2;
-        dimension2 = _;
-
-        return chart;
-    };
-
     chart.tickLabels = function (_) 
     {
         if (!arguments.length) return tickLabels;
@@ -227,13 +216,11 @@ function barChart()
         {
             brush.extent(_);
             dimension.filterRange(_);
-            dimension2.filterRange(_);
         }
         else 
         {
             brush.clear();
             dimension.filterAll();
-            dimension2.filterAll();
         }
         brushDirty = true;
         return chart;

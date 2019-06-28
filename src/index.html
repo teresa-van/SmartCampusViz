@@ -49,29 +49,39 @@
             <hr>
             <center>
             <div id="left-charts">
-                <h2>Month</h2>
-                <div id="left-month-chart" class="left-chart chart"></div>
-                <h2>Weekday</h2>
-                <div id="left-weekday-chart" class="left-chart chart"></div>
-                <h2>Time of Day</h2>
-                <div id="left-hour-chart" class="left-chart chart"></div>
-                <h2>Mean Temperature</h2>
-                <div id="left-mean-temp-chart" class="left-chart chart"></div>
-                <h2>Total Precipitation</h2>
-                <div id="left-precip-chart" class="left-chart chart"></div>
-                <h2>Snow</h2>
-                <div id="left-snow-chart" class="left-chart chart"></div>
-
-                <!-- Hidable charts -->
-                <div id="left-azimuth-path-filter">
+                <div id="left-path-charts">
+                    <h2>Month</h2>
+                    <div id="left-month-chart" class="left-chart chart"></div>
+                    <h2>Weekday</h2>
+                    <div id="left-weekday-chart" class="left-chart chart"></div>
+                    <h2>Time of Day</h2>
+                    <div id="left-hour-chart" class="left-chart chart"></div>
+                    <h2>Mean Temperature</h2>
+                    <div id="left-mean-temp-chart" class="left-chart chart"></div>
+                    <h2>Total Precipitation</h2>
+                    <div id="left-precip-chart" class="left-chart chart"></div>
+                    <h2>Snow</h2>
+                    <div id="left-snow-chart" class="left-chart chart"></div>
                     <h2>Azimuth Path</h2>
                     <div id="left-azimuth-path-chart" class="left-chart chart"></div>
                 </div>
-                <div id="left-duration-filter" style="display: none">
+
+                <div id="left-staypoint-charts" style="display: none">
+                    <h2>Month</h2>
+                    <div id="left-month-chart" class="left-chart chart"></div>
+                    <h2>Weekday</h2>
+                    <div id="left-weekday-chart" class="left-chart chart"></div>
+                    <h2>Time of Day</h2>
+                    <div id="left-hour-chart" class="left-chart chart"></div>
+                    <h2>Mean Temperature</h2>
+                    <div id="left-mean-temp-chart" class="left-chart chart"></div>
+                    <h2>Total Precipitation</h2>
+                    <div id="left-precip-chart" class="left-chart chart"></div>
+                    <h2>Snow</h2>
+                    <div id="left-snow-chart" class="left-chart chart"></div>
                     <h2>Duration</h2>
                     <div id="left-duration-chart" class="left-chart chart"></div>
                 </div>
-                
             </div>
             </center>
         </div>
@@ -131,25 +141,36 @@
             <hr>
             <center>
             <div id="right-charts">
-                <h2>Month</h2>
-                <div id="right-month-chart" class="right-chart chart"></div>
-                <h2>Weekday</h2>
-                <div id="right-weekday-chart" class="right-chart chart"></div>
-                <h2>Time of Day</h2>
-                <div id="right-hour-chart" class="right-chart chart"></div>
-                <h2>Mean Temperature</h2>
-                <div id="right-mean-temp-chart" class="right-chart chart"></div>
-                <h2>Total Precipitation</h2>
-                <div id="right-precip-chart" class="right-chart chart"></div>
-                <h2>Snow</h2>
-                <div id="right-snow-chart" class="right-chart chart"></div>
-
-                <!-- Hidable charts -->
-                <div id="right-azimuth-path-filter">
+                <div id="right-path-charts">
+                    <h2>Month</h2>
+                    <div id="right-month-chart" class="right-chart chart"></div>
+                    <h2>Weekday</h2>
+                    <div id="right-weekday-chart" class="right-chart chart"></div>
+                    <h2>Time of Day</h2>
+                    <div id="right-hour-chart" class="right-chart chart"></div>
+                    <h2>Mean Temperature</h2>
+                    <div id="right-mean-temp-chart" class="right-chart chart"></div>
+                    <h2>Total Precipitation</h2>
+                    <div id="right-precip-chart" class="right-chart chart"></div>
+                    <h2>Snow</h2>
+                    <div id="right-snow-chart" class="right-chart chart"></div>
                     <h2>Azimuth Path</h2>
                     <div id="right-azimuth-path-chart" class="right-chart chart"></div>
                 </div>
-                <div id="right-duration-filter" style="display: none">
+
+                <div id="right-staypoint-charts" style="display: none">
+                    <h2>Month</h2>
+                    <div id="right-month-chart" class="right-chart chart"></div>
+                    <h2>Weekday</h2>
+                    <div id="right-weekday-chart" class="right-chart chart"></div>
+                    <h2>Time of Day</h2>
+                    <div id="right-hour-chart" class="right-chart chart"></div>
+                    <h2>Mean Temperature</h2>
+                    <div id="right-mean-temp-chart" class="right-chart chart"></div>
+                    <h2>Total Precipitation</h2>
+                    <div id="right-precip-chart" class="right-chart chart"></div>
+                    <h2>Snow</h2>
+                    <div id="right-snow-chart" class="right-chart chart"></div>
                     <h2>Duration</h2>
                     <div id="right-duration-chart" class="right-chart chart"></div>
                 </div>
@@ -164,52 +185,8 @@
     <script src='layers.js'></script>
     <script src='app.js'></script>
     <script src='barchart.js'></script>
+    <script src='charts.js'></script>
     <script src='sidebar.js'></script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <h2>Month</h2>
-<div style="min-width: 250px; width: 94%; padding-left: 25px">
-    <select name="month" class="ui fluid selection dropdown" multiple="" id="month-select">
-        <option value="">Month</option>
-        <option value="1">January</option>
-        <option value="2">February</option>
-        <option value="3">March</option>
-        <option value="4">April</option>
-        <option value="5">May</option>
-        <option value="6">June</option>
-        <option value="7">July</option>
-        <option value="8">August</option>
-        <option value="9">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
-    </select>
-</div>
-
-<h2>Weekday</h2>
-<div style="min-width: 250px; width: 94%; padding-left: 25px">
-    <select name="weekday" class="ui fluid selection dropdown" multiple="" id="weekday-select">
-        <option value="">Weekday</option>
-        <option value="0">Sunday</option>
-        <option value="1">Monday</option>
-        <option value="2">Tuesday</option>
-        <option value="3">Wednesday</option>
-        <option value="4">Thursday</option>
-        <option value="5">Friday</option>
-        <option value="6">Saturday</option>
-    </select>
-</div> -->
