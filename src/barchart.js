@@ -145,7 +145,7 @@ function barChart()
             .attr("x", x(extent[0]))
             .attr("width", x(extent[1]) - x(extent[0]));
        
-        try { dimension.filterRange(extent) } catch {}; // error in EDGE
+        dimension.filterRange(extent);
     });
 
     brush.on("brushend.chart", function () 
@@ -156,7 +156,7 @@ function barChart()
             div.select(".title a").style("display", "none");
             div.select("#clip-" + id + " rect").attr("x", null).attr("width", "100%");
 
-            try { dimension.filterAll() } catch {};
+            dimension.filterAll();
         }
     });
 
