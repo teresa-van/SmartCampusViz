@@ -4,7 +4,7 @@ var lightStyle = 'mapbox://styles/mapbox/light-v10'; //'http://162.246.156.156:8
 
 var deckgl;
 
-var dataView = 'paths';
+var dataView = ['paths', 'paths'];
 var allPolyPoints = [{}, {}];
 var drawing = false;
 var syncPolygons = false;
@@ -139,7 +139,7 @@ function mapLoaded()
 
 function updateVisualization(index)
 {
-	if (dataView === 'paths')
+	if (dataView[index] === 'paths')
 	{
 		var layer = (index == 0) ? leftPathsLayer : rightPathsLayer;
 		updatePaths(index);
@@ -273,12 +273,12 @@ function filterWithPolygons(remove, index)
 {
 	if (remove)
 	{
-		if (dataView === 'paths') findPathsPassingThroughAllPolygons(index);
+		if (dataView[index] === 'paths') findPathsPassingThroughAllPolygons(index);
 		else findStaypointsWithinAllPolygons(index);
 	}
 	else
 	{
-		if (dataView === 'paths') findPathsPassingThroughPolygon(index);
+		if (dataView[index] === 'paths') findPathsPassingThroughPolygon(index);
 		else findStaypointsWithinPolygon(index);
 	}
 }

@@ -84,8 +84,12 @@ function setAnimation(on)
     if (compareVisible) 
         $("#toggleCompareButton").click();
 
-    rightPathsLayer.setProps( {visible: on ? false : dataView == 'paths'});
-    rightStaypointsLayer.setProps( {visible: on ? false : dataView == 'staypoints'});
+    document.getElementById("right-path-button").className = "ui button";
+    document.getElementById("right-staypoints-button").className = "ui button basic";
+    togglePaths(true, 1);    
+
+    rightPathsLayer.setProps( {visible: on ? false : dataView[1] == 'paths'});
+    rightStaypointsLayer.setProps( {visible: on ? false : dataView[1] == 'staypoints'});
 
     var animatedPathsLayer = new TripsLayer
     ({
@@ -142,7 +146,7 @@ function togglePaths(paths, index)
     document.getElementById("left-staypoint-charts").style.display = !paths ? "inline-block" : "none";
     document.getElementById("right-staypoint-charts").style.display = !paths ? "inline-block" : "none";
 
-    dataView = paths ? 'paths' : 'staypoints';
+    dataView[index] = paths ? 'paths' : 'staypoints';
     filterWithPolygons(true, index);
 }
 
