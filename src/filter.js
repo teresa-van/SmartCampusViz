@@ -6,7 +6,7 @@
         null <- Select all (remove filter)
 */
 
-var pathsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/animate/data/paths.json";
+var pathsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/paths.json";
 var pathsjson;
 
 var staypointsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/staypoints.json";
