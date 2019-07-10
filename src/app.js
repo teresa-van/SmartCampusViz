@@ -83,6 +83,9 @@ $(function ()
 		
 		deckgl.setProps({ viewState: view });
 	});
+
+	console.log(new Date(startDate));
+	console.log(new Date(endDate));
 });
 
 function initMaps()
@@ -148,6 +151,7 @@ function updateVisualization(index)
 		layer.setProps({ data: STAYPOINTSVISUAL[index], opacity: Math.min(1, 0.02 * (maxStaypoints / STAYPOINTSVISUAL[index].length / 3)) });
 	}
 
+	updateInfo(index);
 	// renderAll();
 }
 

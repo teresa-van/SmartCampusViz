@@ -27,6 +27,9 @@ function openLeftSidebar()
     document.getElementById("left-sidebar").style.width = "20%";
     document.getElementById("left-sidebar-button").style.zIndex = "-1";
     document.getElementById("left-sidebar-button").style.opacity = "0";
+
+    document.getElementById("left-paths-info-all").style.left = "20%";
+    document.getElementById("left-staypoints-info-all").style.left = "20%";
 }
 
 function closeLeftSidebar() 
@@ -34,6 +37,9 @@ function closeLeftSidebar()
     document.getElementById("left-sidebar").style.width = "0";
     document.getElementById("left-sidebar-button").style.zIndex = "10";
     document.getElementById("left-sidebar-button").style.opacity = "1";
+
+    document.getElementById("left-paths-info-all").style.left = "2%";
+    document.getElementById("left-staypoints-info-all").style.left = "2%";
 }
 
 function openRightSidebar() 
@@ -41,6 +47,9 @@ function openRightSidebar()
     document.getElementById("right-sidebar").style.width = "20%";
     document.getElementById("right-sidebar-button").style.zIndex = "-1";
     document.getElementById("right-sidebar-button").style.opacity = "0";
+
+    document.getElementById("right-paths-info-all").style.right = "20%";
+    document.getElementById("right-staypoints-info-all").style.right = "20%";
 }
   
 
@@ -49,6 +58,22 @@ function closeRightSidebar()
     document.getElementById("right-sidebar").style.width = "0";
     document.getElementById("right-sidebar-button").style.zIndex = "10";
     document.getElementById("right-sidebar-button").style.opacity = "1";
+
+    document.getElementById("right-paths-info-all").style.right = "2%";
+    document.getElementById("right-staypoints-info-all").style.right = "2%";
+}
+
+function updateInfo(index)
+{
+    if (dataView[index] == 'paths')
+    {
+        if (index == 0)
+            document.getElementById("left-visible-paths-number").innerHTML = PATHSVISUAL[index].length + " / 5530";
+        else
+            document.getElementById("right-visible-paths-number").innerHTML = PATHSVISUAL[index].length + " / 5530";
+    }
+    else
+        document.getElementById("right-visible-paths-number").innerHTML = PATHSVISUAL[index].length;
 }
 
 
@@ -145,6 +170,17 @@ function togglePaths(paths, index)
 
     document.getElementById("left-staypoint-charts").style.display = !paths ? "inline-block" : "none";
     document.getElementById("right-staypoint-charts").style.display = !paths ? "inline-block" : "none";
+
+    if (index == 0)
+    {
+        document.getElementById("left-paths-info-all").style.display = paths ? "inline-block" : "none";
+        document.getElementById("left-staypoints-info-all").style.display = !paths ? "inline-block" : "none";
+    }
+    else
+    {
+        document.getElementById("right-paths-info-all").style.display = paths ? "inline-block" : "none";
+        document.getElementById("right-staypoints-info-all").style.display = !paths ? "inline-block" : "none";
+    }
 
     dataView[index] = paths ? 'paths' : 'staypoints';
     filterWithPolygons(true, index);
