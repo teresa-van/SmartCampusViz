@@ -53,7 +53,17 @@ function createLayers()
 		rounded: true,
 		pickable: true,
 		autoHighlight: true,
-		highlightColor: [255, 255, 255]
+		highlightColor: [255, 255, 255],
+		highlightedObjectIndex: null,
+		onClick: ({ object }) =>
+		{
+			leftPathsLayer.setProps({ highlightedObjectIndex: PATHSVISUAL[1].indexOf(object)});
+		},
+		onHover: () =>
+		{
+			if (leftPathsLayer.props.highlightedObjectIndex == -1)
+			leftPathsLayer.setProps({ highlightedObjectIndex: null });
+		}
 	});
 
 	rightPathsLayer = new MapboxLayer
@@ -71,7 +81,17 @@ function createLayers()
 		rounded: true,
 		pickable: true,
 		autoHighlight: true,
-		highlightColor: [255, 255, 255]
+		highlightColor: [255, 255, 255],
+		highlightedObjectIndex: null,
+		onClick: ({ object }) =>
+		{
+			rightPathsLayer.setProps({ highlightedObjectIndex: PATHSVISUAL[1].indexOf(object)});
+		},
+		onHover: () =>
+		{
+			if (rightPathsLayer.props.highlightedObjectIndex == -1)
+				rightPathsLayer.setProps({ highlightedObjectIndex: null });
+		}
 	});
 
 	leftStaypointsLayer = new MapboxLayer
@@ -87,9 +107,19 @@ function createLayers()
 		radiusMinPixels: 2,
 		radiusMaxPixels: 30,//p => console.log(p.pointSize),
 		pickable: true,
+		visible: false,
 		autoHighlight: true,
 		highlightColor: [255, 255, 255],
-		visible: false,
+		highlightedObjectIndex: null,
+		onClick: ({ object }) =>
+		{
+			leftStaypointsLayer.setProps({ highlightedObjectIndex: PATHSVISUAL[1].indexOf(object)});
+		},
+		onHover: () =>
+		{
+			if (leftStaypointsLayer.props.highlightedObjectIndex == -1)
+			leftStaypointsLayer.setProps({ highlightedObjectIndex: null });
+		}
 	});
 
 	rightStaypointsLayer = new MapboxLayer
@@ -105,9 +135,19 @@ function createLayers()
 		radiusMinPixels: 2,
 		radiusMaxPixels: 30,//p => console.log(p.pointSize),
 		pickable: true,
+		visible: false,
 		autoHighlight: true,
 		highlightColor: [255, 255, 255],
-		visible: false,
+		highlightedObjectIndex: null,
+		onClick: ({ object }) =>
+		{
+			rightStaypointsLayer.setProps({ highlightedObjectIndex: PATHSVISUAL[1].indexOf(object)});
+		},
+		onHover: () =>
+		{
+			if (rightStaypointsLayer.props.highlightedObjectIndex == -1)
+			rightStaypointsLayer.setProps({ highlightedObjectIndex: null });
+		}
 	});
 
 	leftGeoJsonLayer = new MapboxLayer
@@ -123,21 +163,6 @@ function createLayers()
 		lineWidthMinPixels: 2,
 		pickable: false,
 		fp64: true,
-		// onHover: ({object, x, y}) => {
-		// 	map.getCanvas().style.cursor = 'crosshair';
-		// }
-		// onClick: ({ object, x, y }) =>
-		// {
-		// 	try
-		// 	{
-		// 		const tooltip = object.properties.Building_n;
-		// 		console.log(tooltip);
-		// 	}
-		// 	catch (error) { };
-		// 	/* Update tooltip
-		// 		http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
-		// 	*/
-		// }
 	});
 
 	rightGeoJsonLayer = new MapboxLayer
@@ -184,12 +209,6 @@ function createLayers()
 		sizeScale: 1,
 		sizeUnits: 'meters',
 		fontFamily : 'Roboto, sans-serif',
-		// onHover: ({object, x, y}) => {
-		//   const tooltip = `${object.name}\n${object.address}`;
-		//   /* Update tooltip
-		//      http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
-		//   */
-		// }
 	});
 
 	rightBuildingLabelLayer = new MapboxLayer
@@ -206,12 +225,6 @@ function createLayers()
 		sizeScale: 1,
 		sizeUnits: 'meters',
 		fontFamily : 'Roboto, sans-serif',
-		// onHover: ({object, x, y}) => {
-		//   const tooltip = `${object.name}\n${object.address}`;
-		//   /* Update tooltip
-		//      http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
-		//   */
-		// }
 	});
 
 }

@@ -43,12 +43,6 @@ configurePathsFilter(paths[1]);
 configureStaypointsFilter(staypoints[0]);
 configureStaypointsFilter(staypoints[1]);
 
-// paths.month.filter(6);
-// paths.weekday.filter(0);
-// paths.id.filter(2656);
-// paths.academicDay.filter('BETWEEN_TERMS');
-// staypoints.academicDayStart.filter('BETWEEN_TERMS');
-
 // #region Paths
 
 function filterPathsPassingThroughPolygons(index)

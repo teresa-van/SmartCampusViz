@@ -47,14 +47,14 @@ $(function ()
     leftMap.on('load', function () 
     {
 		addMapLayers(leftMap, [leftBuildingLabelLayer, leftGeoJsonLayer, leftPathsLayer, leftStaypointsLayer],
-			['', 'leftBuildingLabelLayer', 'leftGeoJsonLayer', 'leftGeoJsonLayer']);
+			['', 'leftBuildingLabelLayer', 'leftGeoJsonLayer', 'leftGeoJsonLayer'], 0);
         mapLoaded();
     });
 
     rightMap.on('load', function ()
     {
 		addMapLayers(rightMap, [rightBuildingLabelLayer, rightGeoJsonLayer, rightPathsLayer, rightStaypointsLayer],
-			['', 'rightBuildingLabelLayer', 'rightGeoJsonLayer', 'rightGeoJsonLayer']);
+			['', 'rightBuildingLabelLayer', 'rightGeoJsonLayer', 'rightGeoJsonLayer'], 1);
         mapLoaded();
 	});
 
@@ -111,8 +111,6 @@ function mapLoaded()
 	{
 		var timeStamp = (Date.now() - start) / 1000;
 		var currentTime = ((timeStamp % loopTime) / loopTime) * loopLength
-		// currentDate = ((timeStamp % loopTime) / loopTime) * loopLength;
-		// console.log(currentTime);
 
 		var animatedPathsLayer = new TripsLayer
 		({
@@ -130,8 +128,6 @@ function mapLoaded()
 		})
 
 		deckgl.setProps({ layers: [animatedPathsLayer] });
-
-		// rightPathsLayer.setProps({ currentTime: currentTime });
 
 		animation = requestAnimationFrame(animate);
 	}
@@ -175,12 +171,14 @@ function createMap(container, style)
 	});
 }
 
-function addMapLayers(_map, layers, order)
+function addMapLayers(_map, layers, order, index)
 {
 	for (var i in layers)
 	{
 		_map.addLayer(layers[i], order[i]);
 		layers[i].deck.props.getCursor = () => drawing ? "crosshair" : "grab";
+		layers[i].deck.props.pickingRadius = 5;
+		layers[i].deck.props.onClick = (info) => handleHighlight(info, index);
 	}
 }
 
@@ -280,6 +278,17 @@ function filterWithPolygons(remove, index)
 	{
 		if (dataView[index] === 'paths') findPathsPassingThroughPolygon(index);
 		else findStaypointsWithinPolygon(index);
+	}
+}
+
+function handleHighlight(info, index)
+{
+	if (info.object == null)
+	{
+		if (index == 0)
+			leftPathsLayer.setProps({ highlightedObjectIndex: -1 });
+		else
+			rightPathsLayer.setProps({ highlightedObjectIndex: -1 });
 	}
 }
 
