@@ -57,12 +57,12 @@ function createLayers()
 		highlightedObjectIndex: null,
 		onClick: ({ object }) =>
 		{
-			leftPathsLayer.setProps({ highlightedObjectIndex: PATHSVISUAL[1].indexOf(object)});
+			leftPathsLayer.setProps({ highlightedObjectIndex: PATHSVISUAL[0].indexOf(object)});
 		},
 		onHover: () =>
 		{
 			if (leftPathsLayer.props.highlightedObjectIndex == -1)
-			leftPathsLayer.setProps({ highlightedObjectIndex: null });
+				leftPathsLayer.setProps({ highlightedObjectIndex: null });
 		}
 	});
 
@@ -113,12 +113,12 @@ function createLayers()
 		highlightedObjectIndex: null,
 		onClick: ({ object }) =>
 		{
-			leftStaypointsLayer.setProps({ highlightedObjectIndex: PATHSVISUAL[1].indexOf(object)});
+			leftStaypointsLayer.setProps({ highlightedObjectIndex: STAYPOINTSVISUAL[1].indexOf(object)});
 		},
 		onHover: () =>
 		{
 			if (leftStaypointsLayer.props.highlightedObjectIndex == -1)
-			leftStaypointsLayer.setProps({ highlightedObjectIndex: null });
+				leftStaypointsLayer.setProps({ highlightedObjectIndex: null });
 		}
 	});
 
@@ -141,12 +141,12 @@ function createLayers()
 		highlightedObjectIndex: null,
 		onClick: ({ object }) =>
 		{
-			rightStaypointsLayer.setProps({ highlightedObjectIndex: PATHSVISUAL[1].indexOf(object)});
+			rightStaypointsLayer.setProps({ highlightedObjectIndex: STAYPOINTSVISUAL[1].indexOf(object)});
 		},
 		onHover: () =>
 		{
 			if (rightStaypointsLayer.props.highlightedObjectIndex == -1)
-			rightStaypointsLayer.setProps({ highlightedObjectIndex: null });
+				rightStaypointsLayer.setProps({ highlightedObjectIndex: null });
 		}
 	});
 

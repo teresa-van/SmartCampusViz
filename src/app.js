@@ -286,9 +286,20 @@ function handleHighlight(info, index)
 	if (info.object == null)
 	{
 		if (index == 0)
-			leftPathsLayer.setProps({ highlightedObjectIndex: -1 });
+		{
+			if (dataView[index] == "paths")
+				leftPathsLayer.setProps({ highlightedObjectIndex: -1 });
+			else
+				leftStaypointsLayer.setProps({ highlightedObjectIndex: -1 });
+		}
 		else
-			rightPathsLayer.setProps({ highlightedObjectIndex: -1 });
+		{
+			if (dataView[index] == "paths")
+				rightPathsLayer.setProps({ highlightedObjectIndex: -1 });
+			else
+				rightStaypointsLayer.setProps({ highlightedObjectIndex: -1 });
+		}
+		
 	}
 }
 
