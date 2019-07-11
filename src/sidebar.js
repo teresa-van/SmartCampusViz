@@ -165,6 +165,9 @@ function togglePaths(paths, index)
     pathsLayer.setProps({ visible: paths });
     staypointsLayer.setProps({ visible: !paths });
 
+    document.getElementById("pathlegend").style.display = paths ? "block" : "none";
+    document.getElementById("staypointslegend").style.display = !paths ? "block" : "none";
+
     document.getElementById("left-path-charts").style.display = paths ? "inline-block" : "none";
     document.getElementById("right-path-charts").style.display = paths ? "inline-block" : "none";
 
