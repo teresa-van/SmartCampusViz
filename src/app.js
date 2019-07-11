@@ -117,26 +117,28 @@ function mapLoaded()
 
 	function animate()
 	{
-		var timeStamp = (Date.now() - start) / 1000;
-		var currentTime = ((timeStamp % loopTime) / loopTime) * loopLength
+		if (animating)
+		{
+			var timeStamp = (Date.now() - start) / 1000;
+			var currentTime = ((timeStamp % loopTime) / loopTime) * loopLength
 
-		var animatedPathsLayer = new TripsLayer
-		({
-			id: 'animatedPathsLayer',
-			// type: TripsLayer,
-			data: ANIMATEPATHS,
-			getPath: p => p.path,
-			getColor: p => p.azimuthColor,
-			opacity: Math.min(1, 0.08 * (maxPaths / ANIMATEPATHS.length) / 2),
-			widthMinPixels: 2,
-			rounded: true,
-			trailLength: 480,
-			currentTime: currentTime,
-			visible: animating
-		})
+			var animatedPathsLayer = new TripsLayer
+			({
+				id: 'animatedPathsLayer',
+				// type: TripsLayer,
+				data: ANIMATEPATHS,
+				getPath: p => p.path,
+				getColor: p => p.azimuthColor,
+				opacity: Math.min(1, 0.08 * (maxPaths / ANIMATEPATHS.length) / 2),
+				widthMinPixels: 2,
+				rounded: true,
+				trailLength: 480,
+				currentTime: currentTime,
+				visible: animating
+			})
 
-		deckgl.setProps({ layers: [animatedPathsLayer] });
-
+			deckgl.setProps({ layers: [animatedPathsLayer] });
+		}
 		animation = requestAnimationFrame(animate);
 	}
 }

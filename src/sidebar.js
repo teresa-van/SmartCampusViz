@@ -73,7 +73,12 @@ function updateInfo(index)
             document.getElementById("right-visible-paths-number").innerHTML = PATHSVISUAL[index].length + " / 5530";
     }
     else
-        document.getElementById("right-visible-paths-number").innerHTML = PATHSVISUAL[index].length;
+    {
+        if (index == 0)
+            document.getElementById("left-visible-staypoints-number").innerHTML = STAYPOINTSVISUAL[index].length + " / 80076";
+        else
+            document.getElementById("right-visible-staypoints-number").innerHTML = STAYPOINTSVISUAL[index].length + " / 80076";
+    }
 }
 
 
