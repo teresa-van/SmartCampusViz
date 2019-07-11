@@ -32,6 +32,14 @@ staypoints[1].onChange(e => updateVisualization(1));
 
 // #endregion
 
+$(document).ready(function() 
+{
+	setTimeout(function()
+	{
+        $('body').addClass('loaded');
+    }, 3000);
+});
+
 $(function () 
 {
 	mapboxgl.accessToken = 'pk.eyJ1IjoidGVyZXNhLXZhbiIsImEiOiJjanF3cGV6MHgwYWw3NDhzYnU0MzhveWRpIn0.2L-9hptK5Va1-PjdKC_fVA';
@@ -83,9 +91,6 @@ $(function ()
 		
 		deckgl.setProps({ viewState: view });
 	});
-
-	console.log(new Date(startDate));
-	console.log(new Date(endDate));
 });
 
 function initMaps()
