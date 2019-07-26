@@ -7,8 +7,12 @@ var STAYPOINTSVISUAL = [[], []];
 
 const S = 0.75;
 const B = 1;
-var startDate = 1380322371000;
-var endDate = 1494523051000;
+
+var pathStartDate = [0, 0];
+var pathEndDate = [0, 0];
+
+var staypointStartDate = [0, 0];
+var staypointEndDate = [0, 0];
 
 // Parse paths data
 function updatePaths(index)
@@ -16,6 +20,13 @@ function updatePaths(index)
     // pathCoordinates = [];
     var filteredNumPaths = paths[index].groupAll().reduceCount().value();
     var filteredPaths = paths[index].allFiltered();
+
+    pathStartDate = [0, 0];
+    pathEndDate = [0, 0];
+    
+    staypointStartDate = [0, 0];
+    staypointEndDate = [0, 0];
+
     var count = 0;
     var hueFactor = 255 / 360;
 
@@ -60,6 +71,10 @@ function updatePaths(index)
         var minFromLast = filteredPaths[i].Minutes_From_Last;
         timestamp = timestamp + (minFromLast * 100);
 
+        var date = new Date(filteredPaths[i].Loct_Year, filteredPaths[i].Loct_Month, filteredPaths[i].Loct_Day).getTime();
+        pathStartDate[index] = date < pathStartDate[index] || pathStartDate[index] == 0 ? date : pathStartDate[index];
+        pathEndDate[index] = date > pathEndDate[index] || pathEndDate[index] == 0 ? date : pathEndDate[index];
+
         PATHSVISUAL[index][count].path.push([lon, lat]);
         ANIMATEPATHS[count].path.push([lon, lat, timestamp]);
     }
@@ -86,6 +101,13 @@ function updateStaypoints(index)
         
         var lat = parseFloat(filteredStaypoints[i].Centroid_Lat);
         var lon = parseFloat(filteredStaypoints[i].Centroid_Lon);
+
+        var date = new Date(parseInt(filteredStaypoints[i].Loct_Start.split(" ")[0].split("-")[2]), 
+                            parseInt(filteredStaypoints[i].Loct_Start.split(" ")[0].split("-")[1]), 
+                            parseInt(filteredStaypoints[i].Loct_Start.split(" ")[0].split("-")[0])).getTime();
+        staypointStartDate[index] = date < staypointStartDate[index] || staypointStartDate[index] == 0 ? date : staypointStartDate[index];
+        staypointEndDate[index] = date > staypointEndDate[index] || staypointEndDate[index] == 0 ? date : staypointEndDate[index];
+
         STAYPOINTSVISUAL[index][i].point.push(lon);
         STAYPOINTSVISUAL[index][i].point.push(lat);
     }

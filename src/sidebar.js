@@ -28,8 +28,8 @@ function openLeftSidebar()
     document.getElementById("left-sidebar-button").style.zIndex = "-1";
     document.getElementById("left-sidebar-button").style.opacity = "0";
 
-    document.getElementById("left-paths-info-all").style.left = "20%";
-    document.getElementById("left-staypoints-info-all").style.left = "20%";
+    document.getElementById("left-paths-info-all").style.left = "24%";
+    document.getElementById("left-staypoints-info-all").style.left = "24%";
 }
 
 function closeLeftSidebar() 
@@ -38,8 +38,8 @@ function closeLeftSidebar()
     document.getElementById("left-sidebar-button").style.zIndex = "10";
     document.getElementById("left-sidebar-button").style.opacity = "1";
 
-    document.getElementById("left-paths-info-all").style.left = "2%";
-    document.getElementById("left-staypoints-info-all").style.left = "2%";
+    document.getElementById("left-paths-info-all").style.left = "3%";
+    document.getElementById("left-staypoints-info-all").style.left = "3%";
 }
 
 function openRightSidebar() 
@@ -48,8 +48,8 @@ function openRightSidebar()
     document.getElementById("right-sidebar-button").style.zIndex = "-1";
     document.getElementById("right-sidebar-button").style.opacity = "0";
 
-    document.getElementById("right-paths-info-all").style.right = "20%";
-    document.getElementById("right-staypoints-info-all").style.right = "20%";
+    document.getElementById("right-paths-info-all").style.right = "24%";
+    document.getElementById("right-staypoints-info-all").style.right = "24%";
 }
   
 
@@ -59,25 +59,46 @@ function closeRightSidebar()
     document.getElementById("right-sidebar-button").style.zIndex = "10";
     document.getElementById("right-sidebar-button").style.opacity = "1";
 
-    document.getElementById("right-paths-info-all").style.right = "2%";
-    document.getElementById("right-staypoints-info-all").style.right = "2%";
+    document.getElementById("right-paths-info-all").style.right = "3%";
+    document.getElementById("right-staypoints-info-all").style.right = "3%";
 }
 
 function updateInfo(index)
 {
     if (dataView[index] == 'paths')
     {
+        var start = new Date(pathStartDate[index]).toString();
+        var end = new Date(pathEndDate[index]).toString();
+        var dateRange = start.split(" ").slice(1,4).join(" ") + " - " + end.split(" ").slice(1,4).join(" ");
+
         if (index == 0)
+        {
             document.getElementById("left-visible-paths-number").innerHTML = PATHSVISUAL[index].length + " / 5530";
+            document.getElementById("left-visible-paths-date").innerHTML = pathStartDate[index] == 0 ? "Sep 27 2013 - May 11 2017" : dateRange
+
+        }
         else
+        {
             document.getElementById("right-visible-paths-number").innerHTML = PATHSVISUAL[index].length + " / 5530";
+            document.getElementById("right-visible-paths-date").innerHTML = pathStartDate[index] == 0 ? "Sep 27 2013 - May 11 2017" : dateRange
+        }
     }
     else
     {
+        var start = new Date(staypointStartDate[index]).toString();
+        var end = new Date(staypointEndDate[index]).toString();
+        var dateRange = start.split(" ").slice(1,4).join(" ") + " - " + end.split(" ").slice(1,4).join(" ");
+
         if (index == 0)
+        {
             document.getElementById("left-visible-staypoints-number").innerHTML = STAYPOINTSVISUAL[index].length + " / 80076";
+            document.getElementById("left-visible-staypoints-date").innerHTML = staypointStartDate[index] == 0 ? "Jan 23 2013 - Apr 10 2017" : dateRange
+        }
         else
+        {
             document.getElementById("right-visible-staypoints-number").innerHTML = STAYPOINTSVISUAL[index].length + " / 80076";
+            document.getElementById("right-visible-staypoints-date").innerHTML = staypointStartDate[index] == 0 ? "Jan 23 2013 - Apr 10 2017" : dateRange
+        }
     }
 }
 

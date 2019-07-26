@@ -243,7 +243,7 @@ hr {
     width: 10%;
     z-index: 1;
     top: 1%;
-    right: 2%;
+    right: 3%;
     background-color: transparent;
     overflow-x: hidden;
     transition: 0.5s;
@@ -256,7 +256,7 @@ hr {
     width: 10%;
     z-index: 1;
     top: 1%;
-    left: 2%;
+    left: 3%;
     background-color: transparent;
     overflow-x: hidden;
     transition: 0.5s;
