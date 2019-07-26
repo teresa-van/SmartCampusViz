@@ -9,7 +9,7 @@
 var pathsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/paths.json";
 var pathsjson;
 
-var restpointsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/staypoints.json";
+var restpointsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/restpoints.json";
 var restpointsjson;
 
 // #region Load stuff
