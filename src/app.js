@@ -27,8 +27,8 @@ var leftMap;
 paths[0].onChange(e => updateVisualization(0));
 paths[1].onChange(e => updateVisualization(1));
 
-staypoints[0].onChange(e => updateVisualization(0));
-staypoints[1].onChange(e => updateVisualization(1));
+restpoints[0].onChange(e => updateVisualization(0));
+restpoints[1].onChange(e => updateVisualization(1));
 
 // #endregion
 
@@ -46,22 +46,22 @@ $(function ()
 	updatePaths(0);
 	updatePaths(1);
 
-	updateStaypoints(0);
-	updateStaypoints(1);
+	updateRestpoints(0);
+	updateRestpoints(1);
 
 	createLayers();
 	initMaps();
 
     leftMap.on('load', function () 
     {
-		addMapLayers(leftMap, [leftBuildingLabelLayer, leftGeoJsonLayer, leftPathsLayer, leftStaypointsLayer],
+		addMapLayers(leftMap, [leftBuildingLabelLayer, leftGeoJsonLayer, leftPathsLayer, leftRestpointsLayer],
 			['', 'leftBuildingLabelLayer', 'leftGeoJsonLayer', 'leftGeoJsonLayer'], 0);
         mapLoaded();
     });
 
     rightMap.on('load', function ()
     {
-		addMapLayers(rightMap, [rightBuildingLabelLayer, rightGeoJsonLayer, rightPathsLayer, rightStaypointsLayer],
+		addMapLayers(rightMap, [rightBuildingLabelLayer, rightGeoJsonLayer, rightPathsLayer, rightRestpointsLayer],
 			['', 'rightBuildingLabelLayer', 'rightGeoJsonLayer', 'rightGeoJsonLayer'], 1);
         mapLoaded();
 	});
@@ -153,9 +153,9 @@ function updateVisualization(index)
 	}
 	else
 	{
-		var layer = (index == 0) ? leftStaypointsLayer : rightStaypointsLayer;
-		updateStaypoints(index);
-		layer.setProps({ data: STAYPOINTSVISUAL[index], opacity: Math.min(1, 0.02 * (maxStaypoints / STAYPOINTSVISUAL[index].length / 3)) });
+		var layer = (index == 0) ? leftRestpointsLayer : rightRestpointsLayer;
+		updateRestpoints(index);
+		layer.setProps({ data: RESTPOINTSVISUAL[index], opacity: Math.min(1, 0.02 * (maxRestpoints / RESTPOINTSVISUAL[index].length / 3)) });
 	}
 
 	updateInfo(index);
@@ -283,12 +283,12 @@ function filterWithPolygons(remove, index)
 	if (remove)
 	{
 		if (dataView[index] === 'paths') findPathsPassingThroughAllPolygons(index);
-		else findStaypointsWithinAllPolygons(index);
+		else findRestpointsWithinAllPolygons(index);
 	}
 	else
 	{
 		if (dataView[index] === 'paths') findPathsPassingThroughPolygon(index);
-		else findStaypointsWithinPolygon(index);
+		else findRestpointsWithinPolygon(index);
 	}
 }
 
@@ -301,14 +301,14 @@ function handleHighlight(info, index)
 			if (dataView[index] == "paths")
 				leftPathsLayer.setProps({ highlightedObjectIndex: -1 });
 			else
-				leftStaypointsLayer.setProps({ highlightedObjectIndex: -1 });
+				leftRestpointsLayer.setProps({ highlightedObjectIndex: -1 });
 		}
 		else
 		{
 			if (dataView[index] == "paths")
 				rightPathsLayer.setProps({ highlightedObjectIndex: -1 });
 			else
-				rightStaypointsLayer.setProps({ highlightedObjectIndex: -1 });
+				rightRestpointsLayer.setProps({ highlightedObjectIndex: -1 });
 		}
 		
 	}

@@ -9,8 +9,8 @@
 var pathsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/paths.json";
 var pathsjson;
 
-var staypointsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/staypoints.json";
-var staypointsjson;
+var restpointsURL = "https://raw.githubusercontent.com/teresa-van/SmartCampusViz/master/data/staypoints.json";
+var restpointsjson;
 
 // #region Load stuff
 loadJSON(function (response)
@@ -20,8 +20,8 @@ loadJSON(function (response)
 
 loadJSON(function (response)
 {
-    staypointsjson = JSON.parse(response);
-}, staypointsURL);
+    restpointsjson = JSON.parse(response);
+}, restpointsURL);
 
 // #endregion
 
@@ -31,17 +31,17 @@ var pathCoordinateIDs = [{}, {}];
 const paths = [crossfilter(pathsjson), crossfilter(pathsjson)];
 const maxPaths = paths[0].groupAll().reduceCount().value();
 
-// Staypoint variables
+// Restpoint variables
 filteredCentroidLon = [[], []];
 filteredCentroidLat = [[], []];
-const staypoints = [crossfilter(staypointsjson), crossfilter(staypointsjson)];
-const maxStaypoints = staypoints[0].groupAll().reduceCount().value();
+const restpoints = [crossfilter(restpointsjson), crossfilter(restpointsjson)];
+const maxRestpoints = restpoints[0].groupAll().reduceCount().value();
 
 configurePathsFilter(paths[0]);
 configurePathsFilter(paths[1]);
 
-configureStaypointsFilter(staypoints[0]);
-configureStaypointsFilter(staypoints[1]);
+configureRestpointsFilter(restpoints[0]);
+configureRestpointsFilter(restpoints[1]);
 
 // #region Paths
 
@@ -141,61 +141,61 @@ function configurePathsFilter(_paths)
 
 // #endregion
 
-// #region Staypoints
+// #region Restpoints
 
-function filterStaypointsWithinPolygons(index)
+function filterRestpointsWithinPolygons(index)
 {
     // Filter
     if (filteredCentroidLon[index].length > 0)
     {
-        staypoints[index].centroidLon.filter(function (d)
+        restpoints[index].centroidLon.filter(function (d)
         {
             return filteredCentroidLon[index].indexOf(d) > -1;
         });
     }
     if (filteredCentroidLat[index].length > 0)
     {
-        staypoints[index].centroidLat.filter(function (d)
+        restpoints[index].centroidLat.filter(function (d)
         {
             return filteredCentroidLat[index].indexOf(d) > -1;
         });
     }
 }
 
-function findStaypointsWithinPolygon(index)
+function findRestpointsWithinPolygon(index)
 {
-    staypoints[index].centroidLon.filter(null);
-    staypoints[index].centroidLat.filter(null);
+    restpoints[index].centroidLon.filter(null);
+    restpoints[index].centroidLat.filter(null);
 
-    var staypointCoordinates = [];
-    staypoints[index].allFiltered().forEach(function (d)
+    var restpointCoordinates = [];
+    restpoints[index].allFiltered().forEach(function (d)
     {
-        staypointCoordinates.push([d.Centroid_Lon, d.Centroid_Lat]);
+        restpointCoordinates.push([d.Centroid_Lon, d.Centroid_Lat]);
     });
 
-    var pointsWithinPoly = findPointsWithinAPolygon(staypointCoordinates, allPolyPoints[index][Object.keys(allPolyPoints[index])[Object.keys(allPolyPoints[index]).length-1]], false, index);
+    var pointsWithinPoly = findPointsWithinAPolygon(restpointCoordinates, allPolyPoints[index][Object.keys(allPolyPoints[index])[Object.keys(allPolyPoints[index]).length-1]], false, index);
     filteredCentroidLon[index] = filteredCentroidLon[index].concat(pointsWithinPoly.lons);
     filteredCentroidLat[index] = filteredCentroidLat[index].concat(pointsWithinPoly.lats);
 
     // Filter
-    filterStaypointsWithinPolygons(index);
+    filterRestpointsWithinPolygons(index);
 }
 
-function findStaypointsWithinAllPolygons(index)
+function findRestpointsWithinAllPolygons(index)
 {
     filteredCentroidLon[index] = [];
     filteredCentroidLat[index] = [];
 
-    staypoints[index].centroidLon.filter(null);
-    staypoints[index].centroidLat.filter(null);
+    restpoints[index].centroidLon.filter(null);
+    restpoints[index].centroidLat.filter(null);
 
-    var staypointCoordinates = [];
-    staypoints[index].allFiltered().forEach(function (d)
+    var restpointCoordinates = [];
+    restpoints[index].allFiltered().forEach(function (d)
     {
-        staypointCoordinates.push([d.Centroid_Lon, d.Centroid_Lat]);
+        restpointCoordinates.push([d.Centroid_Lon, d.Centroid_Lat]);
     });
 
-    var pointsWithinAllPoly = findPointsWithinAllPolygons(staypointCoordinates, false, index);
+    var pointsWithinAllPoly = findPointsWithinAllPolygons(restpointCoordinates, false, index);
 
     for (var p in pointsWithinAllPoly)
     {
@@ -204,47 +204,47 @@ function findStaypointsWithinAllPolygons(index)
     }
 
     // Filter
-    filterStaypointsWithinPolygons(index);
+    filterRestpointsWithinPolygons(index);
 }
 
-function configureStaypointsFilter(_staypoints)
+function configureRestpointsFilter(_restpoints)
 {
     try 
     {
-        _staypoints.loctStart = _staypoints.dimension(function (d) { return d.Loct_Start }),
-        _staypoints.loctEnd = _staypoints.dimension(function (d) { return d.Loct_End }),
+        _restpoints.loctStart = _restpoints.dimension(function (d) { return d.Loct_Start }),
+        _restpoints.loctEnd = _restpoints.dimension(function (d) { return d.Loct_End }),
 
-        _staypoints.day = _staypoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[0].split("-")[0]) }),
-        _staypoints.month = _staypoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[0].split("-")[1]) }),
-        _staypoints.year = _staypoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[0].split("-")[2]) }),
-        _staypoints.weekday = _staypoints.dimension(function (d) { 
+        _restpoints.day = _restpoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[0].split("-")[0]) }),
+        _restpoints.month = _restpoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[0].split("-")[1]) }),
+        _restpoints.year = _restpoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[0].split("-")[2]) }),
+        _restpoints.weekday = _restpoints.dimension(function (d) { 
             var date = d.Loct_Start.split(" ")[0].split("-");
             var day = new Date(date[1]+"-"+date[0]+"-"+date[2]);
             return parseInt(day.getDay());
         }),
 
-        _staypoints.hour = _staypoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[1].split(":")[0]) }),
-        _staypoints.minute = _staypoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[1].split(":")[1]) }),
+        _restpoints.hour = _restpoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[1].split(":")[0]) }),
+        _restpoints.minute = _restpoints.dimension(function (d) { return parseInt(d.Loct_Start.split(" ")[1].split(":")[1]) }),
 
-        _staypoints.academicDayStart = _staypoints.dimension(function (d) { return d.Academic_Day_Start }),
-        _staypoints.academicDayEnd = _staypoints.dimension(function (d) { return d.Academic_Day_End }),
-        _staypoints.duration = _staypoints.dimension(function (d) { return d.Duration_minutes }),
-        _staypoints.buildingId = _staypoints.dimension(function (d) { return d.Building_ID }),
-        _staypoints.buildingName = _staypoints.dimension(function (d) { return d.Building_Name }),
-        _staypoints.latitude = _staypoints.dimension(function (d) { return d.Lat }),
-        _staypoints.longitude = _staypoints.dimension(function (d) { return d.Lon }),
-        _staypoints.maxTemp = _staypoints.dimension(function (d) { return d.Max_Temp_C }),
-        _staypoints.meanTemp = _staypoints.dimension(function (d) { return d.Mean_Temp_C }),
-        _staypoints.totalPrecip = _staypoints.dimension(function (d) { return d.Total_Precip_mm }),
-        _staypoints.snow = _staypoints.dimension(function (d) { return d.Snow_cm }),
-        _staypoints.qScore = _staypoints.dimension(function (d) { return d.Q_Score }),
-        _staypoints.tScore = _staypoints.dimension(function (d) { return d.T_Score }),
-        _staypoints.aScore = _staypoints.dimension(function (d) { return d.A_Score }),
-        _staypoints.combinedScore = _staypoints.dimension(function (d) { return d.Combined_Score }),
-        _staypoints.centroidLat = _staypoints.dimension(function (d) { return d.Centroid_Lat }),
-        _staypoints.centroidLon = _staypoints.dimension(function (d) { return d.Centroid_Lon }),
-        _staypoints.groupCentroidLat = _staypoints.dimension(function (d) { return d.Group_Centroid_Lat }),
-        _staypoints.groupCentroidLon = _staypoints.dimension(function (d) { return d.Group_Centroid_Lon })
+        _restpoints.academicDayStart = _restpoints.dimension(function (d) { return d.Academic_Day_Start }),
+        _restpoints.academicDayEnd = _restpoints.dimension(function (d) { return d.Academic_Day_End }),
+        _restpoints.duration = _restpoints.dimension(function (d) { return d.Duration_minutes }),
+        _restpoints.buildingId = _restpoints.dimension(function (d) { return d.Building_ID }),
+        _restpoints.buildingName = _restpoints.dimension(function (d) { return d.Building_Name }),
+        _restpoints.latitude = _restpoints.dimension(function (d) { return d.Lat }),
+        _restpoints.longitude = _restpoints.dimension(function (d) { return d.Lon }),
+        _restpoints.maxTemp = _restpoints.dimension(function (d) { return d.Max_Temp_C }),
+        _restpoints.meanTemp = _restpoints.dimension(function (d) { return d.Mean_Temp_C }),
+        _restpoints.totalPrecip = _restpoints.dimension(function (d) { return d.Total_Precip_mm }),
+        _restpoints.snow = _restpoints.dimension(function (d) { return d.Snow_cm }),
+        _restpoints.qScore = _restpoints.dimension(function (d) { return d.Q_Score }),
+        _restpoints.tScore = _restpoints.dimension(function (d) { return d.T_Score }),
+        _restpoints.aScore = _restpoints.dimension(function (d) { return d.A_Score }),
+        _restpoints.combinedScore = _restpoints.dimension(function (d) { return d.Combined_Score }),
+        _restpoints.centroidLat = _restpoints.dimension(function (d) { return d.Centroid_Lat }),
+        _restpoints.centroidLon = _restpoints.dimension(function (d) { return d.Centroid_Lon }),
+        _restpoints.groupCentroidLat = _restpoints.dimension(function (d) { return d.Group_Centroid_Lat }),
+        _restpoints.groupCentroidLon = _restpoints.dimension(function (d) { return d.Group_Centroid_Lon })
     }
     catch (e) { console.log(e.stack); }
 }

@@ -3,7 +3,7 @@ const GEOJSON = 'https://raw.githubusercontent.com/teresa-van/SmartCampusViz/mas
 // var pathCoordinates = [];
 var ANIMATEPATHS = [];
 var PATHSVISUAL = [[], []];
-var STAYPOINTSVISUAL = [[], []];
+var RESTPOINTSVISUAL = [[], []];
 
 const S = 0.75;
 const B = 1;
@@ -11,8 +11,8 @@ const B = 1;
 var pathStartDate = [0, 0];
 var pathEndDate = [0, 0];
 
-var staypointStartDate = [0, 0];
-var staypointEndDate = [0, 0];
+var restpointStartDate = [0, 0];
+var restpointEndDate = [0, 0];
 
 // Parse paths data
 function updatePaths(index)
@@ -23,9 +23,6 @@ function updatePaths(index)
 
     pathStartDate = [0, 0];
     pathEndDate = [0, 0];
-    
-    staypointStartDate = [0, 0];
-    staypointEndDate = [0, 0];
 
     var count = 0;
     var hueFactor = 255 / 360;
@@ -80,36 +77,40 @@ function updatePaths(index)
     }
 }
 
-function updateStaypoints(index)
+function updateRestpoints(index)
 {
-    var filteredNumStaypoints = staypoints[index].groupAll().reduceCount().value();
-    var filteredStaypoints = staypoints[index].allFiltered();
+    var filteredNumRestpoints = restpoints[index].groupAll().reduceCount().value();
+    var filteredRestpoints = restpoints[index].allFiltered();
 
-    if (filteredNumStaypoints == 0) return;
+    restpointStartDate = [0, 0];
+    restpointEndDate = [0, 0];
+
+    if (filteredNumRestpoints == 0) return;
 
     var color;
-    STAYPOINTSVISUAL[index] = [];
-    // Parse staypoints data
-    for (let i = 0; i < filteredNumStaypoints; i++)
+    RESTPOINTSVISUAL[index] = [];
+    // Parse restpoints data
+    for (let i = 0; i < filteredNumRestpoints; i++)
     {
-        var hour = parseInt(filteredStaypoints[i].Loct_Start.split(" ")[1].split(":")[0]);
+        var hour = parseInt(filteredRestpoints[i].Loct_Start.split(" ")[1].split(":")[0]);
         var hue = (hour >= 0 && hour < 8) ? 0 : (hour >= 8 && hour < 16) ? 60 : 240
         color = HSVtoRGB(hue / 360, S, B);
 
-        var s = (filteredStaypoints[i].Duration_minutes / 762.8) * 2000 + 2;
-        STAYPOINTSVISUAL[index][i] = {point: [], color: [color.r, color.g, color.b], pointSize: s};
+        var s = (filteredRestpoints[i].Duration_minutes / 762.8) * 2000 + 2;
+        RESTPOINTSVISUAL[index][i] = {point: [], color: [color.r, color.g, color.b], pointSize: s};
         
-        var lat = parseFloat(filteredStaypoints[i].Centroid_Lat);
-        var lon = parseFloat(filteredStaypoints[i].Centroid_Lon);
+        var lat = parseFloat(filteredRestpoints[i].Centroid_Lat);
+        var lon = parseFloat(filteredRestpoints[i].Centroid_Lon);
 
-        var date = new Date(parseInt(filteredStaypoints[i].Loct_Start.split(" ")[0].split("-")[2]), 
-                            parseInt(filteredStaypoints[i].Loct_Start.split(" ")[0].split("-")[1]), 
-                            parseInt(filteredStaypoints[i].Loct_Start.split(" ")[0].split("-")[0])).getTime();
-        staypointStartDate[index] = date < staypointStartDate[index] || staypointStartDate[index] == 0 ? date : staypointStartDate[index];
-        staypointEndDate[index] = date > staypointEndDate[index] || staypointEndDate[index] == 0 ? date : staypointEndDate[index];
+        var date = new Date(parseInt(filteredRestpoints[i].Loct_Start.split(" ")[0].split("-")[2]), 
+                            parseInt(filteredRestpoints[i].Loct_Start.split(" ")[0].split("-")[1]), 
+                            parseInt(filteredRestpoints[i].Loct_Start.split(" ")[0].split("-")[0])).getTime();
 
-        STAYPOINTSVISUAL[index][i].point.push(lon);
-        STAYPOINTSVISUAL[index][i].point.push(lat);
+        restpointStartDate[index] = date < restpointStartDate[index] || restpointStartDate[index] == 0 ? date : restpointStartDate[index];
+        restpointEndDate[index] = date > restpointEndDate[index] || restpointEndDate[index] == 0 ? date : restpointEndDate[index];
+
+        RESTPOINTSVISUAL[index][i].point.push(lon);
+        RESTPOINTSVISUAL[index][i].point.push(lat);
     }
 }
 

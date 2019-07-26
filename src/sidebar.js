@@ -29,7 +29,7 @@ function openLeftSidebar()
     document.getElementById("left-sidebar-button").style.opacity = "0";
 
     document.getElementById("left-paths-info-all").style.left = "24%";
-    document.getElementById("left-staypoints-info-all").style.left = "24%";
+    document.getElementById("left-restpoints-info-all").style.left = "24%";
 }
 
 function closeLeftSidebar() 
@@ -39,7 +39,7 @@ function closeLeftSidebar()
     document.getElementById("left-sidebar-button").style.opacity = "1";
 
     document.getElementById("left-paths-info-all").style.left = "3%";
-    document.getElementById("left-staypoints-info-all").style.left = "3%";
+    document.getElementById("left-restpoints-info-all").style.left = "3%";
 }
 
 function openRightSidebar() 
@@ -49,7 +49,7 @@ function openRightSidebar()
     document.getElementById("right-sidebar-button").style.opacity = "0";
 
     document.getElementById("right-paths-info-all").style.right = "24%";
-    document.getElementById("right-staypoints-info-all").style.right = "24%";
+    document.getElementById("right-restpoints-info-all").style.right = "24%";
 }
   
 
@@ -60,7 +60,7 @@ function closeRightSidebar()
     document.getElementById("right-sidebar-button").style.opacity = "1";
 
     document.getElementById("right-paths-info-all").style.right = "3%";
-    document.getElementById("right-staypoints-info-all").style.right = "3%";
+    document.getElementById("right-restpoints-info-all").style.right = "3%";
 }
 
 function updateInfo(index)
@@ -85,19 +85,19 @@ function updateInfo(index)
     }
     else
     {
-        var start = new Date(staypointStartDate[index]).toString();
-        var end = new Date(staypointEndDate[index]).toString();
+        var start = new Date(restpointStartDate[index]).toString();
+        var end = new Date(restpointEndDate[index]).toString();
         var dateRange = start.split(" ").slice(1,4).join(" ") + " - " + end.split(" ").slice(1,4).join(" ");
 
         if (index == 0)
         {
-            document.getElementById("left-visible-staypoints-number").innerHTML = STAYPOINTSVISUAL[index].length + " / 80076";
-            document.getElementById("left-visible-staypoints-date").innerHTML = staypointStartDate[index] == 0 ? "Jan 23 2013 - Apr 10 2017" : dateRange
+            document.getElementById("left-visible-restpoints-number").innerHTML = RESTPOINTSVISUAL[index].length + " / 80076";
+            document.getElementById("left-visible-restpoints-date").innerHTML = restpointStartDate[index] == 0 ? "Jan 23 2013 - Apr 10 2017" : dateRange
         }
         else
         {
-            document.getElementById("right-visible-staypoints-number").innerHTML = STAYPOINTSVISUAL[index].length + " / 80076";
-            document.getElementById("right-visible-staypoints-date").innerHTML = staypointStartDate[index] == 0 ? "Jan 23 2013 - Apr 10 2017" : dateRange
+            document.getElementById("right-visible-restpoints-number").innerHTML = RESTPOINTSVISUAL[index].length + " / 80076";
+            document.getElementById("right-visible-restpoints-date").innerHTML = restpointStartDate[index] == 0 ? "Jan 23 2013 - Apr 10 2017" : dateRange
         }
     }
 }
@@ -136,11 +136,11 @@ function setAnimation(on)
         $("#toggleCompareButton").click();
 
     document.getElementById("right-path-button").className = "ui button";
-    document.getElementById("right-staypoints-button").className = "ui button basic";
+    document.getElementById("right-restpoints-button").className = "ui button basic";
     togglePaths(true, 1);    
 
     rightPathsLayer.setProps( {visible: on ? false : dataView[1] == 'paths'});
-    rightStaypointsLayer.setProps( {visible: on ? false : dataView[1] == 'staypoints'});
+    rightRestpointsLayer.setProps( {visible: on ? false : dataView[1] == 'restpoints'});
 
     var animatedPathsLayer = new TripsLayer
     ({
@@ -163,13 +163,13 @@ function setAnimation(on)
     {
         document.getElementById('toggleCompareButton').setAttribute("disabled", "disabled");
         document.getElementById('right-path-button').setAttribute("disabled", "disabled");
-        document.getElementById('right-staypoints-button').setAttribute("disabled", "disabled");
+        document.getElementById('right-restpoints-button').setAttribute("disabled", "disabled");
     }
     else
     {
         document.getElementById('toggleCompareButton').removeAttribute("disabled");
         document.getElementById('right-path-button').removeAttribute("disabled");
-        document.getElementById('right-staypoints-button').removeAttribute("disabled");
+        document.getElementById('right-restpoints-button').removeAttribute("disabled");
     }
 
     animating = on;
@@ -186,44 +186,47 @@ $("#restartAnimateButton")
 function togglePaths(paths, index)
 {
     var pathsLayer = (index == 0) ? leftPathsLayer : rightPathsLayer;
-    var staypointsLayer = (index == 0) ? leftStaypointsLayer : rightStaypointsLayer;
+    var restpointsLayer = (index == 0) ? leftRestpointsLayer : rightRestpointsLayer;
 
     pathsLayer.setProps({ visible: paths });
-    staypointsLayer.setProps({ visible: !paths });
-
-    document.getElementById("pathlegend").style.display = paths ? "block" : "none";
-    document.getElementById("staypointslegend").style.display = !paths ? "block" : "none";
-
-    document.getElementById("left-path-charts").style.display = paths ? "inline-block" : "none";
-    document.getElementById("right-path-charts").style.display = paths ? "inline-block" : "none";
-
-    document.getElementById("left-staypoint-charts").style.display = !paths ? "inline-block" : "none";
-    document.getElementById("right-staypoint-charts").style.display = !paths ? "inline-block" : "none";
+    restpointsLayer.setProps({ visible: !paths });
 
     if (index == 0)
     {
+        document.getElementById("leftPathlegend").style.display = paths ? "block" : "none";
+        document.getElementById("leftRestpointslegend").style.display = !paths ? "block" : "none";
+
         document.getElementById("left-paths-info-all").style.display = paths ? "inline-block" : "none";
-        document.getElementById("left-staypoints-info-all").style.display = !paths ? "inline-block" : "none";
+        document.getElementById("left-restpoints-info-all").style.display = !paths ? "inline-block" : "none";
+
+        document.getElementById("left-path-charts").style.display = paths ? "inline-block" : "none";
+        document.getElementById("left-restpoint-charts").style.display = !paths ? "inline-block" : "none";
     }
     else
     {
+        document.getElementById("rightPathlegend").style.display = paths ? "block" : "none";
+        document.getElementById("rightRestpointslegend").style.display = !paths ? "block" : "none";
+        
         document.getElementById("right-paths-info-all").style.display = paths ? "inline-block" : "none";
-        document.getElementById("right-staypoints-info-all").style.display = !paths ? "inline-block" : "none";
+        document.getElementById("right-restpoints-info-all").style.display = !paths ? "inline-block" : "none";
+
+        document.getElementById("right-path-charts").style.display = paths ? "inline-block" : "none";
+        document.getElementById("right-restpoint-charts").style.display = !paths ? "inline-block" : "none";
     }
 
-    dataView[index] = paths ? 'paths' : 'staypoints';
+    dataView[index] = paths ? 'paths' : 'restpoints';
     filterWithPolygons(true, index);
 }
 
 
-///////// STAYPOINTS / PATHS ////////////
+///////// RESTPOINTS / PATHS ////////////
 
 $('#left-path-button')
     .click(
         function()
         {
             document.getElementById("left-path-button").className = "ui button";
-            document.getElementById("left-staypoints-button").className = "ui button basic";
+            document.getElementById("left-restpoints-button").className = "ui button basic";
         
             togglePaths(true, 0);
         }
@@ -234,29 +237,29 @@ $('#right-path-button')
         function()
         {
             document.getElementById("right-path-button").className = "ui button";
-            document.getElementById("right-staypoints-button").className = "ui button basic";
+            document.getElementById("right-restpoints-button").className = "ui button basic";
         
             togglePaths(true, 1);
         }
     );
 
-$('#left-staypoints-button')
+$('#left-restpoints-button')
     .click(
         function()
         {
             document.getElementById("left-path-button").className = "ui button basic";
-            document.getElementById("left-staypoints-button").className = "ui button";
+            document.getElementById("left-restpoints-button").className = "ui button";
 
             togglePaths(false, 0);
         }
     );
 
-$('#right-staypoints-button')
+$('#right-restpoints-button')
     .click(
         function()
         {
             document.getElementById("right-path-button").className = "ui button basic";
-            document.getElementById("right-staypoints-button").className = "ui button";
+            document.getElementById("right-restpoints-button").className = "ui button";
 
             togglePaths(false, 1);
         }
@@ -271,7 +274,7 @@ $('#right-staypoints-button')
 //             if (value.length <= 0)
 //             {
 //                 paths.month.filter(null);
-//                 staypoints.month.filter(null);
+//                 restpoints.month.filter(null);
 //             }
 //             else
 //             {
@@ -280,7 +283,7 @@ $('#right-staypoints-button')
 //                     return value.map(Number).indexOf(parseInt(d)) > -1;
 //                 });
 
-//                 staypoints.month.filter(function (d)
+//                 restpoints.month.filter(function (d)
 //                 {
 //                     return value.map(Number).indexOf(parseInt(d)) > -1;
 //                 });
@@ -298,7 +301,7 @@ $('#right-staypoints-button')
 //             if (value.length <= 0)
 //             {
 //                 paths.weekday.filter(null);
-//                 staypoints.weekday.filter(null);
+//                 restpoints.weekday.filter(null);
 //             }
 //             else
 //             {
@@ -307,7 +310,7 @@ $('#right-staypoints-button')
 //                     return value.map(Number).indexOf(parseInt(d)) > -1;
 //                 });
 
-//                 staypoints.weekday.filter(function (d)
+//                 restpoints.weekday.filter(function (d)
 //                 {
 //                     return value.map(Number).indexOf(parseInt(d)) > -1;
 //                 });

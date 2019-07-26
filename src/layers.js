@@ -15,7 +15,7 @@ var buildingLabelData = [];
 createBuildingLabelData();
 
 var leftPathsLayer, rightPathsLayer;
-var leftStaypointsLayer, rightStaypointsLayer;
+var leftRestpointsLayer, rightRestpointsLayer;
 var leftGeoJsonLayer, rightGeoJsonLayer;
 var leftBuildingLabelLayer, rightBuildingLabelLayer;
 
@@ -94,14 +94,14 @@ function createLayers()
 		}
 	});
 
-	leftStaypointsLayer = new MapboxLayer
+	leftRestpointsLayer = new MapboxLayer
 	({
-		id: 'leftStaypointsLayer',
+		id: 'leftRestpointsLayer',
 		type: ScatterplotLayer,
-		data: STAYPOINTSVISUAL[0],
+		data: RESTPOINTSVISUAL[0],
 		getPosition: p => p.point,
 		getFillColor: p => p.color,
-		opacity: Math.min(1, 0.02 * (maxStaypoints / STAYPOINTSVISUAL[0].length / 3)),
+		opacity: Math.min(1, 0.02 * (maxRestpoints / RESTPOINTSVISUAL[0].length / 3)),
 		getRadius: p => p.pointSize,
 		radiusScale: 1 / (view.zoom ** 2),
 		radiusMinPixels: 2,
@@ -113,23 +113,23 @@ function createLayers()
 		highlightedObjectIndex: null,
 		onClick: ({ object }) =>
 		{
-			leftStaypointsLayer.setProps({ highlightedObjectIndex: STAYPOINTSVISUAL[1].indexOf(object)});
+			leftRestpointsLayer.setProps({ highlightedObjectIndex: RESTPOINTSVISUAL[1].indexOf(object)});
 		},
 		onHover: () =>
 		{
-			if (leftStaypointsLayer.props.highlightedObjectIndex == -1)
-				leftStaypointsLayer.setProps({ highlightedObjectIndex: null });
+			if (leftRestpointsLayer.props.highlightedObjectIndex == -1)
+				leftRestpointsLayer.setProps({ highlightedObjectIndex: null });
 		}
 	});
 
-	rightStaypointsLayer = new MapboxLayer
+	rightRestpointsLayer = new MapboxLayer
 	({
-		id: 'rightStaypointsLayer',
+		id: 'rightRestpointsLayer',
 		type: ScatterplotLayer,
-		data: STAYPOINTSVISUAL[1],
+		data: RESTPOINTSVISUAL[1],
 		getPosition: p => p.point,
 		getFillColor: p => p.color,
-		opacity: Math.min(1, 0.02 * (maxStaypoints / STAYPOINTSVISUAL[1].length / 3)),
+		opacity: Math.min(1, 0.02 * (maxRestpoints / RESTPOINTSVISUAL[1].length / 3)),
 		getRadius: p => p.pointSize,
 		radiusScale: 1 / (view.zoom ** 2),
 		radiusMinPixels: 2,
@@ -141,12 +141,12 @@ function createLayers()
 		highlightedObjectIndex: null,
 		onClick: ({ object }) =>
 		{
-			rightStaypointsLayer.setProps({ highlightedObjectIndex: STAYPOINTSVISUAL[1].indexOf(object)});
+			rightRestpointsLayer.setProps({ highlightedObjectIndex: RESTPOINTSVISUAL[1].indexOf(object)});
 		},
 		onHover: () =>
 		{
-			if (rightStaypointsLayer.props.highlightedObjectIndex == -1)
-				rightStaypointsLayer.setProps({ highlightedObjectIndex: null });
+			if (rightRestpointsLayer.props.highlightedObjectIndex == -1)
+				rightRestpointsLayer.setProps({ highlightedObjectIndex: null });
 		}
 	});
 

@@ -240,7 +240,7 @@ hr {
 .infopanel-right {
     position: fixed;
     height: 93%;
-    width: 10%;
+    width: 15%;
     z-index: 1;
     top: 1%;
     right: 3%;
@@ -253,36 +253,10 @@ hr {
 .infopanel-left {
     position: fixed;
     height: 93%;
-    width: 10%;
+    width: 15%;
     z-index: 1;
     top: 1%;
     left: 3%;
-    background-color: transparent;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 30px;
-}
-
-.selectinfopanel-right {
-    position: fixed;
-    height: 93%;
-    width: 10%;
-    z-index: 1;
-    bottom: 15%;
-    right: 0%;
-    background-color: transparent;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 30px;
-}
-
-.selectinfopanel-left {
-    position: fixed;
-    height: 93%;
-    width: 10%;
-    z-index: 1;
-    bottom: 15%;
-    left: 0%;
     background-color: transparent;
     overflow-x: hidden;
     transition: 0.5s;

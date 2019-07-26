@@ -47,19 +47,19 @@
         <div id="left-paths-info-all" class="infopanel-left" style='pointer-events: none'>
             <h2 style="font-size: 16px; text-align: left">No. of Paths </h2>
             <h1 id="left-visible-paths-number" style="font-size: 16px; color: var(--primary); margin-top: -2px; text-align: left">5530 / 5530</h1>
-            <h2 style="font-size: 12px; text-align: left">No. of Students </h2>
-            <h1 style="font-size: 12px; color: var(--primary); margin-top: -8px; text-align: left">181</h1>
-            <h2 style="font-size: 12px; text-align: left">Dates </h2>
-            <h1 id="left-visible-paths-date"style="font-size: 12px; color: var(--primary); margin-top: -8px; text-align: left">Sep 27 2013 - May 11 2017</h1>
+            <h2 style="font-size: 16px; text-align: left">No. of Students </h2>
+            <h1 style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: left">181</h1>
+            <h2 style="font-size: 16px; text-align: left">Dates </h2>
+            <h1 id="left-visible-paths-date"style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: left">Sep 27 2013 - May 11 2017</h1>
         </div>
 
-        <div id="left-staypoints-info-all" class="infopanel-left" style='display: none; pointer-events: none'>
-            <h2 style="font-size: 16px; text-align: left">No. of Staypoints </h2>
-            <h1 id="left-visible-staypoints-number" style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: left">80067 / 80076</h1>
-            <h2 style="font-size: 12px; text-align: left">No. of Students </h2>
-            <h1 style="font-size: 12px; color: var(--primary); margin-top: -8px; text-align: left">208</h1>
-            <h2 style="font-size: 12px; text-align: left">Dates </h2>
-            <h1 id="left-visible-staypoints-date"style="font-size: 12px; color: var(--primary); margin-top: -8px; text-align: left">Jan 23 2013 - Apr 10 2017</h1>
+        <div id="left-restpoints-info-all" class="infopanel-left" style='display: none; pointer-events: none'>
+            <h2 style="font-size: 16px; text-align: left">No. of Restpoints </h2>
+            <h1 id="left-visible-restpoints-number" style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: left">80067 / 80076</h1>
+            <h2 style="font-size: 16px; text-align: left">No. of Students </h2>
+            <h1 style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: left">208</h1>
+            <h2 style="font-size: 16px; text-align: left">Dates </h2>
+            <h1 id="left-visible-restpoints-date"style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: left">Jan 23 2013 - Apr 10 2017</h1>
         </div>
 
         <div id="left-sidebar" class="sidebar" style="left: 3%">
@@ -68,7 +68,7 @@
             <hr>
             <div style="padding-left: 25px">
                 <button id="left-path-button" class="ui button">Paths</button>
-                <button id="left-staypoints-button" class="ui button basic">Staypoints</button>
+                <button id="left-restpoints-button" class="ui button basic">Restpoints</button>
             </div>    
             <h1>Filter</h1>
             <hr>
@@ -91,7 +91,7 @@
                     <div id="left-azimuth-path-chart" class="left-chart chart"></div>
                 </div>
 
-                <div id="left-staypoint-charts" style="display: none">
+                <div id="left-restpoint-charts" style="display: none">
                     <h2>Month</h2>
                     <div id="left-month-chart" class="left-chart chart"></div>
                     <h2>Weekday</h2>
@@ -109,6 +109,23 @@
                 </div>
             </div>
             </center>
+
+            <h1>Legend</h1>
+            <hr>
+            <div id="leftPathlegend">
+                <center>
+                <h2>Azimuth Path</h2>
+                <img src="./azimuthpath.png" width="250px"/>
+                </center>
+            </div>
+            <div id="leftRestpointslegend" style="display: none">
+                <center>
+                <h2>Time of Day</h2>
+                <img src="./restpoints-legend.png" width="250px"/>
+                </center>
+            </div>
+            <br>
+
         </div>
     </div>
 
@@ -122,19 +139,19 @@
         <div id="right-paths-info-all" class="infopanel-right" style='pointer-events: none'>
             <h2 style="font-size: 16px; text-align: right">No. of Paths </h2>
             <h1 id="right-visible-paths-number" style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: right">5530 / 5530</h1>
-            <h2 style="font-size: 12px; text-align: right">No. of Students </h2>
-            <h1 style="font-size: 12px; color: var(--primary); margin-top: -8px; text-align: right">181</h1>
-            <h2 style="font-size: 12px; text-align: right">Dates </h2>
-            <h1 id="right-visible-paths-date"style="font-size: 12px; color: var(--primary); margin-top: -8px; text-align: right">Sep 27 2013 - May 11 2017</h1>
+            <h2 style="font-size: 16px; text-align: right">No. of Students </h2>
+            <h1 style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: right">181</h1>
+            <h2 style="font-size: 16px; text-align: right">Dates </h2>
+            <h1 id="right-visible-paths-date"style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: right">Sep 27 2013 - May 11 2017</h1>
         </div>
 
-        <div id="right-staypoints-info-all" class="infopanel-right" style='display: none; pointer-events: none'>
-            <h2 style="font-size: 16px; text-align: right">No. of Staypoints </h2>
-            <h1 id="right-visible-staypoints-number" style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: right">5530 / 5530</h1>
-            <h2 style="font-size: 12px; text-align: right">No. of Students </h2>
-            <h1 style="font-size: 12px; color: var(--primary); margin-top: -8px; text-align: right">208</h1>
-            <h2 style="font-size: 12px; text-align: right">Dates </h2>
-            <h1 id="right-visible-staypoints-date"style="font-size: 12px; color: var(--primary); margin-top: -8px; text-align: right">Jan 23 2013 - Apr 10 2017</h1>
+        <div id="right-restpoints-info-all" class="infopanel-right" style='display: none; pointer-events: none'>
+            <h2 style="font-size: 16px; text-align: right">No. of Restpoints </h2>
+            <h1 id="right-visible-restpoints-number" style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: right">5530 / 5530</h1>
+            <h2 style="font-size: 16px; text-align: right">No. of Students </h2>
+            <h1 style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: right">208</h1>
+            <h2 style="font-size: 16px; text-align: right">Dates </h2>
+            <h1 id="right-visible-restpoints-date"style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: right">Jan 23 2013 - Apr 10 2017</h1>
         </div>
 
         <div id="right-sidebar" class="sidebar" style="right: 3%">
@@ -148,7 +165,7 @@
             <hr>
             <div style="padding-left: 25px">
                 <button id="right-path-button" class="ui button">Paths</button>
-                <button id="right-staypoints-button" class="ui button basic">Staypoints</button>
+                <button id="right-restpoints-button" class="ui button basic">Restpoints</button>
             </div>
 
             <!-- <button id="toggleSyncButton" style="position:absolute;">Toggle sync</button> -->
@@ -179,21 +196,6 @@
                 </div>
             </div>
 
-            <h1>Legend</h1>
-            <hr>
-            <div id="pathlegend">
-                <center>
-                <h2>Azimuth Path</h2>
-                <img src="./azimuthpath.png" width="250px"/>
-                </center>
-            </div>
-            <div id="staypointslegend" style="display: none">
-                <center>
-                <h2>Time of Day</h2>
-                <img src="./staypoints-legend.png" width="250px"/>
-                </center>
-            </div>
-
             <h1>Filter</h1>
             <hr>
             <center>
@@ -215,7 +217,7 @@
                     <div id="right-azimuth-path-chart" class="right-chart chart"></div>
                 </div>
 
-                <div id="right-staypoint-charts" style="display: none">
+                <div id="right-restpoint-charts" style="display: none">
                     <h2>Month</h2>
                     <div id="right-month-chart" class="right-chart chart"></div>
                     <h2>Weekday</h2>
@@ -234,8 +236,25 @@
             </div>
             </center>
 
+            <h1>Legend</h1>
             <hr>
+            <div id="rightPathlegend">
+                <center>
+                <h2>Azimuth Path</h2>
+                <img src="./azimuthpath.png" width="250px"/>
+                </center>
+            </div>
+            <div id="rightRestpointslegend" style="display: none">
+                <center>
+                <h2>Time of Day</h2>
+                <img src="./restpoints-legend.png" width="250px"/>
+                </center>
+            </div>
+
+            <hr>
+            <br>
             <p1>Note: This visualization is best run on Google Chrome.</p1>
+            <br>
         </div>
     </div>
           

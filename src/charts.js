@@ -71,8 +71,8 @@ var leftCharts =
     /////////////////// STAYPOINTS CHARTS ////////////////////////
 
     barChart()
-        .dimension(staypoints[0].month)
-        .group(staypoints[0].month.group())
+        .dimension(restpoints[0].month)
+        .group(restpoints[0].month.group())
         .x(d3.scale.linear()
             .domain([1,13])
             .rangeRound([0, width]))
@@ -80,8 +80,8 @@ var leftCharts =
         .numTicks(13),
 
     barChart()
-        .dimension(staypoints[0].weekday)
-        .group(staypoints[0].weekday.group())
+        .dimension(restpoints[0].weekday)
+        .group(restpoints[0].weekday.group())
         .x(d3.scale.linear()
         .domain([0, 7])
         .rangeRound([0, width]))
@@ -89,8 +89,8 @@ var leftCharts =
         .numTicks(8),
 
     barChart()
-        .dimension(staypoints[0].hour)
-        .group(staypoints[0].hour.group())
+        .dimension(restpoints[0].hour)
+        .group(restpoints[0].hour.group())
         .x(d3.scale.linear()
         .domain([0, 24])
         .rangeRound([0, width]))
@@ -98,8 +98,8 @@ var leftCharts =
         .numTicks(13),
 
         barChart()
-        .dimension(staypoints[0].meanTemp)
-        .group(staypoints[0].meanTemp.group())
+        .dimension(restpoints[0].meanTemp)
+        .group(restpoints[0].meanTemp.group())
         .x(d3.scale.linear()
         .domain([-25, 25])
         .rangeRound([0, width]))
@@ -107,8 +107,8 @@ var leftCharts =
         .numTicks(1),
 
     barChart()
-        .dimension(staypoints[0].totalPrecip)
-        .group(staypoints[0].totalPrecip.group())
+        .dimension(restpoints[0].totalPrecip)
+        .group(restpoints[0].totalPrecip.group())
         .x(d3.scale.linear()
         .domain([0, 10])
         .rangeRound([0, width]))
@@ -116,8 +116,8 @@ var leftCharts =
         .numTicks(9),
 
     barChart()
-        .dimension(staypoints[0].snow)
-        .group(staypoints[0].snow.group())
+        .dimension(restpoints[0].snow)
+        .group(restpoints[0].snow.group())
         .x(d3.scale.linear()
         .domain([0, 20])
         .rangeRound([0, width]))
@@ -125,8 +125,8 @@ var leftCharts =
         .numTicks(9),
 
     barChart()
-        .dimension(staypoints[0].duration)
-        .group(staypoints[0].duration.group())
+        .dimension(restpoints[0].duration)
+        .group(restpoints[0].duration.group())
         .x(d3.scale.linear()
         .domain([0, 1600])
         .rangeRound([0, width]))
@@ -205,8 +205,8 @@ var rightCharts =
     /////////////////// PATHS CHARTS ////////////////////////
 
     barChart()
-        .dimension(staypoints[1].month)
-        .group(staypoints[1].month.group())
+        .dimension(restpoints[1].month)
+        .group(restpoints[1].month.group())
         .x(d3.scale.linear()
             .domain([1,13])
             .rangeRound([0, width]))
@@ -214,8 +214,8 @@ var rightCharts =
         .numTicks(13),
 
     barChart()
-        .dimension(staypoints[1].weekday)
-        .group(staypoints[1].weekday.group())
+        .dimension(restpoints[1].weekday)
+        .group(restpoints[1].weekday.group())
         .x(d3.scale.linear()
         .domain([0, 7])
         .rangeRound([0, width]))
@@ -223,8 +223,8 @@ var rightCharts =
         .numTicks(8),
 
     barChart()
-        .dimension(staypoints[1].hour)
-        .group(staypoints[1].hour.group())
+        .dimension(restpoints[1].hour)
+        .group(restpoints[1].hour.group())
         .x(d3.scale.linear()
         .domain([0, 24])
         .rangeRound([0, width]))
@@ -232,8 +232,8 @@ var rightCharts =
         .numTicks(13),
 
     barChart()
-        .dimension(staypoints[1].meanTemp)
-        .group(staypoints[1].meanTemp.group())
+        .dimension(restpoints[1].meanTemp)
+        .group(restpoints[1].meanTemp.group())
         .x(d3.scale.linear()
         .domain([-25, 25])
         .rangeRound([0, width]))
@@ -241,8 +241,8 @@ var rightCharts =
         .numTicks(1),
 
     barChart()
-        .dimension(staypoints[1].totalPrecip)
-        .group(staypoints[1].totalPrecip.group())
+        .dimension(restpoints[1].totalPrecip)
+        .group(restpoints[1].totalPrecip.group())
         .x(d3.scale.linear()
         .domain([0, 10])
         .rangeRound([0, width]))
@@ -250,8 +250,8 @@ var rightCharts =
         .numTicks(9),
 
     barChart()
-        .dimension(staypoints[1].snow)
-        .group(staypoints[1].snow.group())
+        .dimension(restpoints[1].snow)
+        .group(restpoints[1].snow.group())
         .x(d3.scale.linear()
         .domain([0, 20])
         .rangeRound([0, width]))
@@ -260,8 +260,8 @@ var rightCharts =
 
 
     barChart()
-        .dimension(staypoints[1].duration)
-        .group(staypoints[1].duration.group())
+        .dimension(restpoints[1].duration)
+        .group(restpoints[1].duration.group())
         .x(d3.scale.linear()
         .domain([0, 1600])
         .rangeRound([0, width]))
