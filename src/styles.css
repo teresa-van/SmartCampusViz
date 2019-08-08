@@ -263,6 +263,19 @@ hr {
     padding-top: 30px;
 }
 
+.infopanel-right a {
+    padding: 4px 4px 4px 16px;
+    text-decoration: none;
+    font-size: 18px;
+    color: var(--primary);
+    display: block;
+    transition: 0.3s;
+}
+
+.infopanel-right a:hover {
+    color: #f1f1f1;
+}
+
 /* #endregion */
 
 /* #region Sidebar */
