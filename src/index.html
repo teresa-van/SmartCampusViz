@@ -32,18 +32,20 @@
 </head>
 
 <body>
+    <!-- Loader -->
     <div id="loader-wrapper">
         <div id="loader"></div>
         <div class="loader-section section-left"></div>
         <div class="loader-section section-right"></div>
     </div>
 
+    <!-- Left container -->
     <div id='leftContainer'>
         <div id='leftMap' class='map'></div>
         <div id='left-sidebar-button' class="sidebarbtn">
             <button class="openbtn ui icon button" style="left: 1%" onclick="openLeftSidebar()">></button>
         </div>
-
+        <!-- Left paths info panel -->
         <div id="left-paths-info-all" class="infopanel-left" style='pointer-events: none'>
             <h2 style="font-size: 16px; text-align: left">No. of Paths </h2>
             <h1 id="left-visible-paths-number" style="font-size: 16px; color: var(--primary); margin-top: -2px; text-align: left">5530 / 5530</h1>
@@ -52,7 +54,7 @@
             <h2 style="font-size: 16px; text-align: left">Dates </h2>
             <h1 id="left-visible-paths-date"style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: left">Sep 27 2013 - May 11 2017</h1>
         </div>
-
+        <!-- Left restpoints info panel -->
         <div id="left-restpoints-info-all" class="infopanel-left" style='display: none; pointer-events: none'>
             <h2 style="font-size: 16px; text-align: left">No. of Restpoints </h2>
             <h1 id="left-visible-restpoints-number" style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: left">80067 / 80076</h1>
@@ -61,7 +63,7 @@
             <h2 style="font-size: 16px; text-align: left">Dates </h2>
             <h1 id="left-visible-restpoints-date"style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: left">Jan 23 2013 - Apr 10 2017</h1>
         </div>
-
+        <!-- Left sidebar -->
         <div id="left-sidebar" class="sidebar" style="left: 3%">
             <a href="javascript:void(0)" class="closebtn" onclick="closeLeftSidebar()">×</a>
             <h1>View</h1>
@@ -129,12 +131,14 @@
         </div>
     </div>
 
+    <!-- Right container -->
     <div id='rightContainer'>
         <div id='rightMap' class='map'></div>
         <canvas id='rightDeck' style='pointer-events: none'></canvas>
         <div id='right-sidebar-button' class="sidebarbtn">
             <button class="openbtn ui icon button" style="right:1%" onclick="openRightSidebar()"><</button>
         </div>
+        <!-- Right paths info panel -->
         <div id="right-paths-info-all" class="infopanel-right">
             <a href="https://smartcampus.ucalgary.ca/" target="_blank" style="font-size: 14px; text-align: right; padding-bottom: 20px">About the Project</a>
             <div style='pointer-events: none'>
@@ -146,7 +150,7 @@
                 <h1 id="right-visible-paths-date"style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: right">Sep 27 2013 - May 11 2017</h1>
             </div>
         </div>
-
+        <!-- Right restpoints info panel -->
         <div id="right-restpoints-info-all" class="infopanel-right" style='display: none'>
             <a href="https://smartcampus.ucalgary.ca/" target="_blank" style="font-size: 14px; text-align: right; padding-bottom: 20px">About the Project</a>
             <div style='pointer-events: none'>
@@ -158,7 +162,7 @@
                 <h1 id="right-visible-restpoints-date"style="font-size: 16px; color: var(--primary); margin-top: -8px; text-align: right">Jan 23 2013 - Apr 10 2017</h1>
             </div>
         </div>
-
+        <!-- Right sidebar -->
         <div id="right-sidebar" class="sidebar" style="right: 3%">
             <a href="javascript:void(0)" class="closebtn" onclick="closeRightSidebar()">×</a>
             <center>
@@ -263,6 +267,7 @@
         </div>
     </div>
           
+    <!-- Load local scripts -->
     <script src='polygonDrawStyle.js'></script>
     <script src='filter.js'></script>
     <script src='data.js'></script>
